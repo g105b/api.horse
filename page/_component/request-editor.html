@@ -1,0 +1,126 @@
+<h1>Request editor</h1>
+
+<form method="post" class="request">
+	<label>
+		<span>Name</span>
+		<input name="name" placeholder="e.g. List all items" autofocus autocomplete="off" />
+	</label>
+
+	<div class="endpoint">
+		<label class="combo-method">
+			<span>Method</span>
+			<select name="method">
+				<option>GET</option>
+				<option>POST</option>
+				<option>PUT</option>
+				<option>PATCH</option>
+				<option>DELETE</option>
+				<option>COPY</option>
+				<option>HEAD</option>
+				<option>OPTIONS</option>
+				<option>LINK</option>
+				<option>UNLINK</option>
+				<option>PURGE</option>
+				<option>LOCK</option>
+				<option>UNLOCK</option>
+				<option>PROPFIND</option>
+				<option>VIEW</option>
+			</select>
+		</label>
+
+		<label class="combo-endpoint">
+			<span>Endpoint</span>
+			<input name="endpoint" required type="url" />
+		</label>
+	</div>
+
+	<details>
+		<summary><h2>Query parameters <span>0</span></h2></summary>
+		<div class="multiple">
+			<label>
+				<span>Key</span>
+				<input name="query-key[]" />
+			</label>
+			<label>
+				<span>Value</span>
+				<input name="query-value[]" />
+			</label>
+			<div class="add">
+				<button>Add</button>
+			</div>
+		</div>
+	</details>
+
+	<details>
+		<summary><h2>Headers <span>0</span></h2></summary>
+		<div class="multiple">
+			<label>
+				<span>Key</span>
+				<input name="header-key[]" />
+			</label>
+			<label>
+				<span>Value</span>
+				<input name="header-value[]" />
+			</label>
+			<div class="add">
+				<button>Add</button>
+			</div>
+		</div>
+	</details>
+
+	<details>
+		<summary><h2>Body</h2></summary>
+		<div class="type">
+			<label>
+				<span>Body type</span>
+				<select name="body-type">
+					<option value="">No body</option>
+					<optgroup label="Form">
+						<option value="form-data">Multipart form</option>
+						<option value="form-data">URL Encoded</option>
+					</optgroup>
+					<optgroup label="Raw">
+						<option value="text">Plain text</option>
+						<option value="json">JSON</option>
+						<option value="xml">XML</option>
+					</optgroup>
+				</select>
+			</label>
+		</div>
+		<div class="raw">
+			<label>
+				<span>Body</span>
+				<textarea name="body-raw"></textarea>
+			</label>
+		</div>
+		<div class="multiple">
+			<label>
+				<span>Key</span>
+				<input name="body-key[]" />
+			</label>
+			<label>
+				<span>Value</span>
+				<input name="body-value[]" />
+			</label>
+			<div class="add">
+				<button>Add</button>
+			</div>
+		</div>
+	</details>
+
+	<details>
+		<summary><h2>Raw HTTP message</h2></summary>
+		<div>
+			<label>
+				<span>Message</span>
+				<textarea name="message"></textarea>
+			</label>
+		</div>
+	</details>
+
+	<div class="actions send">
+		<button name="do" value="send" class="positive">Send request</button>
+	</div>
+
+
+</form>
