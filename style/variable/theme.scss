@@ -1,0 +1,23 @@
+:root {
+	--theme-header--bg: var(--pal-3);
+	--theme-header--fg: var(--pal-1);
+	--theme-header--border: var(--pal-4);
+
+	--theme-sidebar--bg: var(--pal-2);
+	--theme-sidebar--fg: var(--pal-1);
+	--theme-sidebar--border: var(--pal-4);
+	--theme-sidebar--bg--active: var(--pal-3);
+	--theme-sidebar--fg--active: var(--pal-1);
+
+	--theme-button--bg: var(--pal-3);
+	--theme-button--fg: var(--pal-1);
+	--theme-button--border: var(--pal-4);
+	--theme-button--bg--positive: var(--pal-8);
+	--theme-button--fg--positive: var(--pal-2);
+	--theme-button--border--positive: var(--pal-9);
+
+	--theme-input--bg: var(--pal-2);
+	--theme-input--fg: var(--pal-1);
+	--theme-input--border: var(--pal-4);
+	--theme-input--border--hover: var(--pal-7);
+}

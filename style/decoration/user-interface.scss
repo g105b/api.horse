@@ -1,0 +1,15 @@
+%d-user-interface {
+	box-sizing: border-box;
+	width: 100%;
+	padding: 0.5rem;
+	font-size: 1rem;
+	font-family: sans-serif;
+	border-radius: 0.25rem;
+	border: 1px solid var(--theme-input--border);
+	background-color: var(--theme-input--bg);
+	color: var(--theme-input--fg);
+
+	&:hover:not(:focus) {
+		border-color: var(--theme-input--border--hover);
+	}
+}

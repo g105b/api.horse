@@ -1,0 +1,29 @@
+@import "variable/break";
+@import "variable/palette";
+@import "variable/theme";
+@import "mixin/icon";
+@import "decoration/user-interface";
+@import "decoration/panel";
+@import "decoration/sidebar";
+@import "object/page-layout";
+@import "component/global-header";
+@import "component/request-editor";
+@import "component/request-sidebar";
+@import "component/response-viewer";
+@import "component/secrets-editor";
+@import "element/body";
+@import "element/button";
+@import "element/html";
+@import "element/input";
+@import "element/main";
+@import "element/select";
+@import "element/textarea";
+
+:focus {
+	outline: 2px solid var(--pal-7);
+	outline-offset: 2px;
+
+	&:active {
+		outline-offset: 0;
+	}
+}

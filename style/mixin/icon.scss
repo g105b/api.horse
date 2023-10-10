@@ -1,0 +1,10 @@
+@mixin icon($name) {
+	content: "";
+	display: block;
+	width: 1.25rem;
+	aspect-ratio: 1;
+	background-image: url("/asset/icon/#{$name}.svg");
+	background-size: 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}

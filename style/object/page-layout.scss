@@ -1,0 +1,14 @@
+%o-page-layout {
+	display: flex;
+	flex-direction: column;
+
+	@media(min-width: $break-small) {
+		flex-direction: row;
+	}
+
+	section {
+		display: flex;
+		flex-wrap: wrap;
+		flex-grow: 1;
+	}
+}
