@@ -1,8 +1,9 @@
 %d-sidebar {
 	display: block;
+	flex-shrink: 0;
 
 	@media(min-width: $break-small) {
-		width: 48rem;
+		width: 24rem;
 	}
 
 	menu {

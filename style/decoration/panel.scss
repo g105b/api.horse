@@ -1,11 +1,10 @@
 %d-panel {
 	display: block;
-	flex-grow: 1;
 	margin: 0 1rem;
-	max-width: $break-medium;
+	width: 100%;
 
-	@media(min-width: $break-small) {
-		min-width: $break-small;
+	@media(min-width: $break-medium) {
+		width: calc(50% - 2rem);
 	}
 
 	h1, h2, h3, h4, h5, h6 {
