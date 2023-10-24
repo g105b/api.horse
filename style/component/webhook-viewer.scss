@@ -1,3 +1,18 @@
 webhook-viewer {
 	@extend %d-panel;
+
+	>ul {
+		list-style-type: none;
+		padding: 0;
+
+		>li {
+			>details {
+				margin-bottom: 2rem;
+
+				>summary {
+					@extend %d-http-attributes;
+				}
+			}
+		}
+	}
 }

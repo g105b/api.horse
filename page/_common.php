@@ -1,9 +1,18 @@
 <?php
+use App\ShareId;
 use Gt\Dom\HTMLDocument;
+use Gt\DomTemplate\DocumentBinder;
 use Gt\Http\Response;
 use Gt\Http\Uri;
 
-function go(Uri $uri, HTMLDocument $document):void {
+function go(
+	Uri $uri,
+	HTMLDocument $document,
+	DocumentBinder $binder,
+	ShareId $shareId,
+):void {
+	$binder->bindKeyValue("shareId", $shareId);
+
 	foreach($document->querySelectorAll("global-header menu a") as $link) {
 		if(str_starts_with($uri->getPath(), $link->href)) {
 			$link->parentElement->classList->add("selected");

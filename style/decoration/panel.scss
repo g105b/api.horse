@@ -2,6 +2,7 @@
 	display: block;
 	margin: 0 1rem;
 	width: 100%;
+	max-width: $break-small;
 
 	@media(min-width: $break-medium) {
 		width: calc(50% - 2rem);
@@ -60,8 +61,7 @@
 		}
 	}
 
-	form.new, form.request {
-		max-width: $break-small;
+	form.new, form.request, form.webhook {
 		display: flex;
 		flex-direction: column;
 

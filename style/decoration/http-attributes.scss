@@ -1,0 +1,40 @@
+%d-http-attributes {
+	cursor: pointer;
+	margin-bottom: 1rem;
+
+	&::marker {
+		content: "";
+	}
+
+	&:hover:not(:focus) {
+		outline: 2px solid var(--theme-input--border);
+		outline-offset: 2px;
+	}
+
+	.method {
+		font-family: monospace;
+		font-weight: bold;
+	}
+
+	.status {
+		display: inline-block;
+		padding: 0.5rem;
+		background-color: var(--theme-button--bg);
+		color: var(--theme-button--fg);
+		border: 1px solid var(--theme-button--border);
+		border-radius: 0.5rem;
+	}
+
+	.id {
+		display: inline-block;
+		padding: 0.5rem;
+		background-color: var(--theme-variable--bg);
+		color: var(--theme-variable--fg);
+		border: 1px solid var(--theme-variable--border);
+		border-radius: 0.5rem;
+	}
+
+	time {
+		opacity: 0.5;
+	}
+}

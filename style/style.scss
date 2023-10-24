@@ -5,6 +5,7 @@
 @import "decoration/user-interface";
 @import "decoration/panel";
 @import "decoration/sidebar";
+@import "decoration/http-attributes";
 @import "object/page-layout";
 @import "component/global-header";
 @import "component/request-editor";
@@ -15,6 +16,7 @@
 @import "component/webhook-create";
 @import "component/webhook-editor";
 @import "component/webhook-viewer";
+@import "component/http-message";
 @import "element/body";
 @import "element/button";
 @import "element/html";

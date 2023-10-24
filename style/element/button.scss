@@ -25,4 +25,14 @@ button {
 			box-shadow: inset 0 0 0 10rem rgba(white, 0.1);
 		}
 	}
+
+	&.negative {
+		--pal-bg: var(--theme-button--bg--negative);
+		--pal-fg: var(--theme-button--fg--negative);
+		--pal-border: var(--theme-button--border--negative);
+
+		&:hover {
+			box-shadow: inset 0 0 0 10rem rgba(white, 0.1);
+		}
+	}
 }

@@ -1,3 +1,57 @@
 webhook-editor {
 	@extend %d-panel;
+
+	form.webhook {
+		display: flex;
+		flex-direction: row;
+		gap: 1rem;
+		align-items: last baseline;
+
+		button {
+			width: 6rem;
+		}
+	}
+
+	>ul {
+		list-style-type: none;
+		padding: 0;
+
+		>li {
+			form {
+				display: flex;
+				gap: 1rem;
+
+				.actions {
+					display: flex;
+					align-items: last baseline;
+					opacity: 0;
+
+					button {
+						width: 6rem;
+
+						&[value=add-endpoint] {
+							display: none;
+						}
+					}
+				}
+
+				&:hover, &:focus-within {
+					.actions {
+						opacity: 1;
+					}
+				}
+			}
+
+			&:first-of-type {
+				.actions {
+					button[value=add-endpoint] {
+						display: block;
+					}
+					button[value=delete-endpoint] {
+						display: none;
+					}
+				}
+			}
+		}
+	}
 }

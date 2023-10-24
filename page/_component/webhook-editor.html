@@ -1,3 +1,14 @@
+<h1>Settings</h1>
+
+<form method="post" class="webhook">
+	<label>
+		<span>Name</span>
+		<input name="name" required />
+	</label>
+	<button name="do" value="update-name">Update</button>
+	<button name="do" value="delete-webhook" class="negative" onclick="return confirm('Delete this webhook?')">Delete</button>
+</form>
+
 <h1>Endpoints</h1>
 
 <ul>
@@ -5,7 +16,7 @@
 		<form method="post">
 			<label>
 				<span>Endpoint</span>
-				<input type="url" name="endpoint" value="/" />
+				<input type="url" name="endpoint" placeholder="e.g. /test" />
 			</label>
 			<label>
 				<span>Status</span>
@@ -15,12 +26,12 @@
 			</label>
 			<label>
 				<span>Response body</span>
-				<input name="body" value="Hello, Horsey!" />
+				<input name="body" placeholder="e.g. Hello, Horsey!" />
 			</label>
 
 			<div class="actions">
 				<button name="do" value="add-endpoint">Add</button>
-				<button name="do" value="delete-endpoint">Delete</button>
+				<button name="do" value="delete-endpoint" onclick="return confirm('Delete this endpoint?')">Delete</button>
 			</div>
 		</form>
 	</li>
