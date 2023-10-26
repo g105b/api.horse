@@ -21,6 +21,8 @@ API testing without horsing around.
 
 Each piece of the user interface is composed of its own custom HTML element, brought together using [PHP.Gt/WebEngine]. I've just completed building the user interface of API.horse, and before I implement the functionality, I want to introduce a long-awaited feature of WebEngine: [Components with their own PHP](https://github.com/PhpGt/DomTemplate/issues/331). There's never a better time to improve a tool than when building a silly side project like this.
 
+### Why does it look like Github?
+
 Currently the user interface is built to look and feel just like Github. This is intentional, because I personally have no ability at creating good designs, but I am quite comfortable in implementing a design once I can see it. I'm really familiar with Github's user interface, so for now I've just copied that. Once the product's in use, I'll hire a graphic designer to give it its own look and feel.
 
 ## What's with the name?
