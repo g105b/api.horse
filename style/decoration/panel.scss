@@ -30,8 +30,12 @@
 		margin: 2rem 0;
 	}
 
-	.hidden {
+	.hidden-area {
 		display: none;
+
+		&.show {
+			display: block;
+		}
 	}
 
 	.kvp {
@@ -90,36 +94,34 @@
 			}
 		}
 
-		form {
-			&.add, &.type, &.text {
+		.add, .type, .text {
+			display: flex;
+			justify-content: flex-start;
+			gap: 1rem;
+			margin-bottom: 1rem;
+			padding: 0 1rem;
+
+			button {
+				flex-grow: 1;
+			}
+		}
+
+		.add {
+			justify-content: stretch;
+		}
+		.type {
+			align-items: last baseline;
+
+			label {
+				flex-grow: 0;
+			}
+		}
+		.text {
+			flex-direction: column;
+			align-items: stretch;
+
+			.actions {
 				display: flex;
-				justify-content: flex-start;
-				gap: 1rem;
-				margin-bottom: 1rem;
-				padding: 0 1rem;
-
-				button {
-					flex-grow: 1;
-				}
-			}
-
-			&.add {
-				justify-content: stretch;
-			}
-			&.type {
-				align-items: last baseline;
-
-				label {
-					flex-grow: 0;
-				}
-			}
-			&.text {
-				flex-direction: column;
-				align-items: stretch;
-
-				.actions {
-					display: flex;
-				}
 			}
 		}
 
@@ -146,10 +148,6 @@
 				&.combo-method {
 					position: absolute;
 					top: 0;
-
-					span {
-						//display: none;
-					}
 				}
 
 				&.combo-endpoint {

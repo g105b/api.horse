@@ -35,21 +35,21 @@ class RequestEntity {
 	}
 
 	#[BindGetter]
-	public function getHideParameters():bool {
+	public function getShowBodyParameters():bool {
 		if(!$this->body) {
-			return true;
+			return false;
 		}
 
-		return !($this->body instanceof BodyEntityMultipart || $this->body instanceof BodyEntityUrlEncoded);
+		return $this->body instanceof BodyEntityForm;
 	}
 
 	#[BindGetter]
-	public function getHideRaw():bool {
+	public function getShowBodyRaw():bool {
 		if(!$this->body) {
-			return true;
+			return false;
 		}
 
-		return !($this->body instanceof BodyEntityRaw);
+		return $this->body instanceof BodyEntityRaw;
 	}
 
 	public function addQueryParameter(

@@ -3,7 +3,7 @@
 <form method="post" class="fields">
 	<label>
 		<span>Name</span>
-		<input name="name" placeholder="e.g. List all items" autofocus autocomplete="off" data-bind:value="@name" />
+		<input name="name" placeholder="e.g. List all items" autofocus autocomplete="off" data-bind:value="nameOrId" />
 	</label>
 
 	<div class="endpoint">
@@ -30,7 +30,7 @@
 
 		<label class="combo-endpoint">
 			<span>Endpoint</span>
-			<input name="endpoint" placeholder="e.g. https://api.example.com/test" required type="url" data-bind:value="@name" />
+			<input name="endpoint" placeholder="e.g. https://api.example.com/test" required type="url" autocomplete="off" data-bind:value="@name" />
 		</label>
 	</div>
 
@@ -53,11 +53,11 @@
 					<input type="hidden" name="id" data-bind:value="@name" />
 					<label>
 						<span>Key</span>
-						<input name="key" data-bind:value="@name" />
+						<input name="key" data-bind:value="@name" autocomplete="off" />
 					</label>
 					<label>
 						<span>Value</span>
-						<input name="value" data-bind:value="@name" />
+						<input name="value" data-bind:value="@name" autocomplete="off" />
 					</label>
 					<div class="actions">
 						<button name="do" value="save-query-parameter">Save</button>
@@ -79,11 +79,11 @@
 					<input type="hidden" name="id" data-bind:value="@name" />
 					<label>
 						<span>Key</span>
-						<input name="key" data-bind:value="@name" />
+						<input name="key" data-bind:value="@name" autocomplete="off" />
 					</label>
 					<label>
 						<span>Value</span>
-						<input name="value" data-bind:value="@name" />
+						<input name="value" data-bind:value="@name" autocomplete="off" />
 					</label>
 					<div class="actions">
 						<button name="do" value="save-header">Save</button>
@@ -120,11 +120,11 @@
 			</div>
 		</form>
 
-		<div class="raw" data-bind:class=":hideRaw hidden">
+		<div class="raw" hidden data-bind:hidden="?!showBodyRaw">
 			<form method="post" class="text">
 				<label>
 					<span>Body</span>
-					<textarea name="body-raw"></textarea>
+					<textarea name="body-raw" data-bind:html="body.content"></textarea>
 				</label>
 				<div class="actions">
 					<button name="do" value="save-body-raw">Save</button>
@@ -132,18 +132,20 @@
 			</form>
 		</div>
 
-		<div class="parameters" data-bind:class=":hideParameters hidden">
-			<ul class="multiple " data-term="body parameters">
-				<li>
+		<div class="parameters" hidden data-bind:hidden="?!showBodyParameters">
+			<ul class="multiple " data-term="body parameters" data-bind:list="body.parameters">
+				<li data-list>
 					<form method="post">
+						<input type="hidden" name="id" data-bind:value="@name" />
 						<label>
 							<span>Key</span>
-							<input name="key" />
+							<input name="key" data-bind:value="@name" autocomplete="off" />
 						</label>
 						<label>
 							<span>Value</span>
-							<input name="value" />
+							<input name="value" data-bind:value="@name" autocomplete="off" />
 						</label>
+
 						<div class="actions">
 							<button name="do" value="save-body-parameter">Save</button>
 							<button name="do" value="delete-body-parameter">Delete</button>
@@ -159,7 +161,7 @@
 
 	<details>
 		<summary><h2>Raw HTTP message</h2></summary>
-		<div>
+		<div class="text">
 			<label>
 				<span>Message</span>
 				<textarea name="message"></textarea>

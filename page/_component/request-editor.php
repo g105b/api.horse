@@ -1,4 +1,5 @@
 <?php
+use App\Request\BodyEntityForm;
 use App\Request\BodyEntityMultipart;
 use App\Request\BodyEntityRaw;
 use App\Request\BodyEntityUrlEncoded;
@@ -156,8 +157,12 @@ function do_set_body_type(
 	Input $input,
 	Response $response,
 	RequestRepository $requestRepository,
-	RequestEntity $requestEntity,
+	?RequestEntity $requestEntity,
 ):void {
+	if(!$requestEntity) {
+		$requestEntity = $requestRepository->create();
+	}
+
 	$type = $input->getString("body-type");
 	$id = new Ulid("body");
 	$bodyEntity = match($type) {
@@ -167,10 +172,54 @@ function do_set_body_type(
 		"text", "json", "xml" => new BodyEntityRaw($id, $type),
 	};
 
-// MORNING TODO: Above, we create a specific type of BodyEntity to store on the RequestEntity.
-// The BodyEntityText also takes a type. This will allow it to be bound to the body-type select.
-
 	$requestEntity->setBody($bodyEntity);
+	$requestRepository->update($requestEntity);
+	$response->redirect("../$requestEntity->id/?editor=body");
+}
+
+function do_save_body_raw(
+	Input $input,
+	Response $response,
+	RequestRepository $requestRepository,
+	RequestEntity $requestEntity,
+):void {
+	$requestEntity->body->content = $input->getString("body-raw");
+	$requestRepository->update($requestEntity);
+	$response->redirect("../$requestEntity->id/?editor=body");
+}
+
+function do_new_body_parameter(
+	Input $input,
+	Response $response,
+	RequestRepository $requestRepository,
+	RequestEntity $requestEntity,
+):void {
+	$requestEntity->body->addBodyParameter();
+	$requestRepository->update($requestEntity);
+	$response->redirect("../$requestEntity->id/?editor=body");
+}
+
+function do_save_body_parameter(
+	Input $input,
+	Response $response,
+	RequestRepository $requestRepository,
+	RequestEntity $requestEntity,
+):void {
+	$bodyParameterEntity = $requestEntity->body->getParameterById($input->getString("id"));
+	$bodyParameterEntity->key = $input->getString("key");
+	$bodyParameterEntity->value = $input->getString("value");
+	$requestRepository->update($requestEntity);
+	$response->redirect("../$requestEntity->id/?editor=body");
+}
+
+function do_delete_body_parameter(
+	Input $input,
+	Response $response,
+	RequestRepository $requestRepository,
+	RequestEntity $requestEntity,
+):void {
+	$bodyParameterEntity = $requestEntity->body->getParameterById($input->getString("id"));
+	$requestEntity->body->deleteParameter($bodyParameterEntity);
 	$requestRepository->update($requestEntity);
 	$response->redirect("../$requestEntity->id/?editor=body");
 }
