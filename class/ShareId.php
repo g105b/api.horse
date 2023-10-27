@@ -1,13 +1,14 @@
 <?php
 namespace App;
 
+use Gt\Ulid\Ulid;
 use Stringable;
 
 class ShareId implements Stringable {
 	private string $random;
 
 	public function __construct() {
-		$this->random = uniqid("blah");
+		$this->random = new Ulid();
 	}
 
 	public function __toString():string {

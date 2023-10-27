@@ -1,4 +1,5 @@
 %d-panel {
+	position: relative;
 	display: block;
 	margin: 0 1rem;
 	width: 100%;
@@ -27,6 +28,10 @@
 
 	article {
 		margin: 2rem 0;
+	}
+
+	.hidden {
+		display: none;
 	}
 
 	.kvp {
@@ -61,7 +66,7 @@
 		}
 	}
 
-	form.new, form.request, form.webhook {
+	.fields {
 		display: flex;
 		flex-direction: column;
 
@@ -74,10 +79,63 @@
 			flex-grow: 1;
 			margin-bottom: 1rem;
 
+			&:last-of-type {
+				margin-bottom: 0;
+			}
+
 			span {
 				display: block;
 				padding: 0.5rem;
 				font-weight: bold;
+			}
+		}
+
+		form {
+			&.add, &.type, &.text {
+				display: flex;
+				justify-content: flex-start;
+				gap: 1rem;
+				margin-bottom: 1rem;
+				padding: 0 1rem;
+
+				button {
+					flex-grow: 1;
+				}
+			}
+
+			&.add {
+				justify-content: stretch;
+			}
+			&.type {
+				align-items: last baseline;
+
+				label {
+					flex-grow: 0;
+				}
+			}
+			&.text {
+				flex-direction: column;
+				align-items: stretch;
+
+				.actions {
+					display: flex;
+				}
+			}
+		}
+
+		.actions {
+			&.primary {
+				margin-top: 1rem;
+
+				button {
+					@extend .positive;
+					width: 100%;
+				}
+			}
+			&:not(.primary) {
+				button {
+					margin: 1rem 0;
+				}
 			}
 		}
 
@@ -158,42 +216,60 @@
 					}
 				}
 			}
-
-			div {
-				padding: 1rem;
-
-				&.type {
-					padding-bottom: 0;
-				}
-
-				&.multiple {
-					display: flex;
-					gap: 1rem;
-					flex-wrap: wrap;
-
-					label {
-						width: calc(50% - 0.5rem);
-					}
-
-					.add {
-						width: 100%;
-						margin: 0;
-						padding: 0;
-
-						button {
-							width: 100%;
-						}
-					}
-				}
-			}
 		}
 
-		.actions {
-			margin-top: 1rem;
+		ul.multiple {
+			list-style-type: none;
+			padding: 0 1rem;
 
-			&.send {
-				button {
-					width: 100%;
+			&:empty {
+				&::before {
+					content: "There are no " attr(data-term) " added yet.";
+					display: block;
+					font-style: italic;
+					text-align: center;
+					opacity: 0.5;
+					margin: 2rem;
+				}
+			}
+
+			>li {
+				display: flex;
+				justify-content: stretch;
+				align-items: flex-end;
+				gap: 1rem;
+				flex-wrap: wrap;
+				margin-bottom: 0.5rem;
+
+				>form {
+					flex-grow: 1;
+					display: flex;
+					align-items: flex-end;
+					gap: 1rem;
+				}
+
+				label {
+					flex-grow: 1;
+					margin-bottom: 0;
+				}
+
+				.actions {
+					display: flex;
+					gap: 0.5rem;
+					margin: 0;
+					padding: 0;
+
+					button {
+						margin: 0;
+					}
+				}
+
+				&:not(:first-of-type) {
+					label {
+						span {
+							display: none;
+						}
+					}
 				}
 			}
 		}

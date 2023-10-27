@@ -1,3 +1,10 @@
 request-editor {
 	@extend %d-panel;
+
+	button[name=do][value=delete-request] {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin-top: 0.75rem;
+	}
 }

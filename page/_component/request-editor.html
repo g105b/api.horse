@@ -1,15 +1,15 @@
 <h1>Request editor</h1>
 
-<form method="post" class="request">
+<form method="post" class="fields">
 	<label>
 		<span>Name</span>
-		<input name="name" placeholder="e.g. List all items" autofocus autocomplete="off" />
+		<input name="name" placeholder="e.g. List all items" autofocus autocomplete="off" data-bind:value="@name" />
 	</label>
 
 	<div class="endpoint">
 		<label class="combo-method">
 			<span>Method</span>
-			<select name="method">
+			<select name="method" data-bind:value="@name">
 				<option>GET</option>
 				<option>POST</option>
 				<option>PUT</option>
@@ -30,54 +30,83 @@
 
 		<label class="combo-endpoint">
 			<span>Endpoint</span>
-			<input name="endpoint" placeholder="e.g. https://api.example.com/test" required type="url" />
+			<input name="endpoint" placeholder="e.g. https://api.example.com/test" required type="url" data-bind:value="@name" />
 		</label>
 	</div>
 
-	<details>
-		<summary><h2>Query parameters <span>0</span></h2></summary>
-		<div class="multiple">
-			<label>
-				<span>Key</span>
-				<input name="query-key[]" />
-			</label>
-			<label>
-				<span>Value</span>
-				<input name="query-value[]" />
-			</label>
-			<div class="add">
-				<button>Add</button>
-			</div>
-		</div>
+	<div class="actions">
+		<button name="do" value="update">Update</button>
+	</div>
+</form>
+
+<form method="post">
+	<button name="do" value="delete-request" class="negative" onclick="return confirm('Are you sure you want to delete this request?');">Delete</button>
+</form>
+
+<div class="fields">
+	<details data-editor="query-string-parameter">
+		<summary><h2>Query parameters <span data-bind:text="queryStringParameterCount">0</span></h2></summary>
+
+		<ul class="multiple" data-term="query parameters" data-bind:list="queryStringParameters">
+			<li data-list>
+				<form method="post">
+					<input type="hidden" name="id" data-bind:value="@name" />
+					<label>
+						<span>Key</span>
+						<input name="key" data-bind:value="@name" />
+					</label>
+					<label>
+						<span>Value</span>
+						<input name="value" data-bind:value="@name" />
+					</label>
+					<div class="actions">
+						<button name="do" value="save-query-parameter">Save</button>
+						<button name="do" value="delete-query-parameter">Delete</button>
+					</div>
+				</form>
+			</li>
+		</ul>
+		<form class="add" method="post">
+			<button name="do" value="new-query-parameter">New query parameter</button>
+		</form>
 	</details>
 
-	<details>
-		<summary><h2>Headers <span>0</span></h2></summary>
-		<div class="multiple">
-			<label>
-				<span>Key</span>
-				<input name="header-key[]" />
-			</label>
-			<label>
-				<span>Value</span>
-				<input name="header-value[]" />
-			</label>
-			<div class="add">
-				<button>Add</button>
-			</div>
-		</div>
+	<details data-editor="header">
+		<summary><h2>Headers <span data-bind:text="headerCount">0</span></h2></summary>
+		<ul class="multiple" data-term="headers" data-bind:list="headers">
+			<li data-list>
+				<form method="post">
+					<input type="hidden" name="id" data-bind:value="@name" />
+					<label>
+						<span>Key</span>
+						<input name="key" data-bind:value="@name" />
+					</label>
+					<label>
+						<span>Value</span>
+						<input name="value" data-bind:value="@name" />
+					</label>
+					<div class="actions">
+						<button name="do" value="save-header">Save</button>
+						<button name="do" value="delete-header">Delete</button>
+					</div>
+				</form>
+			</li>
+		</ul>
+		<form class="add">
+			<button name="do" value="new-header">New header</button>
+		</form>
 	</details>
 
-	<details>
-		<summary><h2>Body</h2></summary>
-		<div class="type">
+	<details data-editor="body">
+		<summary><h2>Body <span data-bind:text="body.typeString">None</span></h2></summary>
+		<form class="type" method="post">
 			<label>
 				<span>Body type</span>
-				<select name="body-type">
-					<option value="">No body</option>
+				<select name="body-type" data-bind:value="body.typeValue">
+					<option value="">None</option>
 					<optgroup label="Form">
-						<option value="form-data">Multipart form</option>
-						<option value="form-data">URL Encoded</option>
+						<option value="form-multipart">Multipart form</option>
+						<option value="form-url">URL Encoded</option>
 					</optgroup>
 					<optgroup label="Raw">
 						<option value="text">Plain text</option>
@@ -86,25 +115,45 @@
 					</optgroup>
 				</select>
 			</label>
-		</div>
-		<div class="raw">
-			<label>
-				<span>Body</span>
-				<textarea name="body-raw"></textarea>
-			</label>
-		</div>
-		<div class="multiple">
-			<label>
-				<span>Key</span>
-				<input name="body-key[]" />
-			</label>
-			<label>
-				<span>Value</span>
-				<input name="body-value[]" />
-			</label>
-			<div class="add">
-				<button>Add</button>
+			<div class="actions">
+				<button name="do" value="set-body-type">Set body type</button>
 			</div>
+		</form>
+
+		<div class="raw" data-bind:class=":hideRaw hidden">
+			<form method="post" class="text">
+				<label>
+					<span>Body</span>
+					<textarea name="body-raw"></textarea>
+				</label>
+				<div class="actions">
+					<button name="do" value="save-body-raw">Save</button>
+				</div>
+			</form>
+		</div>
+
+		<div class="parameters" data-bind:class=":hideParameters hidden">
+			<ul class="multiple " data-term="body parameters">
+				<li>
+					<form method="post">
+						<label>
+							<span>Key</span>
+							<input name="key" />
+						</label>
+						<label>
+							<span>Value</span>
+							<input name="value" />
+						</label>
+						<div class="actions">
+							<button name="do" value="save-body-parameter">Save</button>
+							<button name="do" value="delete-body-parameter">Delete</button>
+						</div>
+					</form>
+				</li>
+			</ul>
+			<form class="add">
+				<button name="do" value="new-body-parameter">Add body parameter</button>
+			</form>
 		</div>
 	</details>
 
@@ -118,9 +167,7 @@
 		</div>
 	</details>
 
-	<div class="actions send">
-		<button name="do" value="send" class="positive">Send request</button>
+	<div class="actions primary">
+		<button name="do" value="send">Send request</button>
 	</div>
-
-
-</form>
+</div>
