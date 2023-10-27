@@ -3,7 +3,7 @@ namespace App\Request;
 
 use Gt\Ulid\Ulid;
 
-class BodyEntityForm extends BodyEntity {
+abstract class BodyEntityForm extends BodyEntity {
 	public function addBodyParameter(string $key = "", string $value = ""):void {
 		if(is_null($this->parameters)) {
 			$this->parameters = [];

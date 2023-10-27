@@ -52,6 +52,49 @@ class RequestEntity {
 		return $this->body instanceof BodyEntityRaw;
 	}
 
+	#[BindGetter]
+	public function getRawMessage():string {
+		$queryString = "";
+
+		if($this->queryStringParameters) {
+			foreach($this->queryStringParameters as $queryStringParameter) {
+				if($queryString) {
+					$queryString .= "&";
+				}
+				else {
+					$queryString .= "?";
+				}
+
+				$queryString .= $queryStringParameter->key;
+				if($queryStringParameter->value) {
+					$queryString .= "=$queryStringParameter->value";
+				}
+			}
+		}
+
+		$host = parse_url($this->endpoint, PHP_URL_HOST);
+		$uri = parse_url($this->endpoint, PHP_URL_PATH) ?: "/";
+
+		$message = strtoupper($this->method) . " " . $uri . $queryString . " HTTP/1.1\n";
+		$message .= "Host: $host\n";
+
+		foreach($this->headers ?? [] as $header) {
+			$message .= "$header->key: $header->value\n";
+		}
+
+		if($this->body) {
+			$message .= "\n";
+			$message .= $this->body;
+		}
+
+		return $message;
+	}
+
+	#[BindGetter]
+	public function getRawMessageLines():int {
+		return substr_count($this->getRawMessage(), "\n") + 1;
+	}
+
 	public function addQueryParameter(
 		string $key = "",
 		string $value = null,

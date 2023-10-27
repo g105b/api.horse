@@ -2,8 +2,9 @@
 namespace App\Request;
 
 use Gt\DomTemplate\BindGetter;
+use Stringable;
 
-abstract class BodyEntity {
+abstract class BodyEntity implements Stringable {
 	/** @var null|array<BodyParameterEntity> */
 	public ?array $parameters = null;
 	public ?string $content = null;
@@ -13,6 +14,8 @@ abstract class BodyEntity {
 		public string $id,
 		public ?string $derivedType = null,
 	) {}
+
+	abstract public function __toString():string;
 
 	#[BindGetter]
 	public function getTypeString():string {
