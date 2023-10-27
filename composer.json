@@ -5,7 +5,9 @@
 		"phpgt/routing": "dev-master as v1.1.2"
 	},
 	"require-dev": {
-		"phpunit/phpunit": "^10.4"
+		"ext-xdebug": "*",
+		"phpunit/phpunit": "^10.4",
+		"phpstan/phpstan": "^1.10"
 	},
 	"autoload": {
 		"psr-4": {
