@@ -56,20 +56,12 @@ class RequestEntity {
 	public function getRawMessage():string {
 		$queryString = "";
 
-		if($this->queryStringParameters) {
-			foreach($this->queryStringParameters as $queryStringParameter) {
-				if($queryString) {
-					$queryString .= "&";
-				}
-				else {
-					$queryString .= "?";
-				}
+		if(!$this->method || !$this->endpoint) {
+			return "INCOMPLETE";
+		}
 
-				$queryString .= $queryStringParameter->key;
-				if($queryStringParameter->value) {
-					$queryString .= "=$queryStringParameter->value";
-				}
-			}
+		if($this->queryStringParameters) {
+			$queryString = new QueryEncodedKVP($this->queryStringParameters);
 		}
 
 		$host = parse_url($this->endpoint, PHP_URL_HOST);
@@ -78,8 +70,28 @@ class RequestEntity {
 		$message = strtoupper($this->method) . " " . $uri . $queryString . " HTTP/1.1\n";
 		$message .= "Host: $host\n";
 
-		foreach($this->headers ?? [] as $header) {
-			$message .= "$header->key: $header->value\n";
+		$headerList = $this->headers ?? [];
+		if($this->body instanceof BodyEntityMultipart) {
+			$boundary = new Ulid("boundary");
+			$this->body->boundary = $boundary;
+			array_push(
+				$headerList,
+				new HeaderEntity(
+					new Ulid("header"),
+					"Content-type",
+					"multipart/form-data",
+					"boundary",
+					"--$boundary",
+				)
+			);
+		}
+
+		foreach($headerList as $header) {
+			if(!$header->key) {
+				continue;
+			}
+
+			$message .= "$header\n";
 		}
 
 		if($this->body) {

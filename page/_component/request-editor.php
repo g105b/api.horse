@@ -67,9 +67,22 @@ function do_update(
 		$requestEntity = $requestRepository->create();
 	}
 
+	$endpointString = $input->getString("endpoint");
+	if($queryString = parse_url($endpointString, PHP_URL_QUERY)) {
+		$endpointString = strtok($endpointString, "?");
+		parse_str($queryString, $queryParts);
+		if($queryParts) {
+			$requestEntity->queryStringParameters = [];
+		}
+
+		foreach($queryParts as $key => $value) {
+			$requestEntity->addQueryParameter($key, $value);
+		}
+	}
+
 	$requestEntity->name = $input->getString("name");
 	$requestEntity->method = $input->getString("method");
-	$requestEntity->endpoint = $input->getString("endpoint");
+	$requestEntity->endpoint = $endpointString;
 	$requestRepository->update($requestEntity);
 
 	$response->redirect("../$requestEntity->id/");

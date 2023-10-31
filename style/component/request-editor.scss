@@ -7,4 +7,11 @@ request-editor {
 		right: 0;
 		margin-top: 0.75rem;
 	}
+
+	textarea[name=message] {
+		resize: vertical;
+		overflow-x: scroll;
+		white-space: pre;
+		height: auto;
+	}
 }
