@@ -1,8 +1,10 @@
 <?php
 namespace App;
 
+use App\Http\FetchHandler;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
+use App\Response\ResponseRepository;
 use Gt\Http\Header\RequestHeaders;
 use Gt\Http\Uri;
 use Gt\Routing\Path\DynamicPath;
@@ -38,5 +40,16 @@ class ServiceLoader extends DefaultServiceLoader {
 			"data/request",
 			$this->container->get(ShareId::class),
 		);
+	}
+
+	public function loadResponseRepository():ResponseRepository {
+		return new ResponseRepository(
+			"data/request",
+			$this->container->get(ShareId::class),
+		);
+	}
+
+	public function loadFetchHandler():FetchHandler {
+		return new FetchHandler();
 	}
 }

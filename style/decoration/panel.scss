@@ -222,12 +222,8 @@
 
 			&:empty {
 				&::before {
+					@extend %d-empty-message;
 					content: "There are no " attr(data-term) " added yet.";
-					display: block;
-					font-style: italic;
-					text-align: center;
-					opacity: 0.5;
-					margin: 2rem;
 				}
 			}
 

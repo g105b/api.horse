@@ -1,6 +1,7 @@
 <?php
 namespace App\Request;
 
+use App\Http\HeaderEntity;
 use Stringable;
 
 class QueryEncodedKVP implements Stringable {

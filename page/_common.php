@@ -1,14 +1,14 @@
 <?php
 use App\ShareId;
 use Gt\Dom\HTMLDocument;
-use Gt\DomTemplate\DocumentBinder;
+use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
 use Gt\Http\Uri;
 
 function go(
 	Uri $uri,
 	HTMLDocument $document,
-	DocumentBinder $binder,
+	Binder $binder,
 	ShareId $shareId,
 ):void {
 	$binder->bindKeyValue("shareId", $shareId);

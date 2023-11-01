@@ -5,6 +5,13 @@ response-viewer {
 		list-style-type: none;
 		padding: 0;
 
+		&:empty {
+			&::before {
+				@extend %d-empty-message;
+				content: "Send a request to get a response";
+			}
+		}
+
 		>li {
 			>details {
 				margin-bottom: 2rem;

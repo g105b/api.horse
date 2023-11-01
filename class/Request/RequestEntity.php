@@ -1,9 +1,11 @@
 <?php
 namespace App\Request;
 
+use App\Http\HeaderEntity;
 use Gt\DomTemplate\BindGetter;
+use Gt\Http\Uri;
 use Gt\Ulid\Ulid;
-use JsonSerializable;
+use Psr\Http\Message\UriInterface;
 
 class RequestEntity {
 	public ?string $name = null;
@@ -72,8 +74,6 @@ class RequestEntity {
 
 		$headerList = $this->headers ?? [];
 		if($this->body instanceof BodyEntityMultipart) {
-			$boundary = new Ulid("boundary");
-			$this->body->boundary = $boundary;
 			array_push(
 				$headerList,
 				new HeaderEntity(
@@ -81,7 +81,7 @@ class RequestEntity {
 					"Content-type",
 					"multipart/form-data",
 					"boundary",
-					"--$boundary",
+					"--" . $this->body->boundary,
 				)
 			);
 		}
@@ -147,7 +147,7 @@ class RequestEntity {
 		array_push(
 			$this->headers,
 			new HeaderEntity(
-				new Ulid("header"),
+				new Ulid("reqheader"),
 				$key,
 				$value,
 			),
@@ -182,5 +182,42 @@ class RequestEntity {
 	public function setBody(?BodyEntity $bodyEntity):void {
 		$this->body = $bodyEntity;
 	}
+
+	public function getFetchableUri():UriInterface {
+		$uri = new Uri($this->endpoint);
+
+		foreach($this->queryStringParameters ?? [] as $queryStringParameter) {
+			$uri = $uri->withQueryValue(
+				$queryStringParameter->key,
+				$queryStringParameter->value,
+			);
+		}
+
+		return $uri;
+	}
+
+	/** @return null|array<string, string> */
+	public function getFetchableHeaders():?array {
+		if(!$this->headers) {
+			return null;
+		}
+
+		$headerArray = [];
+		foreach($this->headers as $header) {
+			$headerArray[$header->key] = $header->value;
+		}
+
+		return $headerArray;
+	}
+
+	public function getFetchableBody():?string {
+		if(!$this->body) {
+			return null;
+		}
+
+		return (string)$this->body;
+	}
+
+
 
 }

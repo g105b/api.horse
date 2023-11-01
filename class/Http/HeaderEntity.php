@@ -1,5 +1,5 @@
 <?php
-namespace App\Request;
+namespace App\Http;
 
 use Stringable;
 

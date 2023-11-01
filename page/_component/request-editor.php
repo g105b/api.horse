@@ -1,10 +1,12 @@
 <?php
+use App\Http\FetchHandler;
 use App\Request\BodyEntityForm;
 use App\Request\BodyEntityMultipart;
 use App\Request\BodyEntityRaw;
 use App\Request\BodyEntityUrlEncoded;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
+use App\Response\ResponseRepository;
 use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\NodeList;
@@ -235,4 +237,15 @@ function do_delete_body_parameter(
 	$requestEntity->body->deleteParameter($bodyParameterEntity);
 	$requestRepository->update($requestEntity);
 	$response->redirect("../$requestEntity->id/?editor=body");
+}
+
+function do_send(
+	Response $response,
+	ResponseRepository $responseRepository,
+	RequestEntity $requestEntity,
+	FetchHandler $fetchHandler,
+):void {
+	$responseEntity = $fetchHandler->fetchResponse($requestEntity);
+	$responseRepository->storeResponse($requestEntity, $responseEntity);
+	$response->reload();
 }

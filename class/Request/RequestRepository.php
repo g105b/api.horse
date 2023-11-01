@@ -2,6 +2,7 @@
 namespace App\Request;
 
 use App\Fun\MemorableId;
+use App\Repository;
 use App\ShareId;
 use Gt\Json\JsonObject;
 use Gt\Json\JsonObjectBuilder;
@@ -10,16 +11,7 @@ use ReflectionObject;
 use ReflectionProperty;
 use stdClass;
 
-class RequestRepository {
-	private string $dataDir;
-
-	public function __construct(
-		string $baseDataDir,
-		private readonly ShareId $shareId,
-	) {
-		$this->dataDir = "$baseDataDir/$shareId";
-	}
-
+class RequestRepository extends Repository {
 	public function create():RequestEntity {
 		$id = new MemorableId();
 		$requestEntity = new RequestEntity($id);
