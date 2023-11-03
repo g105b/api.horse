@@ -15,8 +15,10 @@ class FetchHandler {
 		$uri = $requestEntity->getFetchableUri();
 		$init = [
 			"method" => $requestEntity->method,
-			"headers" => $requestEntity->getFetchableHeaders(),
 		];
+		if($headers = $requestEntity->getFetchableHeaders()) {
+			$init["headers"] = $headers;
+		}
 		if($requestEntity->body) {
 			$init["body"] = $requestEntity->getFetchableBody();
 		}

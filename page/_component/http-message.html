@@ -1,28 +1,12 @@
 <details class="headers">
-	<summary>
-		<span>Example-header: some-value</span>
-		<span>Another-header: some other value</span>
-		<span>Something-else: more headers!</span>
-	</summary>
+	<summary><span data-bind:text="headerSummary">Example-header: some-value</span></summary>
 
 	<ul>
-		<li>
-			<span class="key">Header-key</span>:
-			<span class="value">Example header value</span>
-		</li>
-		<li>
-			<span class="key">Header-key</span>:
-			<span class="value">Example header value</span>
-		</li>
-		<li>
-			<span class="key">Header-key</span>:
-			<span class="value">Example header value</span>
-		</li>
-		<li>
-			<span class="key">Header-key</span>:
-			<span class="value">Example header value</span>
+		<li data-list>
+			<span class="key" data-bind:text="key">Header-key</span>:
+			<span class="value" data-bind:text="value">Example header value</span>
 		</li>
 	</ul>
 </details>
 
-<div class="response-body" data-bind:text="body">Here's the response body!</div>
+<div class="response-body" data-bind:text="body"></div>

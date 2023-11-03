@@ -19,7 +19,6 @@ class ResponseEntity {
 	public ?string $body;
 
 	public function __construct(
-		public readonly RequestEntity $requestEntity
 	) {
 		$this->id = new Ulid("res");
 		$this->initTimestamp = microtime(true);
@@ -65,6 +64,20 @@ class ResponseEntity {
 		return "$size $unit";
 	}
 
+	#[BindGetter]
+	public function getHeaderSummary():string {
+		$summaryString = "";
+
+		foreach($this->headers as $i => $header) {
+			if($i > 0) {
+				$summaryString .= "; ";
+			}
+			$summaryString .= "$header->key: $header->value";
+		}
+
+		return $summaryString;
+	}
+
 	public function setStatus(int $status, string $statusText):void {
 		$this->waitingComplete();
 		$this->status = $status;
@@ -88,6 +101,7 @@ class ResponseEntity {
 
 	public function setBody(string $bodyData):void {
 		$this->receivingComplete(strlen($bodyData));
+		$this->body = $bodyData;
 	}
 
 	private function waitingComplete():void {

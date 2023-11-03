@@ -5,12 +5,12 @@
 		<details>
 			<summary>
 				<span class="status" data-bind:text="statusMessage">000 NONE</span>
-				<span class="id">RES_0000000000000000</span>
-				<time data-bind:datetime="dateTime" data-bind:text="dateTime">0000-00-00 00:00:00</time>
+				<span class="id" data-bind:text="id">RES_0000000000000000</span>
+				<time data-bind:text="dateTime">0000-00-00 00:00:00</time>
 			</summary>
 
 			<span class="timing" data-bind:title="Waiting {{millisecondsWaiting}} ms, receiving {{millisecondsReceiving}} ms">Completed in <span data-bind:text="millisecondsTotal">000</span> ms</span>
-			<span class="size">000 B</span>
+			<span class="size" data-bind:text="size">000 B</span>
 			<http-message />
 		</details>
 	</li>

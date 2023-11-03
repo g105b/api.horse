@@ -187,6 +187,15 @@ function do_set_body_type(
 		"text", "json", "xml" => new BodyEntityRaw($id, $type),
 	};
 
+	if($requestEntity->body instanceof BodyEntityForm) {
+		foreach($requestEntity->body->parameters as $existingParameter) {
+			$bodyEntity->addBodyParameter(
+				$existingParameter->key,
+				$existingParameter->value,
+			);
+		}
+	}
+
 	$requestEntity->setBody($bodyEntity);
 	$requestRepository->update($requestEntity);
 	$response->redirect("../$requestEntity->id/?editor=body");

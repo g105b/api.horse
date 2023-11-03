@@ -18,7 +18,11 @@ class ResponseRepository extends Repository {
 	}
 
 	/** @return array<ResponseEntity> */
-	public function getAll(RequestEntity $requestEntity):array {
+	public function getAll(?RequestEntity $requestEntity):array {
+		if(!$requestEntity) {
+			return [];
+		}
+
 		$responseDir = $this->getResponseDir($requestEntity);
 		$responseArray = [];
 
@@ -29,7 +33,7 @@ class ResponseRepository extends Repository {
 			);
 		}
 
-		return $responseArray;
+		return array_reverse($responseArray);
 	}
 
 	private function getResponseDir(RequestEntity $requestEntity):string {

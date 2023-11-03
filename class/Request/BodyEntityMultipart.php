@@ -17,7 +17,7 @@ class BodyEntityMultipart extends BodyEntityForm {
 	public function __toString():string {
 		$bodyString = "--$this->boundary";
 
-		foreach($this->parameters as $parameter) {
+		foreach($this->parameters ?? [] as $parameter) {
 			$bodyString .= "\n";
 			$bodyString .= "Content-disposition: form-data; name=\"$parameter->key\"\n\n";
 			$bodyString .= $parameter->value;

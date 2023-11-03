@@ -8,6 +8,6 @@ class BodyEntityUrlEncoded extends BodyEntityForm {
 	const VALUE_STRING = "form-url";
 
 	public function __toString():string {
-		return new QueryEncodedKVP($this->parameters);
+		return new QueryEncodedKVP($this->parameters ?? []);
 	}
 }

@@ -1,4 +1,6 @@
 http-message {
+	display: block;
+
 	details.headers {
 		margin-top: 1rem;
 
@@ -38,6 +40,7 @@ http-message {
 			border-radius: 0.25rem;
 			font-family: monospace;
 			margin-top: 1rem;
+			overflow-x: scroll;
 
 			>li {
 				>.key {
@@ -46,6 +49,8 @@ http-message {
 				>.value {
 
 				}
+
+				white-space: nowrap;
 			}
 		}
 	}
@@ -69,5 +74,18 @@ http-message {
 		padding: 0.5rem;
 		border-radius: 0.25rem;
 		font-family: monospace;
+		white-space: pre;
+		overflow-x: scroll;
+
+		&:empty {
+			background-color: transparent;
+			border: none;
+			padding-left: 0;
+
+			&::after {
+				content: "There is no response body";
+				font-style: italic;
+			}
+		}
 	}
 }
