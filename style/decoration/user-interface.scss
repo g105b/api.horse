@@ -12,4 +12,7 @@
 	&:hover:not(:focus) {
 		border-color: var(--theme-input--border--hover);
 	}
+	&:focus {
+		background-color: var(--theme-input--bg--focus);
+	}
 }
