@@ -33,7 +33,7 @@ class ResponseRepository extends Repository {
 			);
 		}
 
-		return array_reverse($responseArray);
+		return $responseArray;
 	}
 
 	public function deleteAll(RequestEntity $requestEntity):void {
