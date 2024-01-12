@@ -13,13 +13,9 @@ function go(
 ):void {
 	$binder->bindList($responseRepository->getAll($requestEntity));
 
-	$lastResponseDetailsEl = null;
-	foreach($element->querySelectorAll("ul>li>details") as $responseDetailsEl) {
-		$lastResponseDetailsEl = $responseDetailsEl;
-	}
-
-	if($lastResponseDetailsEl) {
-		$lastResponseDetailsEl->open = true;
+	$detailsList = $element->querySelectorAll("ul>li>details");
+	if($lastDetailsElement = $detailsList[$detailsList?->count() - 1]) {
+		$lastDetailsElement->open = true;
 	}
 }
 
