@@ -36,6 +36,20 @@ class ResponseRepository extends Repository {
 		return array_reverse($responseArray);
 	}
 
+	public function deleteAll(RequestEntity $requestEntity):void {
+		$responseDir = $this->getResponseDir($requestEntity);
+		$deletedResponseDir = "$responseDir/_deleted";
+
+		foreach(glob("$responseDir/*.dat") as $responseFile) {
+			if(!is_dir($deletedResponseDir)) {
+				mkdir($deletedResponseDir);
+			}
+
+			$fileName = pathinfo($responseFile, PATHINFO_BASENAME);
+			rename($responseFile, "$deletedResponseDir/$fileName");
+		}
+	}
+
 	private function getResponseDir(RequestEntity $requestEntity):string {
 		$dir = implode("/", [
 			$this->dataDir,
@@ -47,5 +61,4 @@ class ResponseRepository extends Repository {
 		}
 		return $dir;
 	}
-
 }
