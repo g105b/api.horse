@@ -1,10 +1,10 @@
 {
 	"require": {
 		"phpgt/webengine": "dev-master",
-		"phpgt/domtemplate": "dev-470-component-binder as v3.3.0",
-		"phpgt/servicecontainer": "dev-140-extra-args as v1.4.0",
-		"phpgt/routing": "dev-master as v1.1.2",
-		"phpgt/ulid": "dev-master as v1.2.1",
+		"phpgt/domtemplate": "^3.3",
+		"phpgt/servicecontainer": "^1.3.3",
+		"phpgt/routing": "^1.1",
+		"phpgt/ulid": "^1.2",
 		"phpgt/fetch": "^1.1"
 	},
 	"require-dev": {
