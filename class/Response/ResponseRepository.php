@@ -9,7 +9,7 @@ class ResponseRepository extends Repository {
 		RequestEntity $requestEntity,
 		ResponseEntity $responseEntity,
 	):void {
-		$responseDir = $this->getResponseDir($requestEntity);
+		$responseDir = $this->getResponseDir($requestEntity, true);
 
 		file_put_contents(
 			"$responseDir/$responseEntity->id.dat",
@@ -50,13 +50,13 @@ class ResponseRepository extends Repository {
 		}
 	}
 
-	private function getResponseDir(RequestEntity $requestEntity):string {
+	private function getResponseDir(RequestEntity $requestEntity, bool $forceDir = false):string {
 		$dir = implode("/", [
 			$this->dataDir,
 			$requestEntity->id,
 			"response",
 		]);
-		if(!is_dir($dir)) {
+		if(!is_dir($dir) && $forceDir) {
 			mkdir($dir);
 		}
 		return $dir;

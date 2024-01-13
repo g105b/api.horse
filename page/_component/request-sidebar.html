@@ -1,12 +1,12 @@
-<menu>
+<menu data-turbo data-turbo-config="update-only">
 	<li class="end-of-section">
-		<a href="/request/{{shareId}}/secrets/">Secrets</a>
+		<a href="/request/{{shareId}}/{{collectionId}}/secrets/">Secrets</a>
 	</li>
 	<li>
-		<a href="/request/{{shareId}}/_new/">New request</a>
+		<a href="/request/{{shareId}}/{{collectionId}}/_new/">New request</a>
 	</li>
 
 	<li data-list>
-		<a href="/request/{{shareId}}/{{id}}/" data-bind:text="nameOrId">word1-word2-word3</a>
+		<a href="/request/{{shareId}}/{{collectionId}}/{{id}}/" data-bind:text="nameOrId">word1-word2-word3</a>
 	</li>
 </menu>
