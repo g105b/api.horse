@@ -2,4 +2,8 @@ html {
 	font-size: 14px;
 	font-family: sans-serif;
 	overflow-x: hidden;
+
+	&:has(dialog.no-scroll[open]) {
+		overflow: hidden;
+	}
 }

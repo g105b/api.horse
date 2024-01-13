@@ -7,10 +7,31 @@
 		</a>
 	</h1>
 
-	<form method="post">
-		<button name="do" value="fork"><span>Fork</span></button>
-		<button name="do" value="new" class="positive"><span>New</span></button>
-	</form>
+	<div class="buttons">
+		<button id="mobileMenuToggle" onclick="mobileMenu.showModal()">Menu</button>
+
+		<dialog id="mobileMenu" class="no-scroll">
+			<form method="dialog">
+				<button>Close menu</button>
+			</form>
+
+			<form method="post" class="top-actions">
+				<button name="do" value="fork"><span>Fork</span></button>
+				<button onclick="renameModal.showModal();return false;"><span>Rename</span></button>
+				<button name="do" value="new" class="positive"><span>New collection</span></button>
+			</form>
+
+			<form method="post" class="collections">
+				<label>
+					<span>Switch collections</span>
+
+					<select name="collection">
+						<option>Request collection name</option>
+					</select>
+				</label>
+			</form>
+		</dialog>
+	</div>
 
 	<menu>
 		<li>
@@ -23,4 +44,8 @@
 			<a href="/sponsor/">Sponsor</a>
 		</li>
 	</menu>
+
+	<dialog id="renameModal">
+		<h1>Rename!</h1>
+	</dialog>
 </header>
