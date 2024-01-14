@@ -4,7 +4,7 @@ use App\ShareId;
 use Gt\Http\Response;
 use Gt\Session\Session;
 
-function go(
+function go_before(
 	ShareId $shareId,
 	Response $response,
 ):void {

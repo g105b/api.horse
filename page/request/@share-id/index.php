@@ -3,7 +3,7 @@ use App\Collection\CollectionEntity;
 use App\ShareId;
 use Gt\Http\Response;
 
-function go(
+function go_before(
 	Response $response,
 	ShareId $shareId,
 	CollectionEntity $collectionEntity,

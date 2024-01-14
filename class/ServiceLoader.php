@@ -72,9 +72,11 @@ class ServiceLoader extends DefaultServiceLoader {
 	}
 
 	public function loadResponseRepository():ResponseRepository {
+		$shareId = $this->container->get(ShareId::class);
+		$collectionEntity = $this->container->get(CollectionEntity::class);
+
 		return new ResponseRepository(
-			"data/request",
-			$this->container->get(ShareId::class),
+			"data/$shareId/$collectionEntity->id/{$collectionEntity->mode->name}",
 		);
 	}
 

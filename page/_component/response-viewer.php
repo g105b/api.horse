@@ -17,6 +17,10 @@ function go(
 	if($lastDetailsElement = $detailsList[$detailsList?->count() - 1]) {
 		$lastDetailsElement->open = true;
 	}
+
+	if(!$requestEntity) {
+		$element->querySelector("button[name=do][value=clear]")->remove();
+	}
 }
 
 function do_clear(
