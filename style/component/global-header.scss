@@ -193,6 +193,9 @@ global-header {
 				&[href^="/webhook"]::before {
 					background-image: url("/asset/icon/webhook.svg");
 				}
+				&[href^="/gateway"]::before {
+					background-image: url("/asset/icon/server.svg");
+				}
 				&[href^="/sponsor"]::before {
 					background-image: url("/asset/icon/sponsor-tiers.svg");
 				}
