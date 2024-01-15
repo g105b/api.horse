@@ -12,12 +12,12 @@ function go(
 	CollectionRepository $collectionRepository,
 	CollectionEntity $collection,
 ):void {
-	$binder->bindData($collection);
-
 	$numCollections = $binder->bindList($collectionRepository->retrieveAll());
 	if($numCollections === 1) {
 		$binder->bindKeyValue("single", true);
 	}
+
+	$binder->bindData($collection);
 }
 
 function do_rename(
@@ -30,9 +30,45 @@ function do_rename(
 	$newName = $input->getString("name");
 	$collectionRepository->rename($collection, $newName);
 
+// TODO: Refactor this into a class
 	$uriPath = $uri->getPath();
 	$uriPathParts = explode("/", $uriPath);
 	$uriPathParts[3] = new Slug($newName);
+	$uriPath = implode("/", $uriPathParts);
+
+	$response->redirect($uriPath);
+}
+
+function do_create(
+	Input $input,
+	Response $response,
+	Uri $uri,
+	CollectionRepository $collectionRepository,
+):void {
+	$newName = $input->getString("name");
+	$collection = $collectionRepository->create($newName);
+	$collectionRepository->save($collection);
+
+// TODO: Refactor this into a class
+	$uriPath = $uri->getPath();
+	$uriPathParts = explode("/", $uriPath);
+	$uriPathParts[3] = $collection->id;
+	$uriPath = implode("/", $uriPathParts);
+
+	$response->redirect($uriPath);
+}
+
+function do_change_collection(
+	Input $input,
+	Response $response,
+	Uri $uri,
+):void {
+	$newId = $input->getString("collection");
+
+// TODO: Refactor this into a class
+	$uriPath = $uri->getPath();
+	$uriPathParts = explode("/", $uriPath);
+	$uriPathParts[3] = $newId;
 	$uriPath = implode("/", $uriPathParts);
 
 	$response->redirect($uriPath);

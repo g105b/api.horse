@@ -5,20 +5,24 @@
 		<button>Close menu</button>
 	</form>
 
-	<form method="post" class="top-actions">
-		<button name="do" value="fork"><span>Fork</span></button>
-		<button onclick="renameModal.showModal();return false;"><span>Rename</span></button>
-		<button name="do" value="new" class="positive"><span>New collection</span></button>
-	</form>
+	<div class="top-actions">
+		<button><span>Fork</span></button>
+		<button onclick="renameModal.showModal();"><span>Rename</span></button>
+		<button class="positive" onclick="newModal.showModal();"><span>New collection</span></button>
+	</div>
 
 	<form method="post" class="collections">
 		<label>
 			<span>Switch collections</span>
 
-			<select name="collection" data-bind:class=":single">
+			<select name="collection" data-bind:value="id" data-bind:class=":single" onchange="this.form.querySelector('button').click()">
 				<option data-list data-bind:text="name" data-bind:value="id">Request collection name</option>
 			</select>
 		</label>
+
+		<div class="actions">
+			<button name="do" value="change-collection">Change collection</button>
+		</div>
 	</form>
 </dialog>
 
@@ -32,6 +36,21 @@
 		</label>
 		<div class="actions">
 			<button name="do" value="rename" class="positive">Rename</button>
+			<button name="do" value="cancel" formnovalidate formmethod="dialog">Cancel</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog id="newModal">
+	<form method="post">
+		<h1>New collection</h1>
+
+		<label>
+			<span>Name</span>
+			<input name="name" placeholder="A friendly name for this collection of requests" required autocomplete="off" />
+		</label>
+		<div class="actions">
+			<button name="do" value="create" class="positive">Create</button>
 			<button name="do" value="cancel" formnovalidate formmethod="dialog">Cancel</button>
 		</div>
 	</form>

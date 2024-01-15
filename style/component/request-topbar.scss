@@ -41,6 +41,30 @@ request-topbar {
 			}
 		}
 
+		.top-actions {
+			display: flex;
+			justify-content: center;
+			gap: 0.5rem;
+			top: 0;
+			right: 0;
+			padding: 1rem;
+			background-color: var(--pal-3);
+			width: auto;
+
+			@media(min-width: $break-small) {
+				justify-content: stretch;
+				padding: 0;
+			}
+
+			button {
+				&.positive {
+					@media(min-width: $break-small) {
+						flex-grow: 1;
+					}
+				}
+			}
+		}
+
 		form {
 			display: flex;
 			justify-content: center;
@@ -91,17 +115,6 @@ request-topbar {
 				}
 			}
 
-			&.top-actions {
-				top: 0;
-
-				button {
-					&[value=new] {
-						@media(min-width: $break-small) {
-							flex-grow: 1;
-						}
-					}
-				}
-			}
 			&.collections {
 				bottom: 0;
 
@@ -123,6 +136,10 @@ request-topbar {
 							background: transparent;
 						}
 					}
+				}
+
+				.actions {
+					display: none;
 				}
 			}
 		}
