@@ -1,8 +1,9 @@
 <?php
-namespace App\Collection;
+namespace App\Request\Collection;
 
 use Gt\Http\Uri;
 
+/** TODO: This is obsolete now the Collection is a RequestCollection. */
 enum CollectionMode {
 	case request;
 	case webhook;

@@ -1,14 +1,13 @@
 <?php
 namespace App;
 
-use App\Collection\CollectionEntity;
-use App\Collection\CollectionMode;
-use App\Collection\CollectionRepository;
 use App\Http\FetchHandler;
+use App\Request\Collection\CollectionEntity;
+use App\Request\Collection\CollectionMode;
+use App\Request\Collection\CollectionRepository;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
 use App\Response\ResponseRepository;
-use Gt\Http\Header\RequestHeaders;
 use Gt\Http\Uri;
 use Gt\Routing\Path\DynamicPath;
 use Gt\Session\Session;
@@ -33,12 +32,15 @@ class ServiceLoader extends DefaultServiceLoader {
 		return new CollectionRepository("data/$shareId", $mode);
 	}
 
-	public function loadCollection():CollectionEntity {
+	public function loadCollectionEntity():CollectionEntity {
 		$dynamicPath = $this->container->get(DynamicPath::class);
 		$collectionRepository = $this->container->get(CollectionRepository::class);
 
-		if($id = $dynamicPath->get("collection")) {
-			return $collectionRepository->retrieve($id, false);
+		if($id = $dynamicPath->get("collection-id")) {
+			$collection = $collectionRepository->retrieve($id);
+			if($collection) {
+				return $collection;
+			}
 		}
 
 		// if user has no collections, create one
@@ -55,7 +57,7 @@ class ServiceLoader extends DefaultServiceLoader {
 		$collectionEntity = $this->container->get(CollectionEntity::class);
 
 		return new RequestRepository(
-			"data/$shareId/$collectionEntity->id/{$collectionEntity->mode->name}",
+			"data/$shareId/{$collectionEntity->mode->name}/$collectionEntity->id",
 		);
 	}
 
@@ -76,7 +78,7 @@ class ServiceLoader extends DefaultServiceLoader {
 		$collectionEntity = $this->container->get(CollectionEntity::class);
 
 		return new ResponseRepository(
-			"data/$shareId/$collectionEntity->id/{$collectionEntity->mode->name}",
+			"data/$shareId/{$collectionEntity->mode->name}/$collectionEntity->id",
 		);
 	}
 

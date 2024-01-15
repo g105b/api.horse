@@ -1,9 +1,8 @@
 <?php
-use App\Collection\CollectionEntity;
+use App\Request\Collection\CollectionEntity;
 use App\Request\RequestRepository;
 use App\ShareId;
 use Gt\Dom\Element;
-use Gt\Dom\HTMLDocument;
 use Gt\DomTemplate\Binder;
 use Gt\Http\Uri;
 

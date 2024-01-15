@@ -39,6 +39,9 @@ class RequestRepository extends Repository {
 			if(str_starts_with($id, "_")) {
 				continue;
 			}
+			if(is_file($dir)) {
+				continue;
+			}
 
 			array_push(
 				$requestEntityList,

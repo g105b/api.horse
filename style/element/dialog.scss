@@ -1,0 +1,41 @@
+dialog {
+	&:not(.special) {
+		border-radius: 1rem;
+		border: none;
+		box-shadow: 0 0 1rem rgba(black, 0.25);
+
+		form {
+			width: 24rem;
+
+			>h1 {
+				font-size: 1rem;
+			}
+
+			label {
+				display: block;
+				margin: 1rem 0;
+
+				>span {
+					display: block;
+					margin: 0.5rem 0;
+				}
+
+				>input {
+				}
+			}
+
+			.actions {
+				display: flex;
+				justify-content: space-between;
+
+				.positive {
+					order: 1;
+				}
+			}
+		}
+	}
+
+	&:focus {
+		outline-color: var(--pal-1);
+	}
+}

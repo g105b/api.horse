@@ -1,6 +1,5 @@
 <?php
-use App\Collection\CollectionEntity;
-use App\ShareId;
+use App\Request\Collection\CollectionEntity;
 use Gt\DomTemplate\Binder;
 
 function go(

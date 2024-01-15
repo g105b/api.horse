@@ -1,5 +1,5 @@
 <?php
-use App\Collection\CollectionEntity;
+use App\Request\Collection\CollectionEntity;
 use App\ShareId;
 use Gt\Http\Response;
 

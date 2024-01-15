@@ -1,6 +1,6 @@
 <button id="mobileMenuToggle" onclick="mobileMenu.showModal()">Menu</button>
 
-<dialog id="mobileMenu" class="no-scroll">
+<dialog id="mobileMenu" class="no-scroll special">
 	<form method="dialog">
 		<button>Close menu</button>
 	</form>
@@ -15,9 +15,24 @@
 		<label>
 			<span>Switch collections</span>
 
-			<select name="collection">
-				<option>Request collection name</option>
+			<select name="collection" data-bind:class=":single">
+				<option data-list data-bind:text="name" data-bind:value="id">Request collection name</option>
 			</select>
 		</label>
+	</form>
+</dialog>
+
+<dialog id="renameModal">
+	<form method="post">
+		<h1>Rename this collection</h1>
+
+		<label>
+			<span>Name</span>
+			<input name="name" data-bind:value="name" placeholder="A friendly name for this collection of requests" required autocomplete="off" />
+		</label>
+		<div class="actions">
+			<button name="do" value="rename" class="positive">Rename</button>
+			<button name="do" value="cancel" formnovalidate formmethod="dialog">Cancel</button>
+		</div>
 	</form>
 </dialog>

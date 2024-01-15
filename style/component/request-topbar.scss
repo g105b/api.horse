@@ -10,7 +10,7 @@ request-topbar {
 		}
 	}
 
-	dialog {
+	dialog#mobileMenu {
 		max-width: 100%;
 		width: 100%;
 		min-height: 12rem;
@@ -35,6 +35,10 @@ request-topbar {
 			min-height: 100%;
 			width: 22rem;
 			margin-right: 0;
+
+			&:focus {
+				outline: none;
+			}
 		}
 
 		form {
@@ -44,6 +48,7 @@ request-topbar {
 			right: 0;
 			padding: 1rem;
 			background-color: var(--pal-3);
+			width: auto;
 
 			&:last-of-type {
 				padding-bottom: 2rem;
@@ -107,6 +112,16 @@ request-topbar {
 				label {
 					@media(min-width: $break-small) {
 						flex-grow: 1;
+					}
+
+					select {
+						&.single {
+							appearance: none;
+							pointer-events: none;
+							border: none;
+							outline: none;
+							background: transparent;
+						}
 					}
 				}
 			}
