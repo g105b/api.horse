@@ -7,6 +7,7 @@ use Gt\Ulid\Ulid;
 
 class CollectionRepository extends Repository {
 	const DEFAULT_COLLECTION_NAME = "Collection 1";
+	const CURRENT_COLLECTION_FILE = "current-collection.txt";
 
 	public function __construct(
 		string $shareIdDataDir,
@@ -41,6 +42,9 @@ class CollectionRepository extends Repository {
 		foreach(glob("$this->dataDir/*") as $dir) {
 			$id = pathinfo($dir, PATHINFO_FILENAME);
 			if(str_starts_with($id, "_")) {
+				continue;
+			}
+			if(!is_dir($dir)) {
 				continue;
 			}
 
@@ -86,4 +90,23 @@ class CollectionRepository extends Repository {
 
 		file_put_contents($filePath, $collection->name);
 	}
+
+	public function setCurrent(string|CollectionEntity $collection):void {
+		if(is_string($collection)) {
+			$collection = $this->retrieve($collection, false);
+		}
+
+		$filePath = "$this->dataDir/" . self::CURRENT_COLLECTION_FILE;
+		file_put_contents($filePath, $collection->id);
+	}
+
+	public function getCurrent():?CollectionEntity {
+		$filePath = "$this->dataDir/" . self::CURRENT_COLLECTION_FILE;
+		if(!is_file($filePath)) {
+			return null;
+		}
+
+		return $this->retrieve(file_get_contents($filePath), false);
+	}
+
 }

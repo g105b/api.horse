@@ -28,14 +28,16 @@ function do_rename(
 	CollectionEntity $collection,
 ):void {
 	$newName = $input->getString("name");
+	$newId = new Slug($newName);
 	$collectionRepository->rename($collection, $newName);
 
 // TODO: Refactor this into a class
 	$uriPath = $uri->getPath();
 	$uriPathParts = explode("/", $uriPath);
-	$uriPathParts[3] = new Slug($newName);
+	$uriPathParts[3] = $newId;
 	$uriPath = implode("/", $uriPathParts);
 
+	$collectionRepository->setCurrent($newId);
 	$response->redirect($uriPath);
 }
 
@@ -55,6 +57,7 @@ function do_create(
 	$uriPathParts[3] = $collection->id;
 	$uriPath = implode("/", $uriPathParts);
 
+	$collectionRepository->setCurrent($collection);
 	$response->redirect($uriPath);
 }
 
@@ -62,6 +65,7 @@ function do_change_collection(
 	Input $input,
 	Response $response,
 	Uri $uri,
+	CollectionRepository $collectionRepository,
 ):void {
 	$newId = $input->getString("collection");
 
@@ -71,5 +75,6 @@ function do_change_collection(
 	$uriPathParts[3] = $newId;
 	$uriPath = implode("/", $uriPathParts);
 
+	$collectionRepository->setCurrent($newId);
 	$response->redirect($uriPath);
 }

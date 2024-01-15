@@ -33,12 +33,16 @@ class ServiceLoader extends DefaultServiceLoader {
 	}
 
 	public function loadCollectionEntity():CollectionEntity {
-		$dynamicPath = $this->container->get(DynamicPath::class);
 		$collectionRepository = $this->container->get(CollectionRepository::class);
+		$dynamicPath = $this->container->get(DynamicPath::class);
 
 		if($id = $dynamicPath->get("collection-id")) {
-			$collection = $collectionRepository->retrieve($id);
-			if($collection) {
+			if($collection = $collectionRepository->retrieve($id)) {
+				return $collection;
+			}
+		}
+		else {
+			if($collection = $collectionRepository->getCurrent()) {
 				return $collection;
 			}
 		}

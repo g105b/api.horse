@@ -39,7 +39,7 @@ class RequestRepository extends Repository {
 			if(str_starts_with($id, "_")) {
 				continue;
 			}
-			if(is_file($dir)) {
+			if(!is_dir($dir)) {
 				continue;
 			}
 
