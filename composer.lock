@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "78c0c7624d69075c1386ccc8123c1299",
+    "content-hash": "72bcbd12bb16e17d086d9eff0969fda7",
     "packages": [
         {
             "name": "composer/semver",
@@ -960,16 +960,16 @@
         },
         {
             "name": "phpgt/domtemplate",
-            "version": "v3.3.0",
+            "version": "dev-481-remove-element",
             "source": {
                 "type": "git",
                 "url": "https://github.com/PhpGt/DomTemplate.git",
-                "reference": "913b654c16a4b4d91f64b37aa434f82b9f274259"
+                "reference": "f35d1e20d5597e271258cd513ea5631f7616a8aa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/PhpGt/DomTemplate/zipball/913b654c16a4b4d91f64b37aa434f82b9f274259",
-                "reference": "913b654c16a4b4d91f64b37aa434f82b9f274259",
+                "url": "https://api.github.com/repos/PhpGt/DomTemplate/zipball/f35d1e20d5597e271258cd513ea5631f7616a8aa",
+                "reference": "f35d1e20d5597e271258cd513ea5631f7616a8aa",
                 "shasum": ""
             },
             "require": {
@@ -994,7 +994,7 @@
             "description": "Bind dynamic data to reusable HTML components.",
             "support": {
                 "issues": "https://github.com/PhpGt/DomTemplate/issues",
-                "source": "https://github.com/PhpGt/DomTemplate/tree/v3.3.0"
+                "source": "https://github.com/PhpGt/DomTemplate/tree/481-remove-element"
             },
             "funding": [
                 {
@@ -1002,7 +1002,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-10T11:55:10+00:00"
+            "time": "2024-01-08T12:16:24+00:00"
         },
         {
             "name": "phpgt/fetch",
@@ -2606,16 +2606,16 @@
         },
         {
             "name": "phpstan/phpstan",
-            "version": "1.10.55",
+            "version": "1.10.56",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpstan/phpstan.git",
-                "reference": "9a88f9d18ddf4cf54c922fbeac16c4cb164c5949"
+                "reference": "27816a01aea996191ee14d010f325434c0ee76fa"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/9a88f9d18ddf4cf54c922fbeac16c4cb164c5949",
-                "reference": "9a88f9d18ddf4cf54c922fbeac16c4cb164c5949",
+                "url": "https://api.github.com/repos/phpstan/phpstan/zipball/27816a01aea996191ee14d010f325434c0ee76fa",
+                "reference": "27816a01aea996191ee14d010f325434c0ee76fa",
                 "shasum": ""
             },
             "require": {
@@ -2664,7 +2664,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2024-01-08T12:32:40+00:00"
+            "time": "2024-01-15T10:43:00+00:00"
         },
         {
             "name": "phpunit/php-code-coverage",
@@ -4054,10 +4054,18 @@
             "time": "2023-11-20T00:12:19+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "phpgt/domtemplate",
+            "version": "dev-481-remove-element",
+            "alias": "v3.4",
+            "alias_normalized": "3.4.0.0"
+        }
+    ],
     "minimum-stability": "stable",
     "stability-flags": {
-        "phpgt/webengine": 20
+        "phpgt/webengine": 20,
+        "phpgt/domtemplate": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

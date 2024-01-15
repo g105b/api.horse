@@ -73,6 +73,7 @@ function do_change_collection(
 	$uriPath = $uri->getPath();
 	$uriPathParts = explode("/", $uriPath);
 	$uriPathParts[3] = $newId;
+	$uriPathParts[4] = "_new";
 	$uriPath = implode("/", $uriPathParts);
 
 	$collectionRepository->setCurrent($newId);

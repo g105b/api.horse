@@ -19,6 +19,7 @@
 @import "component/webhook-editor";
 @import "component/webhook-viewer";
 @import "component/http-message";
+@import "element/article";
 @import "element/body";
 @import "element/button";
 @import "element/dialog";
@@ -35,4 +36,8 @@
 	&:active {
 		outline-offset: 0;
 	}
+}
+
+.panel {
+	@extend %d-panel;
 }
