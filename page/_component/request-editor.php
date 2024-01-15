@@ -251,9 +251,13 @@ function do_delete_body_parameter(
 function do_send(
 	Response $response,
 	ResponseRepository $responseRepository,
-	RequestEntity $requestEntity,
+	?RequestEntity $requestEntity,
 	FetchHandler $fetchHandler,
 ):void {
+	if(!$requestEntity) {
+		$response->reload();
+	}
+
 	$responseEntity = $fetchHandler->fetchResponse($requestEntity);
 	$responseRepository->storeResponse($requestEntity, $responseEntity);
 	$response->reload();
