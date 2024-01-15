@@ -1,0 +1,116 @@
+request-topbar {
+	>button {
+		position: absolute;
+		top: 0;
+		right: 0;
+		margin: 1rem;
+
+		@media(min-width: $break-small) {
+			display: none;
+		}
+	}
+
+	dialog {
+		max-width: 100%;
+		width: 100%;
+		min-height: 12rem;
+		margin-top: 0;
+		border: none;
+		padding: 0;
+		background-color: transparent;
+
+		&::backdrop {
+			background-color: transparent;
+			backdrop-filter: blur(0.5rem);
+		}
+
+		@media(min-width: $break-small) {
+			display: flex;
+			flex-direction: column;
+			gap: 1rem;
+			padding: 1rem;
+			position: absolute;
+			top: 0;
+			right: 0;
+			min-height: 100%;
+			width: 22rem;
+			margin-right: 0;
+		}
+
+		form {
+			display: flex;
+			justify-content: center;
+			gap: 0.5rem;
+			right: 0;
+			padding: 1rem;
+			background-color: var(--pal-3);
+
+			&:last-of-type {
+				padding-bottom: 2rem;
+				border-bottom: 1px solid var(--pal-4);
+
+				@media(min-width: $break-small) {
+					padding-bottom: 1rem;
+					border-bottom: none;
+				}
+			}
+
+			@media(min-width: $break-small) {
+				justify-content: stretch;
+				padding: 0;
+			}
+
+			&[method=dialog] {
+				justify-content: space-between;
+				align-items: end;
+
+				@media(min-width: $break-small) {
+					display: none;
+				}
+
+				&::before {
+					content: "api.horse";
+					display: block;
+					font-weight: bold;
+					padding: 0.5rem 3rem;
+					background-image: url("/asset/horse-face.png");
+					background-size: 2rem;
+					background-repeat: no-repeat;
+					background-position-x: 0.5rem;
+					background-position-y: 0.15rem;
+
+					@media(min-width: $break-small) {
+						content: "";
+						display: none;
+					}
+				}
+			}
+
+			&.top-actions {
+				top: 0;
+
+				button {
+					&[value=new] {
+						@media(min-width: $break-small) {
+							flex-grow: 1;
+						}
+					}
+				}
+			}
+			&.collections {
+				bottom: 0;
+
+				span {
+					display: none;
+				}
+
+				label {
+					@media(min-width: $break-small) {
+						flex-grow: 1;
+					}
+				}
+			}
+		}
+
+	}
+}
