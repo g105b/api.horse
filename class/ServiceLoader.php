@@ -7,6 +7,7 @@ use App\Request\Collection\CollectionMode;
 use App\Request\Collection\CollectionRepository;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
+use App\Request\SecretRepository;
 use App\Response\ResponseRepository;
 use Gt\Http\Uri;
 use Gt\Routing\Path\DynamicPath;
@@ -82,6 +83,15 @@ class ServiceLoader extends DefaultServiceLoader {
 		$collectionEntity = $this->container->get(CollectionEntity::class);
 
 		return new ResponseRepository(
+			"data/$shareId/{$collectionEntity->mode->name}/$collectionEntity->id",
+		);
+	}
+
+	public function loadSecretRepository():SecretRepository {
+		$shareId = $this->container->get(ShareId::class);
+		$collectionEntity = $this->container->get(CollectionEntity::class);
+
+		return new SecretRepository(
 			"data/$shareId/{$collectionEntity->mode->name}/$collectionEntity->id",
 		);
 	}
