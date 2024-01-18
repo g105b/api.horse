@@ -35,7 +35,7 @@
 	</div>
 
 	<div class="actions">
-		<button name="do" value="update">Update</button>
+		<button name="do" value="update" data-turbo="autosave">Update</button>
 	</div>
 </form>
 
@@ -44,7 +44,7 @@
 </form>
 
 <div class="fields">
-	<details data-editor="query-string-parameter" data-turbo="@editor">
+	<details data-editor="query-string-parameter">
 		<summary><h2>Query parameters <span data-bind:text="queryStringParameterCount">0</span></h2></summary>
 
 		<ul class="multiple" data-term="query parameters" data-bind:list="queryStringParameters">
@@ -66,12 +66,12 @@
 				</form>
 			</li>
 		</ul>
-		<form class="add" method="post" data-turbo-config="nohide">
+		<form class="add" method="post">
 			<button name="do" value="new-query-parameter">New query parameter</button>
 		</form>
 	</details>
 
-	<details data-editor="header" data-turbo="@editor">
+	<details data-editor="header">
 		<summary><h2>Headers <span data-bind:text="headerCount">0</span></h2></summary>
 		<ul class="multiple" data-term="headers" data-bind:list="headers">
 			<li data-list>
@@ -92,12 +92,12 @@
 				</form>
 			</li>
 		</ul>
-		<form class="add" data-turbo-config="nohide">
+		<form class="add">
 			<button name="do" value="new-header">New header</button>
 		</form>
 	</details>
 
-	<details data-editor="body" data-turbo="@editor">
+	<details data-editor="body">
 		<summary><h2>Body <span data-bind:text="body.typeString">None</span></h2></summary>
 		<form class="type" method="post">
 			<label>
@@ -153,13 +153,13 @@
 					</form>
 				</li>
 			</ul>
-			<form class="add" data-turbo-config="nohide">
+			<form class="add">
 				<button name="do" value="new-body-parameter">Add body parameter</button>
 			</form>
 		</div>
 	</details>
 
-	<details data-turbo="raw">
+	<details>
 		<summary><h2>Raw HTTP message</h2></summary>
 		<div class="text">
 			<label>
