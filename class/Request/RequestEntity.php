@@ -63,7 +63,7 @@ class RequestEntity {
 		}
 
 		if($this->queryStringParameters) {
-			$queryString = new QueryEncodedKVP($this->queryStringParameters);
+			$queryString = "?" . new QueryEncodedKVP($this->queryStringParameters);
 		}
 
 		$host = parse_url($this->endpoint, PHP_URL_HOST);

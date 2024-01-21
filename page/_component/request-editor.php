@@ -29,10 +29,12 @@ function go(
 		$element->querySelector("button[value=delete-request]")->remove();
 	}
 
+	$document->querySelectorAll("[autofocus]")->forEach(function(Element $el) {
+		$el->autofocus = false;
+	});
+
 // TODO: Extract this functionality into a UI class:
 	if($editorName = $input->getString("editor")) {
-		$document->querySelector("[autofocus]")->autofocus = false;
-
 		$editor = $document->querySelector("[data-editor='$editorName']");
 		$editor->open = true;
 

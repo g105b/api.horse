@@ -1,6 +1,6 @@
 <h1>Request editor</h1>
 
-<form method="post" class="fields">
+<form method="post" class="fields" data-turbo="update-inner">
 	<label>
 		<span>Name</span>
 		<input name="name" placeholder="e.g. List all items" autofocus autocomplete="off" data-bind:value="nameOrId" />
@@ -44,7 +44,7 @@
 </form>
 
 <div class="fields">
-	<details data-editor="query-string-parameter">
+	<details data-editor="query-string-parameter" data-turbo="update-inner">
 		<summary><h2>Query parameters <span data-bind:text="queryStringParameterCount">0</span></h2></summary>
 
 		<ul class="multiple" data-term="query parameters" data-bind:list="queryStringParameters">
@@ -60,7 +60,7 @@
 						<input name="value" data-bind:value="@name" autocomplete="off" />
 					</label>
 					<div class="actions">
-						<button name="do" value="save-query-parameter">Save</button>
+						<button name="do" value="save-query-parameter" data-turbo="autosave">Save</button>
 						<button name="do" value="delete-query-parameter">Delete</button>
 					</div>
 				</form>
@@ -71,7 +71,7 @@
 		</form>
 	</details>
 
-	<details data-editor="header">
+	<details data-editor="header" data-turbo="update-inner">
 		<summary><h2>Headers <span data-bind:text="headerCount">0</span></h2></summary>
 		<ul class="multiple" data-term="headers" data-bind:list="headers">
 			<li data-list>
@@ -86,18 +86,18 @@
 						<input name="value" data-bind:value="@name" autocomplete="off" />
 					</label>
 					<div class="actions">
-						<button name="do" value="save-header">Save</button>
+						<button name="do" value="save-header" data-turbo="autosave">Save</button>
 						<button name="do" value="delete-header">Delete</button>
 					</div>
 				</form>
 			</li>
 		</ul>
-		<form class="add">
+		<form class="add" method="post">
 			<button name="do" value="new-header">New header</button>
 		</form>
 	</details>
 
-	<details data-editor="body">
+	<details data-editor="body" data-turbo="update-inner">
 		<summary><h2>Body <span data-bind:text="body.typeString">None</span></h2></summary>
 		<form class="type" method="post">
 			<label>
@@ -116,7 +116,7 @@
 				</select>
 			</label>
 			<div class="actions">
-				<button name="do" value="set-body-type">Set body type</button>
+				<button name="do" value="set-body-type" data-turbo="autosave">Set body type</button>
 			</div>
 		</form>
 
@@ -147,19 +147,19 @@
 						</label>
 
 						<div class="actions">
-							<button name="do" value="save-body-parameter">Save</button>
+							<button name="do" value="save-body-parameter" data-turbo="autosave">Save</button>
 							<button name="do" value="delete-body-parameter">Delete</button>
 						</div>
 					</form>
 				</li>
 			</ul>
-			<form class="add">
+			<form class="add" method="post">
 				<button name="do" value="new-body-parameter">Add body parameter</button>
 			</form>
 		</div>
 	</details>
 
-	<details>
+	<details data-turbo="update-inner">
 		<summary><h2>Raw HTTP message</h2></summary>
 		<div class="text">
 			<label>
