@@ -190,7 +190,14 @@ function formSubmitAutoSave(e) {
 }
 
 function completeAutoSave(newDocument) {
-	processUpdateElements(newDocument);
+// The setTimeout with 0 delay doesn't mean it would execute immediately, it
+// schedules the execution immediately after the running script to strive to
+// execute as soon as possible. This is also known as yielding to the browser.
+// It's necessary to allow for click events to be processed before updating the
+// DOM mid-click and causing clicks to be missed on children of updated elements.
+	setTimeout(() => {
+		processUpdateElements(newDocument);
+	}, 0);
 }
 
 function submitForm(form, callback, submitter) {
