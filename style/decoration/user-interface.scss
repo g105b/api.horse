@@ -1,18 +1,25 @@
 %d-user-interface {
+	--theme-ui--bg: var(--pal-3);
+	--theme-ui--bg--focus: var(--pal-2);
+	--theme-ui--fg: var(--pal-1);
+	--theme-ui--border: var(--pal-4);
+	--theme-ui--border--hover: var(--pal-7);
+
 	box-sizing: border-box;
 	width: 100%;
 	padding: 0.5rem;
 	font-size: 1rem;
 	font-family: sans-serif;
 	border-radius: 0.25rem;
-	border: 1px solid var(--theme-input--border);
-	background-color: var(--theme-input--bg);
-	color: var(--theme-input--fg);
+	border: 1px solid var(--theme-ui--border);
+	background-color: var(--theme-ui--bg);
+	color: var(--theme-ui--fg);
+	transition: background-color 0.1s;
 
 	&:hover:not(:focus) {
-		border-color: var(--theme-input--border--hover);
+		border-color: var(--theme-ui--border--hover);
 	}
 	&:focus {
-		background-color: var(--theme-input--bg--focus);
+		background-color: var(--theme-ui--bg--focus);
 	}
 }

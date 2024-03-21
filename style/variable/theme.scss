@@ -9,9 +9,9 @@
 	--theme-sidebar--bg--active: var(--pal-3);
 	--theme-sidebar--fg--active: var(--pal-1);
 
-	--theme-button--bg: var(--pal-3);
-	--theme-button--fg: var(--pal-1);
-	--theme-button--border: var(--pal-4);
+	--theme-bg: var(--pal-3);
+	--theme-fg: var(--pal-1);
+	--theme-border: var(--pal-4);
 	--theme-button--bg--positive: var(--pal-8);
 	--theme-button--fg--positive: var(--pal-2);
 	--theme-button--border--positive: var(--pal-9);
@@ -19,11 +19,11 @@
 	--theme-button--fg--negative: var(--pal-2);
 	--theme-button--border--negative: var(--pal-11);
 
-	--theme-input--bg: var(--pal-3);
-	--theme-input--bg--focus: var(--pal-2);
-	--theme-input--fg: var(--pal-1);
-	--theme-input--border: var(--pal-4);
-	--theme-input--border--hover: var(--pal-7);
+	--theme-ui--bg: var(--pal-3);
+	--theme-ui--bg--focus: var(--pal-2);
+	--theme-ui--fg: var(--pal-1);
+	--theme-ui--border: var(--pal-4);
+	--theme-ui--border--hover: var(--pal-7);
 
 	--theme-variable--bg: var(--pal-5);
 	--theme-variable--fg: var(--pal-1);

@@ -1,6 +1,9 @@
 http-message {
 	display: block;
 
+	--theme-bg: var(--pal-3);
+	--theme-border: var(--pal-4);
+
 	details.headers {
 		margin-top: 1rem;
 
@@ -34,8 +37,8 @@ http-message {
 
 		ul {
 			list-style-type: none;
-			background-color: var(--theme-button--bg);
-			border: 1px solid var(--theme-button--border);
+			background-color: var(--theme-bg);
+			border: 1px solid var(--theme-border);
 			padding: 0.5rem;
 			border-radius: 0.25rem;
 			font-family: monospace;
@@ -69,8 +72,8 @@ http-message {
 
 		position: relative;
 		margin-top: 3rem;
-		background-color: var(--theme-button--bg);
-		border: 1px solid var(--theme-button--border);
+		background-color: var(--theme-bg);
+		border: 1px solid var(--theme-border);
 		padding: 0.5rem;
 		border-radius: 0.25rem;
 		font-family: monospace;

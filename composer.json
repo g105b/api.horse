@@ -1,7 +1,7 @@
 {
 	"require": {
 		"phpgt/webengine": "dev-master",
-		"phpgt/domtemplate": "dev-481-remove-element as v3.4",
+		"phpgt/domtemplate": "dev-486-array-iterator as v3.4",
 		"phpgt/servicecontainer": "^1.3.3",
 		"phpgt/routing": "^1.1",
 		"phpgt/ulid": "^1.2",

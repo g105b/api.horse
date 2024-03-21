@@ -1,9 +1,9 @@
 global-header {
 	display: block;
 	position: relative;
-	background-color: var(--theme-header--bg);
-	color: var(--theme-header--fg);
-	border-bottom: 1px solid var(--theme-header--border);
+	background-color: var(--pal-3);
+	color: var(--pal-1);
+	border-bottom: 1px solid var(--pal-4);
 
 	h1 {
 		margin: 0;
@@ -15,7 +15,7 @@ global-header {
 			padding: 1rem 1.5rem;
 			height: 2.5rem;
 			width: 50%;
-			color: var(--theme-header--fg);
+			color: var(--pal-1);
 			text-decoration: none;
 
 			&::before {
@@ -56,7 +56,7 @@ global-header {
 				padding: 0.5rem;
 				text-decoration: none;
 				border-radius: 0.5rem;
-				color: var(--theme-header-fg);
+				color: var(--pal-1);
 				transition: background-color 0.1s ease-in-out;
 				opacity: 0.75;
 
@@ -82,6 +82,21 @@ global-header {
 				}
 				&[href^="/sponsor"]::before {
 					background-image: url("/asset/icon/sponsor-tiers.svg");
+				}
+				&[href^="https://github.com"]::before {
+					background-image: url("/asset/icon/mark-github.svg");
+				}
+
+				&[href*="://"]::after {
+					content: "";
+					display: inline-block;
+					width: 0.9rem;
+					aspect-ratio: 1;
+					opacity: 0.75;
+					background-size: 100%;
+					background-position: center;
+					background-repeat: no-repeat;
+					background-image: url("/asset/icon/link-external.svg");
 				}
 
 				&:hover, &:focus {

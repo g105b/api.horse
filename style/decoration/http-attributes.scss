@@ -2,12 +2,16 @@
 	cursor: pointer;
 	margin-bottom: 1rem;
 
+	--theme-bg: var(--pal-3);
+	--theme-fg: var(--pal-1);
+	--theme-border: var(--pal-4);
+
 	&::marker {
 		content: "";
 	}
 
 	&:hover:not(:focus) {
-		outline: 2px solid var(--theme-input--border);
+		outline: 2px solid var(--theme-border);
 		outline-offset: 2px;
 	}
 
@@ -19,18 +23,18 @@
 	.status {
 		display: inline-block;
 		padding: 0.5rem;
-		background-color: var(--theme-button--bg);
-		color: var(--theme-button--fg);
-		border: 1px solid var(--theme-button--border);
+		background-color: var(--theme-bg);
+		color: var(--theme-fg);
+		border: 1px solid var(--theme-border);
 		border-radius: 0.5rem;
 	}
 
 	.id {
 		display: inline-block;
 		padding: 0.5rem;
-		background-color: var(--theme-variable--bg);
-		color: var(--theme-variable--fg);
-		border: 1px solid var(--theme-variable--border);
+		background-color: var(--pal-5);
+		color: var(--pal-1);
+		border: 1px solid var(--pal-4);
 		border-radius: 0.5rem;
 	}
 

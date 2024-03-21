@@ -1,44 +1,41 @@
 button {
 	@extend %d-user-interface;
-	--pal-bg: var(--theme-button--bg);
-	--pal-fg: var(--theme-button--fg);
-	--pal-border: var(--theme-button--border);
+	--theme-bg: var(--pal-3);
+	--theme-fg: var(--pal-1);
+	--theme-border: var(--pal-4);
 
 	width: auto;
-	background-color: var(--pal-bg);
-	color: var(--pal-fg);
-	border: 1px solid var(--pal-border);
+	background-color: var(--theme-bg);
+	color: var(--theme-fg);
+	border: 1px solid var(--theme-border);
 	padding-left: 1rem;
 	padding-right: 1rem;
 	cursor: pointer;
 
 	&:hover {
-		box-shadow: inset 0 0 0 10rem rgba(black, 0.1);
+		background-color: color-mix(in srgb, var(--theme-bg), var(--theme-fg) 5%);
 	}
 	&:focus {
-		background-color: var(--pal-bg);
+		background-color: var(--theme-bg);
 	}
 	&:active {
-		background-color: color-mix(in srgb, var(--pal-bg), black 20%);
+		background-color: color-mix(in srgb, var(--theme-bg), var(--theme-fg) 20%);
 	}
 
 	&.positive {
-		--pal-bg: var(--theme-button--bg--positive);
-		--pal-fg: var(--theme-button--fg--positive);
-		--pal-border: var(--theme-button--border--positive);
-
-		&:hover {
-			box-shadow: inset 0 0 0 10rem rgba(white, 0.1);
-		}
+		--theme-bg: var(--pal-8);
+		--theme-fg: var(--pal-2);
+		--theme-border: var(--pal-9);
 	}
 
 	&.negative {
-		--pal-bg: var(--theme-button--bg--negative);
-		--pal-fg: var(--theme-button--fg--negative);
-		--pal-border: var(--theme-button--border--negative);
+		--theme-bg: var(--pal-3);
+		--theme-fg: var(--pal-10);
+		--theme-border: var(--pal-11);
 
 		&:hover {
-			box-shadow: inset 0 0 0 10rem rgba(white, 0.1);
+			--theme-bg: var(--pal-10);
+			--theme-fg: var(--pal-3);
 		}
 	}
 }

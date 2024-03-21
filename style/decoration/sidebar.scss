@@ -1,4 +1,9 @@
 %d-sidebar {
+	--theme-bg: var(--pal-2);
+	--theme-fg: var(--pal-1);
+	--theme-border: var(--pal-4);
+	--theme-selected: var(--pal-7);
+
 	display: block;
 	flex-shrink: 0;
 
@@ -22,7 +27,7 @@
 					margin: calc(0.5rem + 0.5px) auto 0.75rem auto;
 					width: calc(100% - 1rem);
 					height: 1px;
-					background: var(--theme-sidebar--border);
+					background: var(--theme-border);
 				}
 			}
 			&.selected {
@@ -30,11 +35,12 @@
 					font-weight: bold;
 
 					&::after {
+						--theme-bg: var(--theme-selected);
+
+						content: "";
 						position: absolute;
 						left: -8px;
-						content: "";
 						display: inline-block;
-						background-color: var(--pal-7);
 						border-radius: 0.5rem;
 						width: 4px;
 						height: 1.5rem;
@@ -43,8 +49,8 @@
 			}
 			&.selected,&:hover {
 				a {
-					background-color: var(--theme-sidebar--bg--active);
-					color: var(--theme-sidebar--fg--active);
+					--theme-bg: var(--pal-3);
+					--theme-fg: var(--pal-1);
 				}
 			}
 
@@ -57,11 +63,12 @@
 				padding: 0.5rem 1rem;
 				text-decoration: none;
 				border-radius: 0.5rem;
-				color: var(--theme-sidebar--fg);
 				white-space: nowrap;
 				overflow: hidden;
 				text-overflow: ellipsis;
 				line-height: 1.4;
+				color: var(--theme-fg);
+				background-color: var(--theme-bg);
 
 				&::before {
 					content: "";
