@@ -90,10 +90,10 @@ function processUpdateElements(newDocument) {
 			let activeElementSelection = null;
 			if(existingElement.contains(document.activeElement)) {
 				activeElement = getXPathForElement(document.activeElement);
-				activeElementSelection = [
-					document.activeElement.selectionStart,
-					document.activeElement.selectionEnd,
-				];
+				activeElementSelection = [];
+				if(document.activeElement.selectionStart && document.activeElement.selectionEnd) {
+					activeElementSelection.push(document.activeElement.selectionStart, document.activeElement.selectionEnd);
+				}
 			}
 			let xPath = getXPathForElement(existingElement, document);
 			let xPathResult = newDocument.evaluate(xPath, newDocument.documentElement);
@@ -129,6 +129,16 @@ function processUpdateElements(newDocument) {
 					if(elementToActivate.setSelectionRange) {
 						elementToActivate.setSelectionRange(activeElementSelection[0], activeElementSelection[1]);
 					}
+
+					let completeClickFunction = () => {
+						elementToActivate.removeEventListener("mouseup", completeClickFunction);
+
+						setTimeout(() => {
+							console.log("Completing click", elementToActivate);
+							elementToActivate.click();
+						}, 10)
+					};
+					addEventListenerOriginal.call(elementToActivate, "mouseup", completeClickFunction);
 				}
 			}
 		});
@@ -150,7 +160,7 @@ function initAutoSave(turboElement) {
 		return;
 	}
 
-	turboElement.classList.add("turbo-hidden");
+	turboElement.classList.add("turbo-hidden", "turbo-autosave");
 
 	if(!turboElement.form.turboObj) {
 		turboElement.form.turboObj = {};
