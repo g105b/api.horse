@@ -222,7 +222,7 @@ function do_new_body_parameter(
 ):void {
 	$requestEntity->body->addBodyParameter();
 	$requestRepository->update($requestEntity);
-	$response->redirect("../$requestEntity->id/?editor=body");
+	$response->redirect("../$requestEntity->id/?editor=body&editor-action=new");
 }
 
 function do_save_body_parameter(
