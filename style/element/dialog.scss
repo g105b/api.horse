@@ -28,6 +28,10 @@ dialog {
 				display: flex;
 				justify-content: space-between;
 
+				&.important {
+					justify-content: center;
+				}
+
 				.positive {
 					order: 1;
 				}
@@ -37,5 +41,12 @@ dialog {
 
 	&:focus {
 		outline-color: var(--pal-1);
+	}
+
+	hr {
+		height: 1px;
+		border: none;
+		background: var(--pal-1);
+		margin: 2rem 0;
 	}
 }

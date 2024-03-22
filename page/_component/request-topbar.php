@@ -8,9 +8,9 @@ use Gt\Http\Uri;
 use Gt\Input\Input;
 
 function go(
-	Binder $binder,
 	CollectionRepository $collectionRepository,
 	CollectionEntity $collection,
+	Binder $binder,
 ):void {
 	$numCollections = $binder->bindList($collectionRepository->retrieveAll());
 	if($numCollections === 1) {
@@ -21,11 +21,11 @@ function go(
 }
 
 function do_rename(
+	CollectionRepository $collectionRepository,
+	CollectionEntity $collection,
 	Input $input,
 	Response $response,
 	Uri $uri,
-	CollectionRepository $collectionRepository,
-	CollectionEntity $collection,
 ):void {
 	$newName = $input->getString("name");
 	$newId = new Slug($newName);
@@ -42,10 +42,10 @@ function do_rename(
 }
 
 function do_create(
+	CollectionRepository $collectionRepository,
 	Input $input,
 	Response $response,
 	Uri $uri,
-	CollectionRepository $collectionRepository,
 ):void {
 	$newName = $input->getString("name");
 	$collection = $collectionRepository->create($newName);
@@ -62,10 +62,10 @@ function do_create(
 }
 
 function do_change_collection(
+	CollectionRepository $collectionRepository,
 	Input $input,
 	Response $response,
 	Uri $uri,
-	CollectionRepository $collectionRepository,
 ):void {
 	$newId = $input->getString("collection");
 
@@ -77,5 +77,28 @@ function do_change_collection(
 	$uriPath = implode("/", $uriPathParts);
 
 	$collectionRepository->setCurrent($newId);
+	$response->redirect($uriPath);
+}
+
+function do_delete(
+	CollectionRepository $collectionRepository,
+	CollectionEntity $collection,
+	Response $response,
+	Uri $uri,
+):void {
+	$collectionRepository->delete($collection);
+
+	$firstCollection = $collectionRepository->retrieveAll()[0] ?? null;
+	if(!$firstCollection) {
+		$firstCollection = $collectionRepository->create();
+	}
+	$collectionRepository->setCurrent($firstCollection);
+	$newId = $firstCollection->id;
+
+	$uriPath = $uri->getPath();
+	$uriPathParts = explode("/", $uriPath);
+	$uriPathParts[3] = $newId;
+	$uriPathParts[4] = "_new";
+	$uriPath = implode("/", $uriPathParts);
 	$response->redirect($uriPath);
 }

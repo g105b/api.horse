@@ -1,4 +1,4 @@
-<button id="mobileMenuToggle" onclick="mobileMenu.showModal()">Menu</button>
+<button id="mobileMenuToggle" onclick="mobileMenu.showModal()">Collections</button>
 
 <dialog id="mobileMenu" class="no-scroll special">
 	<form method="dialog">
@@ -7,7 +7,7 @@
 
 	<div class="top-actions">
 		<button><span>Fork</span></button>
-		<button onclick="renameModal.showModal();"><span>Rename</span></button>
+		<button onclick="editModal.showModal();"><span>Edit</span></button>
 		<button class="positive" onclick="newModal.showModal();"><span>New collection</span></button>
 	</div>
 
@@ -26,9 +26,9 @@
 	</form>
 </dialog>
 
-<dialog id="renameModal">
+<dialog id="editModal">
 	<form method="post">
-		<h1>Rename this collection</h1>
+		<h1>Edit this collection</h1>
 
 		<label>
 			<span>Name</span>
@@ -37,6 +37,12 @@
 		<div class="actions">
 			<button name="do" value="rename" class="positive">Rename</button>
 			<button name="do" value="cancel" formnovalidate formmethod="dialog">Cancel</button>
+		</div>
+
+		<hr />
+
+		<div class="actions important">
+			<button name="do" value="delete" class="negative" onclick="return confirm('Delete this collection?')">Delete this collection</button>
 		</div>
 	</form>
 </dialog>

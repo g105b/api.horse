@@ -91,6 +91,18 @@ class CollectionRepository extends Repository {
 		file_put_contents($filePath, $collection->name);
 	}
 
+	public function delete(CollectionEntity $collection):void {
+		$dirPath = "$this->dataDir/$collection->id";
+		if(!is_dir($dirPath)) {
+			return;
+		}
+
+		foreach(glob("$dirPath/*") as $file) {
+			unlink($file);
+		}
+		rmdir($dirPath);
+	}
+
 	public function setCurrent(string|CollectionEntity $collection):void {
 		if(is_string($collection)) {
 			$collection = $this->retrieve($collection, false);
