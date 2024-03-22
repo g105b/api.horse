@@ -13,7 +13,7 @@ let turboStyle = document.createElement("style");
 document.head.append(turboStyle);
 turboStyle.id = "turbo-style";
 turboStyle.innerHTML = `
-.turbo-hidden {
+[data-turbo="autosave"] {
 	display: none;
 }
 `;
@@ -24,7 +24,7 @@ window.addEventListener("popstate", function(e) {
 
 let elementEventMap = new Map();
 let addEventListenerOriginal = EventTarget.prototype.addEventListener;
-Element.prototype.addEventListener = function addEventListenerTurbo(type, listener) {
+Element.prototype.addEventListener = function addEventListenerTurbo(type, listener, options) {
 	let element = this;
 	let mapObj = elementEventMap.has(element)
 		? elementEventMap.get(element)
@@ -36,17 +36,14 @@ Element.prototype.addEventListener = function addEventListenerTurbo(type, listen
 	mapObj[type].push(listener);
 	elementEventMap.set(element, mapObj);
 
-	addEventListenerOriginal(type, listener);
+	addEventListenerOriginal(type, listener, options);
 	DEBUG && console.log(`Event ${type} added to element:`, element);
 };
 
 turboElementList.forEach(init);
-console.log(elementEventMap);
 
 function init(turboElement) {
 	let turboType = turboElement.dataset["turbo"];
-	turboElement.classList.add("turbo-active");
-	delete turboElement.dataset["turbo"];
 
 	if(turboType === "autosave") {
 		initAutoSave(turboElement)
@@ -66,6 +63,12 @@ function init(turboElement) {
 	}
 }
 
+/**
+ * The updateElementCollection array is a list of all elements that require
+ * updating when the document updates. When something happens that requires the
+ * document to update, the processUpdateElements function will iterate over all
+ * of these stored updateElements and update their content accordingly.
+ */
 function storeUpdateElement(element, updateType) {
 	if(!updateType) {
 		updateType = "_none";
@@ -76,13 +79,20 @@ function storeUpdateElement(element, updateType) {
 	}
 
 	updateElementCollection[updateType].push(element);
-	console.log(`Pushing into ${updateType}: `, element);
+
+	DEBUG && console.log("storeUpdateElement completed", `Pushing into ${updateType}: `, element);
 }
 
+/**
+ * The updateElementCollection array is a list of all elements that require
+ * updating when the document updates. This function is triggered whenever the
+ * document's data changes, so the updateElements can be swapped out from the
+ * old document with the new document's counterparts.
+ */
 function processUpdateElements(newDocument) {
 	let autofocusElement = newDocument.querySelector("[autofocus]");
 	if(autofocusElement) {
-		autofocusElement.classList.add("turbo-autofocus");
+		autofocusElement.dataset["turboAutofocus"] = "";
 	}
 	for(let type of Object.keys(updateElementCollection)) {
 		updateElementCollection[type].forEach(function(existingElement) {
@@ -148,7 +158,7 @@ function processUpdateElements(newDocument) {
 		});
 	}
 
-	document.querySelectorAll(".turbo-autofocus").forEach(autofocusElement => {
+	document.querySelectorAll("[data-turbo-autofocus]").forEach(autofocusElement => {
 		autofocusElement.focus();
 	});
 }
@@ -164,8 +174,6 @@ function initAutoSave(turboElement) {
 		return;
 	}
 
-	turboElement.classList.add("turbo-hidden", "turbo-autosave");
-
 	if(!turboElement.form.turboObj) {
 		turboElement.form.turboObj = {};
 	}
@@ -175,9 +183,12 @@ function initAutoSave(turboElement) {
 			value: turboElement.value,
 		}
 	};
-	turboElement.form.classList.add("turbo-has-obj");
+	// turboElement.form.classList.add("turbo-has-obj");
+	turboElement.form.dataset["turboObj"] = "";
 	turboElement.form.addEventListener("change", formChangeAutoSave);
 	turboElement.form.addEventListener("submit", formSubmitAutoSave);
+
+	DEBUG && console.log("initAutoSave completed", turboElement);
 }
 
 function formChangeAutoSave(e) {
@@ -204,6 +215,10 @@ function formSubmitAutoSave(e) {
 }
 
 function completeAutoSave(newDocument) {
+	if(newDocument.head.children.length === 0) {
+		console.error("Error processing new document!");
+		location.reload();
+	}
 // The setTimeout with 0 delay doesn't mean it would execute immediately, it
 // schedules the execution immediately after the running script to strive to
 // execute as soon as possible. This is also known as yielding to the browser.
@@ -293,12 +308,12 @@ function reattachTurboElements(oldElement, newElement) {
 	}
 
 	newElement.querySelectorAll("[data-turbo]").forEach(init);
-	oldElement.querySelectorAll(".turbo-has-obj").forEach(turboElement => {
+	oldElement.querySelectorAll("[data-turbo-obj]").forEach(turboElement => {
 		let xPath = getXPathForElement(turboElement, oldElement);
 		let newTurboElement = newElement.ownerDocument.evaluate(xPath, newElement).iterateNext();
 		if(newTurboElement) {
 			newTurboElement.turboObj = turboElement.turboObj;
-			newTurboElement.classList.add("turbo-has-obj");
+			newTurboElement.dataset["turboObj"] = "";
 		}
 	});
 }
