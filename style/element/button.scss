@@ -33,9 +33,11 @@ button {
 		--theme-fg: var(--pal-10);
 		--theme-border: var(--pal-11);
 
-		&:hover {
+		&:hover, &:focus, &:active {
 			--theme-bg: var(--pal-10);
 			--theme-fg: var(--pal-3);
+			--theme-ui--border: var(--theme-border);
+			--theme-ui--outline: var(--theme-border);
 		}
 	}
 }

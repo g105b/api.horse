@@ -1,9 +1,8 @@
 %d-user-interface {
 	--theme-ui--bg: var(--pal-3);
-	--theme-ui--bg--focus: var(--pal-2);
 	--theme-ui--fg: var(--pal-1);
 	--theme-ui--border: var(--pal-4);
-	--theme-ui--border--hover: var(--pal-7);
+	--theme-ui--outline: transparent;
 
 	box-sizing: border-box;
 	width: 100%;
@@ -15,11 +14,19 @@
 	background-color: var(--theme-ui--bg);
 	color: var(--theme-ui--fg);
 	transition: background-color 0.1s;
+	outline: 2px solid var(--theme-ui--outline);
 
 	&:hover:not(:focus) {
-		border-color: var(--theme-ui--border--hover);
+		--theme-ui--border: var(--pal-7);
 	}
 	&:focus {
-		background-color: var(--theme-ui--bg--focus);
+		--theme-ui--bg: var(--pal-2);
+		--theme-ui--outline: var(--pal-7);
+		--theme-outline: var(--theme-ui--outline);
+		outline-offset: 2px;
+
+		&:active {
+			outline-offset: 0;
+		}
 	}
 }

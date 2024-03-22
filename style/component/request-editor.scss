@@ -14,4 +14,24 @@ request-editor {
 		white-space: pre;
 		height: auto;
 	}
+
+	form.primary {
+		transition: opacity 0.5s;
+
+		&.submitting {
+			//@keyframes loading {
+			//	from {
+			//		opacity: 1;
+			//	}
+			//}
+
+			cursor: wait;
+			opacity: 0.5;
+			//animation: loading s infinite;
+
+			button {
+				pointer-events: none;
+			}
+		}
+	}
 }

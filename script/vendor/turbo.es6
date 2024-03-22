@@ -86,6 +86,10 @@ function processUpdateElements(newDocument) {
 	}
 	for(let type of Object.keys(updateElementCollection)) {
 		updateElementCollection[type].forEach(function(existingElement) {
+			if(!existingElement) {
+				return;
+			}
+
 			let activeElement = null;
 			let activeElementSelection = null;
 			if(existingElement.contains(document.activeElement)) {
@@ -115,7 +119,7 @@ function processUpdateElements(newDocument) {
 				while(existingElement.firstChild) {
 					existingElement.removeChild(existingElement.firstChild);
 				}
-				while(newElement.firstChild) {
+				while(newElement && newElement.firstChild) {
 					existingElement.appendChild(newElement.firstChild);
 				}
 			}
@@ -284,6 +288,10 @@ function reattachEventListeners(oldElement, newElement) {
 }
 
 function reattachTurboElements(oldElement, newElement) {
+	if(!newElement) {
+		return;
+	}
+
 	newElement.querySelectorAll("[data-turbo]").forEach(init);
 	oldElement.querySelectorAll(".turbo-has-obj").forEach(turboElement => {
 		let xPath = getXPathForElement(turboElement, oldElement);

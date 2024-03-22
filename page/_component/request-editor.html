@@ -120,19 +120,19 @@
 			</div>
 		</form>
 
-		<div class="raw" hidden data-bind:hidden="?!showBodyRaw">
+		<div class="option raw" hidden data-bind:hidden="?!showBodyRaw">
 			<form method="post" class="text">
 				<label>
 					<span>Body</span>
 					<textarea name="body-raw" data-bind:html="body.content"></textarea>
 				</label>
 				<div class="actions">
-					<button name="do" value="save-body-raw">Save</button>
+					<button name="do" value="save-body-raw" data-turbo="autosave">Save</button>
 				</div>
 			</form>
 		</div>
 
-		<div class="parameters" hidden data-bind:hidden="?!showBodyParameters">
+		<div class="option parameters" hidden data-bind:hidden="?!showBodyParameters">
 			<ul class="multiple " data-term="body parameters" data-bind:list="body.parameters">
 				<li data-list>
 					<form method="post">
@@ -169,7 +169,7 @@
 		</div>
 	</details>
 
-	<form class="actions primary" method="post">
+	<form class="actions primary" method="post" data-turbo="update-outer">
 		<button name="do" value="send">Send request</button>
 	</form>
 </div>

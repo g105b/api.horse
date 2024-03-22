@@ -3,6 +3,20 @@ document.querySelectorAll("request-editor").forEach(component => {
 		window.controlReturnCallback = controlReturnCallback;
 		window.addEventListener("keypress", controlReturnCallback);
 	}
+
+	component.querySelectorAll("form.actions.primary").forEach(form => {
+		form.addEventListener("submit", e => {
+			form.classList.add("submitting");
+
+			let button = form.querySelector("button");
+			if(!button) {
+				return;
+			}
+
+			button.dataset["originalText"] = button.textContent;
+			button.textContent = "Sending...";
+		});
+	});
 });
 
 function controlReturnCallback(e) {
@@ -13,14 +27,15 @@ function controlReturnCallback(e) {
 		return;
 	}
 
-	console.log(e);
-	let details = e.target.closest("details");
-	if(!details) {
+	let container = e.target.closest("div.option,details");
+	if(!container) {
+		e.target.blur();
 		return;
 	}
 
-	let addButton = details.querySelector("form.add button");
+	let addButton = container.querySelector("form.add button");
 	if(!addButton) {
+		e.target.blur();
 		return;
 	}
 

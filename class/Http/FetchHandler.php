@@ -10,7 +10,10 @@ class FetchHandler {
 	public function fetchResponse(RequestEntity $requestEntity):ResponseEntity {
 		$responseEntity = new ResponseEntity($requestEntity);
 
-		$http = new Http();
+		$curlOptions = [
+			CURLOPT_TIMEOUT => 5,
+		];
+		$http = new Http($curlOptions);
 
 		$uri = $requestEntity->getFetchableUri();
 		$init = [

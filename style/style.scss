@@ -29,7 +29,8 @@
 @import "element/textarea";
 
 :focus {
-	outline: 2px solid var(--pal-7);
+	--theme-outline: var(--pal-7);
+	outline: 2px solid var(--theme-outline);
 	outline-offset: 2px;
 
 	&:active {

@@ -78,10 +78,10 @@ class ResponseEntity {
 		return $summaryString;
 	}
 
-	public function setStatus(int $status, string $statusText):void {
+	public function setStatus(int $status, ?string $statusText):void {
 		$this->waitingComplete();
 		$this->status = $status;
-		$this->statusText = $statusText;
+		$this->statusText = $statusText ?? "";
 	}
 
 	public function addHeader(string $key, string $value):void {
