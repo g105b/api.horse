@@ -1,0 +1,12 @@
+{
+  "short_name": "api.horse",
+  "name": "api.horse",
+  "icons": [{
+    "src": "/asset/horse-face.png",
+    "type": "image/png",
+    "sizes": "160x160"
+  }],
+  "start_url": "/?utm_source=homescreen",
+  "background_color": "#fafafa",
+  "theme_color": "#fafafa"
+}

@@ -37,6 +37,12 @@ global-header {
 		padding: 0;
 		overflow-x: scroll;
 
+		@media(min-width: $break-small) {
+			&::-webkit-scrollbar {
+				display: none;
+			}
+		}
+
 		>li {
 			border-bottom: 2px solid transparent;
 

@@ -11,14 +11,14 @@ function go(
 	?RequestEntity $requestEntity,
 	ResponseRepository $responseRepository,
 ):void {
-	$binder->bindList($responseRepository->getAll($requestEntity));
+	$bindCount = $binder->bindList($responseRepository->getAll($requestEntity));
 
 	$detailsList = $element->querySelectorAll("ul>li>details");
 	if($lastDetailsElement = $detailsList[$detailsList?->count() - 1]) {
 		$lastDetailsElement->open = true;
 	}
 
-	if(!$requestEntity) {
+	if($bindCount === 0) {
 		$element->querySelector("button[name=do][value=clear]")->remove();
 	}
 }
