@@ -95,7 +95,7 @@ function processUpdateElements(newDocument) {
 			if(existingElement.contains(document.activeElement)) {
 				activeElement = getXPathForElement(document.activeElement);
 				activeElementSelection = [];
-				if(document.activeElement.selectionStart && document.activeElement.selectionEnd) {
+				if(document.activeElement.selectionStart >= 0 && document.activeElement.selectionEnd >= 0) {
 					activeElementSelection.push(document.activeElement.selectionStart, document.activeElement.selectionEnd);
 				}
 			}
