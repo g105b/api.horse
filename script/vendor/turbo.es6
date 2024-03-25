@@ -33,10 +33,11 @@ Element.prototype.addEventListener = function addEventListenerTurbo(type, listen
 	if(mapObj[type] === undefined) {
 		mapObj[type] = [];
 	}
+// TODO: Do we need to store the "options" in here as a tuple?
 	mapObj[type].push(listener);
 	elementEventMap.set(element, mapObj);
 
-	addEventListenerOriginal(type, listener, options);
+	addEventListenerOriginal.call(this, type, listener, options);
 	DEBUG && console.log(`Event ${type} added to element:`, element);
 };
 
@@ -46,7 +47,7 @@ function init(turboElement) {
 	let turboType = turboElement.dataset["turbo"];
 
 	if(turboType === "autosave") {
-		initAutoSave(turboElement)
+		initAutoSave(turboElement);
 	}
 	else if(turboType === "update" || turboType === "update-inner" || turboType === "update-outer") {
 		let updateType = null;
@@ -57,6 +58,9 @@ function init(turboElement) {
 			updateType = "inner";
 		}
 		storeUpdateElement(turboElement, updateType);
+	}
+	else if(turboType === "submit") {
+		initAutoSubmit(turboElement);
 	}
 	else {
 		console.error(`Unknown turbo element type: ${turboType}`, turboElement);
@@ -189,6 +193,22 @@ function initAutoSave(turboElement) {
 	turboElement.form.addEventListener("submit", formSubmitAutoSave);
 
 	DEBUG && console.log("initAutoSave completed", turboElement);
+}
+
+function initAutoSubmit(button) {
+	let form = button.form;
+	if(!form) {
+		return;
+	}
+
+	form.addEventListener("submit", autoSubmit);
+}
+
+function autoSubmit(e) {
+	e.preventDefault();
+	setTimeout(() => {
+		submitForm(e.target, completeAutoSave, e.submitter);
+	}, 0);
 }
 
 function formChangeAutoSave(e) {
