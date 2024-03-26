@@ -6,6 +6,7 @@ use App\Request\BodyEntityRaw;
 use App\Request\BodyEntityUrlEncoded;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
+use App\Request\SecretRepository;
 use App\Response\ResponseRepository;
 use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
@@ -252,15 +253,17 @@ function do_delete_body_parameter(
 }
 
 function do_send(
-	Response $response,
 	ResponseRepository $responseRepository,
+	SecretRepository $secretRepository,
 	?RequestEntity $requestEntity,
 	FetchHandler $fetchHandler,
+	Response $response,
 ):void {
 	if(!$requestEntity) {
 		$response->reload();
 	}
 
+	$requestEntity = $requestEntity->withInjectedSecrets($secretRepository->getAll());
 	$responseEntity = $fetchHandler->fetchResponse($requestEntity);
 	$responseRepository->storeResponse($requestEntity, $responseEntity);
 	$response->reload();

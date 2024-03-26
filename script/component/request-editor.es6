@@ -30,6 +30,4 @@ function controlReturnCallback(e) {
 
 	e.preventDefault();
 	addButton.click();
-	// setTimeout(() => {
-	// }, 1000)
 }

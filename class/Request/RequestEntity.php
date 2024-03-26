@@ -218,6 +218,66 @@ class RequestEntity {
 		return (string)$this->body;
 	}
 
+	/** @param array<SecretEntity> $secretList */
+	public function withInjectedSecrets(array $secretList):self {
+		if(empty($secretList)) {
+			return $this;
+		}
 
+		$clone = clone($this);
+		$clone->endpoint = $this->injectString($clone->endpoint, $secretList);
+		$clone->queryStringParameters = $this->injectKeyValuePairs(
+			$clone->queryStringParameters,
+			$secretList,
+		);
+		$clone->headers = $this->injectKeyValuePairs(
+			$clone->headers,
+			$secretList,
+		);
+		if($clone->body instanceof BodyEntityForm) {
+			$clone->body->parameters = $this->injectKeyValuePairs(
+				$clone->body->parameters,
+				$secretList,
+			);
+		}
+		elseif($clone->body instanceof BodyEntityRaw) {
+			$clone->body->content = $this->injectString(
+				$clone->body->content,
+				$secretList,
+			);
+		}
+		return $clone;
+	}
 
+	/**
+	 * @param array<QueryStringEntity|HeaderEntity|BodyParameterEntity> $kvpEntityArray
+	 * @param array<SecretEntity> $secretList
+	 * @return array<QueryStringEntity|HeaderEntity|BodyParameterEntity>
+	 */
+	private function injectKeyValuePairs(
+		array $kvpEntityArray,
+		array $secretList,
+	):array {
+		foreach($kvpEntityArray as $kvpEntity) {
+			$kvpEntity->key = $this->injectString($kvpEntity->key, $secretList);
+			if($kvpEntity->value) {
+				$kvpEntity->value = $this->injectString($kvpEntity->value, $secretList);
+			}
+		}
+
+		return $kvpEntityArray;
+	}
+
+	/** @param array<SecretEntity> $secretList */
+	private function injectString(string $string, array $secretList):string {
+		if(!str_contains($string, "{{")) {
+			return $string;
+		}
+
+		foreach($secretList as $secret) {
+			$string = str_ireplace("{{" . $secret->key . "}}", $secret->getSecretValue(), $string);
+		}
+
+		return $string;
+	}
 }

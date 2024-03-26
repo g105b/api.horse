@@ -18,6 +18,7 @@ class SecretRepository extends Repository {
 	}
 
 	public function create(string $key, string $value):void {
+		$key = strtoupper($key);
 		$newSecretAssoc = $this->secretAssoc;
 		$newSecretAssoc[$key] = $value;
 		$this->write($newSecretAssoc);

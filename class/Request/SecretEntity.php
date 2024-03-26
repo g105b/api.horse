@@ -17,4 +17,8 @@ class SecretEntity {
 			str_repeat("•", min(8, strlen($value) - $charactersToShow)) .
 			substr($this->value, -$charactersToShow);
 	}
+
+	public function getSecretValue():string {
+		return $this->value;
+	}
 }
