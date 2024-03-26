@@ -22,6 +22,8 @@ window.addEventListener("popstate", function(e) {
 	location.href = document.location;
 });
 
+console.log("TURBO!");
+
 let elementEventMap = new Map();
 let addEventListenerOriginal = EventTarget.prototype.addEventListener;
 Element.prototype.addEventListener = function addEventListenerTurbo(type, listener, options) {
@@ -40,6 +42,7 @@ Element.prototype.addEventListener = function addEventListenerTurbo(type, listen
 	addEventListenerOriginal.call(this, type, listener, options);
 	DEBUG && console.log(`Event ${type} added to element:`, element);
 };
+console.log("Hooked addEventListener", Element.prototype.addEventListener);
 
 turboElementList.forEach(init);
 
@@ -251,12 +254,15 @@ function completeAutoSave(newDocument) {
 
 function submitForm(form, callback, submitter) {
 	let formData = getFormDataForButton(form, "autoSave", submitter);
+	form.classList.add("submitting");
 
 	fetch(form.action, {
 		method: form.getAttribute("method"),
 		credentials: "same-origin",
 		body: formData,
 	}).then(response => {
+		form.classList.remove("submitting");
+
 		if(!response.ok) {
 			console.error("Form submission error", response);
 			return;

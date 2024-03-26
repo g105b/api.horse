@@ -93,7 +93,7 @@
 			</li>
 		</ul>
 		<form class="add" method="post">
-			<button name="do" value="new-header">New header</button>
+			<button name="do" value="new-header" data-turbo="submit">New header</button>
 		</form>
 	</details>
 
@@ -154,7 +154,7 @@
 				</li>
 			</ul>
 			<form class="add" method="post">
-				<button name="do" value="new-body-parameter">Add body parameter</button>
+				<button name="do" value="new-body-parameter" data-turbo="submit">Add body parameter</button>
 			</form>
 		</div>
 	</details>
@@ -170,6 +170,6 @@
 	</details>
 
 	<form class="actions primary" method="post" data-turbo="update-outer">
-		<button name="do" value="send">Send request</button>
+		<button name="do" value="send" data-turbo="submit">Send request</button>
 	</form>
 </div>

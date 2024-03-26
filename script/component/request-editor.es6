@@ -5,22 +5,6 @@ document.querySelectorAll("request-editor").forEach(component => {
 		window.controlReturnCallback = controlReturnCallback;
 		window.addEventListener("keypress", controlReturnCallback);
 	}
-
-	component.querySelectorAll("form.actions.primary").forEach(form => {
-		console.log("Adding submit event to form", form);
-
-		form.addEventListener("submit", e => {
-			form.classList.add("submitting");
-
-			let button = form.querySelector("button");
-			if(!button) {
-				return;
-			}
-
-			button.dataset["originalText"] = button.textContent;
-			button.textContent = "Sending...";
-		});
-	});
 });
 
 function controlReturnCallback(e) {
