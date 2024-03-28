@@ -4,6 +4,8 @@ use App\Request\BodyEntityForm;
 use App\Request\BodyEntityMultipart;
 use App\Request\BodyEntityRaw;
 use App\Request\BodyEntityUrlEncoded;
+use App\Request\Collection\CollectionEntity;
+use App\Request\PrivateRequestRepository;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
 use App\Request\SecretRepository;
@@ -57,6 +59,11 @@ function do_delete_request(
 	RequestEntity $requestEntity,
 	Response $response,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$requestRepository->delete($requestEntity);
 	$response->redirect("../");
 }
@@ -68,6 +75,11 @@ function do_update(
 	RequestRepository $requestRepository,
 	?RequestEntity $requestEntity,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	if(!$requestEntity) {
 		$requestEntity = $requestRepository->create();
 	}
@@ -98,6 +110,11 @@ function do_new_query_parameter(
 	RequestRepository $requestRepository,
 	?RequestEntity $requestEntity,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	if(!$requestEntity) {
 		$requestEntity = $requestRepository->create();
 	}
@@ -113,6 +130,11 @@ function do_save_query_parameter(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$queryParameterEntity = $requestEntity->getQueryStringParameterById($input->getString("id"));
 	$queryParameterEntity->key = $input->getString("key");
 	$queryParameterEntity->value = $input->getString("value");
@@ -126,6 +148,11 @@ function do_delete_query_parameter(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$queryParameterEntity = $requestEntity->getQueryStringParameterById($input->getString("id"));
 	$requestEntity->deleteQueryParameterEntity($queryParameterEntity);
 	$requestRepository->update($requestEntity);
@@ -137,6 +164,11 @@ function do_new_header(
 	RequestRepository $requestRepository,
 	?RequestEntity $requestEntity,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	if(!$requestEntity) {
 		$requestEntity = $requestRepository->create();
 	}
@@ -152,6 +184,11 @@ function do_save_header(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$headerEntity = $requestEntity->getHeaderById($input->getString("id"));
 	$headerEntity->key = $input->getString("key");
 	$headerEntity->value = $input->getString("value");
@@ -165,6 +202,11 @@ function do_delete_header(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$headerEntity = $requestEntity->getHeaderById($input->getString("id"));
 	$requestEntity->deleteHeaderEntity($headerEntity);
 	$requestRepository->update($requestEntity);
@@ -177,6 +219,11 @@ function do_set_body_type(
 	RequestRepository $requestRepository,
 	?RequestEntity $requestEntity,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	if(!$requestEntity) {
 		$requestEntity = $requestRepository->create();
 	}
@@ -206,33 +253,47 @@ function do_set_body_type(
 }
 
 function do_save_body_raw(
-	Input $input,
-	Response $response,
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
+	Input $input,
+	Response $response,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$requestEntity->body->content = $input->getString("body-raw");
 	$requestRepository->update($requestEntity);
 	$response->redirect("../$requestEntity->id/?editor=body");
 }
 
 function do_new_body_parameter(
-	Input $input,
-	Response $response,
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
+	Response $response,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$requestEntity->body->addBodyParameter();
 	$requestRepository->update($requestEntity);
 	$response->redirect("../$requestEntity->id/?editor=body&editor-action=new");
 }
 
 function do_save_body_parameter(
-	Input $input,
-	Response $response,
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
+	Input $input,
+	Response $response,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$bodyParameterEntity = $requestEntity->body->getParameterById($input->getString("id"));
 	$bodyParameterEntity->key = $input->getString("key");
 	$bodyParameterEntity->value = $input->getString("value");
@@ -241,11 +302,16 @@ function do_save_body_parameter(
 }
 
 function do_delete_body_parameter(
-	Input $input,
-	Response $response,
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
+	Input $input,
+	Response $response,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
 	$bodyParameterEntity = $requestEntity->body->getParameterById($input->getString("id"));
 	$requestEntity->body->deleteParameter($bodyParameterEntity);
 	$requestRepository->update($requestEntity);
@@ -253,6 +319,7 @@ function do_delete_body_parameter(
 }
 
 function do_send(
+	RequestRepository $requestRepository,
 	ResponseRepository $responseRepository,
 	SecretRepository $secretRepository,
 	?RequestEntity $requestEntity,
@@ -262,6 +329,11 @@ function do_send(
 	if(!$requestEntity) {
 		$response->reload();
 	}
+
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
 
 	$requestEntity = $requestEntity->withInjectedSecrets($secretRepository->getAll());
 	$responseEntity = $fetchHandler->fetchResponse($requestEntity);

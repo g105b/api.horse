@@ -5,14 +5,14 @@ use Gt\Ulid\Ulid;
 use Stringable;
 
 class ShareId implements Stringable {
-	private string $random;
+	public string $id;
 
 	public function __construct(?string $prefix = null) {
 // TODO: Shorter length for collections - less entropy needed.
-		$this->random = new Ulid($prefix);
+		$this->id = new Ulid($prefix);
 	}
 
 	public function __toString():string {
-		return $this->random;
+		return $this->id;
 	}
 }

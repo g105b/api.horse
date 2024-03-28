@@ -5,6 +5,8 @@ use App\Http\FetchHandler;
 use App\Request\Collection\CollectionEntity;
 use App\Request\Collection\CollectionMode;
 use App\Request\Collection\CollectionRepository;
+use App\Request\Collection\PrivateCollectionRepository;
+use App\Request\PrivateRequestRepository;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
 use App\Request\SecretRepository;
@@ -16,6 +18,13 @@ use Gt\WebEngine\Middleware\DefaultServiceLoader;
 
 class ServiceLoader extends DefaultServiceLoader {
 	public function loadShareId():ShareId {
+		$dynamicPath = $this->container->get(DynamicPath::class);
+		if($shareIdString = $dynamicPath->get("share-id")) {
+			$shareId = new ShareId();
+			$shareId->id = $shareIdString;
+			return $shareId;
+		}
+
 		$session = $this->container->get(Session::class);
 		if($shareId = $session->get(ShareId::class)) {
 			return $shareId;
@@ -29,13 +38,25 @@ class ServiceLoader extends DefaultServiceLoader {
 	public function loadCollectionRepository():CollectionRepository {
 		$shareId = $this->container->get(ShareId::class);
 		$uri = $this->container->get(Uri::class);
+		$dir = "data/$shareId";
 		$mode = CollectionMode::fromUri($uri);
-		return new CollectionRepository("data/$shareId", $mode);
+
+		$dynamicPath = $this->container->get(DynamicPath::class);
+		if($urlShareId = $dynamicPath->get("share-id")) {
+			$session = $this->container->get(Session::class);
+			if($shareIdSession = $session->get(ShareId::class)) {
+				if($urlShareId === (string)$shareIdSession) {
+					return new PrivateCollectionRepository($dir, $mode);
+				}
+			}
+		}
+
+		return new CollectionRepository($dir, $mode);
 	}
 
 	public function loadCollectionEntity():CollectionEntity {
-		$collectionRepository = $this->container->get(CollectionRepository::class);
 		$dynamicPath = $this->container->get(DynamicPath::class);
+		$collectionRepository = $this->container->get(CollectionRepository::class);
 
 		if($id = $dynamicPath->get("collection-id")) {
 			if($collection = $collectionRepository->retrieve($id)) {
@@ -59,7 +80,14 @@ class ServiceLoader extends DefaultServiceLoader {
 
 	public function loadRequestRepository():RequestRepository {
 		$shareId = $this->container->get(ShareId::class);
+		$collectionRepository = $this->container->get(CollectionRepository::class);
 		$collectionEntity = $this->container->get(CollectionEntity::class);
+
+		if($collectionRepository instanceof PrivateCollectionRepository) {
+			return new PrivateRequestRepository(
+				"data/$shareId/{$collectionEntity->mode->name}/$collectionEntity->id",
+			);
+		}
 
 		return new RequestRepository(
 			"data/$shareId/{$collectionEntity->mode->name}/$collectionEntity->id",
