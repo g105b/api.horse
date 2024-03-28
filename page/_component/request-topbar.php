@@ -1,18 +1,30 @@
 <?php
 use App\Request\Collection\CollectionEntity;
 use App\Request\Collection\CollectionRepository;
+use App\Request\Collection\PrivateCollectionRepository;
 use App\Slug;
 use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
 use Gt\Http\Uri;
 use Gt\Input\Input;
+use Gt\Routing\Path\DynamicPath;
 
 function go(
 	CollectionRepository $collectionRepository,
 	CollectionEntity $collection,
+	DynamicPath $dynamicPath,
 	Binder $binder,
 ):void {
-	$numCollections = $binder->bindList($collectionRepository->retrieveAll());
+	$binder->bindKeyValue("shared", !($collectionRepository instanceof PrivateCollectionRepository));
+
+	if($collectionRepository instanceof PrivateCollectionRepository) {
+		$numCollections = $binder->bindList($collectionRepository->retrieveAll());
+	}
+	else {
+		$current = $collectionRepository->retrieve($dynamicPath->get("collection-id"));
+		$numCollections = $binder->bindList([$current]);
+	}
+
 	if($numCollections === 1) {
 		$binder->bindKeyValue("single", true);
 	}

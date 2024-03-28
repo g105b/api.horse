@@ -1,12 +1,13 @@
 <button id="mobileMenuToggle" onclick="mobileMenu.showModal()">Collections</button>
 
-<dialog id="mobileMenu" class="no-scroll special">
+<dialog id="mobileMenu" class="no-scroll special" data-bind:class=":shared">
 	<form method="dialog">
-		<button>Close menu</button>
+		<button class="shared-show">Close menu</button>
 	</form>
 
 	<div class="top-actions">
-		<button><span>Fork</span></button>
+		<a href="/" class="shared-show shared-show-only">← Back to your collections</a>
+		<button class="shared-show"><span>Fork</span></button>
 		<button onclick="editModal.showModal();"><span>Edit</span></button>
 		<button class="positive" onclick="newModal.showModal();"><span>New collection</span></button>
 	</div>
