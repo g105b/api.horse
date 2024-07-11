@@ -5,6 +5,8 @@ every time its containing form changes.
  */
 const DEBUG = true;
 
+DEBUG && console.group("TURBO!");
+
 const parser = new DOMParser();
 let turboElementList = document.querySelectorAll("[data-turbo]");
 let updateElementCollection = {};
@@ -22,8 +24,6 @@ window.addEventListener("popstate", function(e) {
 	location.href = document.location;
 });
 
-console.log("TURBO!");
-
 let elementEventMap = new Map();
 let addEventListenerOriginal = EventTarget.prototype.addEventListener;
 Element.prototype.addEventListener = function addEventListenerTurbo(type, listener, options) {
@@ -40,9 +40,9 @@ Element.prototype.addEventListener = function addEventListenerTurbo(type, listen
 	elementEventMap.set(element, mapObj);
 
 	addEventListenerOriginal.call(this, type, listener, options);
-	DEBUG && console.log(`Event ${type} added to element:`, element);
+	DEBUG && console.debug(`Event ${type} added to element:`, element);
 };
-console.log("Hooked addEventListener", Element.prototype.addEventListener);
+DEBUG && console.debug("Hooked addEventListener", Element.prototype.addEventListener);
 
 turboElementList.forEach(init);
 
@@ -87,7 +87,7 @@ function storeUpdateElement(element, updateType) {
 
 	updateElementCollection[updateType].push(element);
 
-	DEBUG && console.log("storeUpdateElement completed", `Pushing into ${updateType}: `, element);
+	DEBUG && console.debug("storeUpdateElement completed", `Pushing into ${updateType}: `, element);
 }
 
 /**
@@ -109,9 +109,11 @@ function processUpdateElements(newDocument) {
 
 			let activeElement = null;
 			let activeElementSelection = null;
+			let activeElementValue = null;
 			if(existingElement.contains(document.activeElement)) {
 				activeElement = getXPathForElement(document.activeElement);
 				activeElementSelection = [];
+				activeElementValue = document.activeElement.value;
 				if(document.activeElement.selectionStart >= 0 && document.activeElement.selectionEnd >= 0) {
 					activeElementSelection.push(document.activeElement.selectionStart, document.activeElement.selectionEnd);
 				}
@@ -142,11 +144,12 @@ function processUpdateElements(newDocument) {
 			}
 
 			if(activeElement) {
-				console.log("Active element", activeElement);
+				DEBUG && console.debug("Active element", activeElement);
 				let elementToActivate = document.evaluate(activeElement, document.documentElement).iterateNext();
 				if(elementToActivate) {
-					console.log("Element to activate", elementToActivate, activeElementSelection);
+					DEBUG && console.debug("Element to activate", elementToActivate, activeElementSelection);
 					elementToActivate.focus();
+					elementToActivate.value = activeElementValue;
 					if(elementToActivate.setSelectionRange) {
 						elementToActivate.setSelectionRange(activeElementSelection[0], activeElementSelection[1]);
 					}
@@ -155,7 +158,7 @@ function processUpdateElements(newDocument) {
 						elementToActivate.removeEventListener("mouseup", completeClickFunction);
 
 						setTimeout(() => {
-							console.log("Completing click", elementToActivate);
+							DEBUG && console.debug("Completing click", elementToActivate);
 							elementToActivate.click();
 						}, 10)
 					};
@@ -171,7 +174,7 @@ function processUpdateElements(newDocument) {
 }
 
 function initAutoSave(turboElement) {
-	if(!turboElement instanceof HTMLButtonElement) {
+	if(!(turboElement instanceof HTMLButtonElement)) {
 		console.error("TurboElement type autosave must be an HTMLButtonElement", turboElement);
 		return;
 	}
@@ -195,7 +198,7 @@ function initAutoSave(turboElement) {
 	turboElement.form.addEventListener("change", formChangeAutoSave);
 	turboElement.form.addEventListener("submit", formSubmitAutoSave);
 
-	DEBUG && console.log("initAutoSave completed", turboElement);
+	DEBUG && console.debug("initAutoSave completed", turboElement);
 }
 
 function initAutoSubmit(button) {
@@ -323,7 +326,7 @@ function reattachEventListeners(oldElement, newElement) {
 	let mapObj = elementEventMap.get(oldElement);
 	for(let type of Object.keys(mapObj)) {
 		for(let listener of mapObj[type]) {
-			console.log("Listener for element:", oldElement, listener);
+			DEBUG && console.debug("Listener for element:", oldElement, listener);
 		}
 	}
 }
