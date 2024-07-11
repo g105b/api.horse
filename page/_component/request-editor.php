@@ -80,8 +80,9 @@ function do_update(
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
+	$entityName = $input->getString("name");
 	if(!$requestEntity) {
-		$requestEntity = $requestRepository->create();
+		$requestEntity = $requestRepository->create($entityName ?: null);
 	}
 
 	$endpointString = $input->getString("endpoint");
@@ -97,11 +98,11 @@ function do_update(
 		}
 	}
 
-	$requestEntity->name = $input->getString("name");
+	$requestEntity->name = $entityName;
 	$requestEntity->method = $input->getString("method");
 	$requestEntity->endpoint = $endpointString;
-	$requestRepository->update($requestEntity);
 
+	$requestRepository->update($requestEntity);
 	$response->redirect("../$requestEntity->id/");
 }
 

@@ -1,6 +1,7 @@
 <?php
 namespace App\Request;
 
+use App\ImmutableClone;
 use App\Http\HeaderEntity;
 use Gt\DomTemplate\BindGetter;
 use Gt\Http\Uri;
@@ -8,6 +9,8 @@ use Gt\Ulid\Ulid;
 use Psr\Http\Message\UriInterface;
 
 class RequestEntity {
+	use ImmutableClone;
+
 	public ?string $name = null;
 	public ?string $method = null;
 	public ?string $endpoint = null;
