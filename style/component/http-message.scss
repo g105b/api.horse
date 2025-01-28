@@ -8,6 +8,10 @@ http-message {
 		margin-top: 1rem;
 
 		>summary {
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+
 			&::marker {
 				content: "";
 			}
@@ -21,10 +25,6 @@ http-message {
 				text-decoration: underline;
 				cursor: pointer;
 			}
-
-			white-space: nowrap;
-			overflow: hidden;
-			text-overflow: ellipsis;
 		}
 
 		&[open] {
@@ -46,19 +46,29 @@ http-message {
 			overflow-x: scroll;
 
 			>li {
+				white-space: nowrap;
+
 				>.key {
 					font-weight: bold;
 				}
 				>.value {
 
 				}
-
-				white-space: nowrap;
 			}
 		}
 	}
 
 	.response-body {
+		position: relative;
+		margin-top: 3rem;
+		background-color: var(--theme-bg);
+		border: 1px solid var(--theme-border);
+		padding: 0.5rem;
+		border-radius: 0.25rem;
+		font-family: monospace;
+		white-space: pre;
+		overflow-x: scroll;
+
 		&::before {
 			position: absolute;
 			display: block;
@@ -70,16 +80,6 @@ http-message {
 			font-family: sans-serif;
 		}
 
-		position: relative;
-		margin-top: 3rem;
-		background-color: var(--theme-bg);
-		border: 1px solid var(--theme-border);
-		padding: 0.5rem;
-		border-radius: 0.25rem;
-		font-family: monospace;
-		white-space: pre;
-		overflow-x: scroll;
-
 		&:empty {
 			background-color: transparent;
 			border: none;
@@ -88,6 +88,20 @@ http-message {
 			&::after {
 				content: "There is no response body";
 				font-style: italic;
+			}
+		}
+
+		.type {
+			white-space: pre-line;
+
+			&.type-integer, &.type-double, &.type-null, &.type-boolean {
+				font-weight: bold;
+				text-transform: uppercase;
+				color: var(--pal-8);
+			}
+			&.type-string {
+				font-weight: bold;
+				color: var(--pal-10);
 			}
 		}
 	}

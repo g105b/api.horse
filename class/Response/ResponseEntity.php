@@ -78,6 +78,19 @@ class ResponseEntity {
 		return $summaryString;
 	}
 
+	#[BindGetter]
+	public function getContentType():?string {
+		foreach($this->headers as $header) {
+			if(strtolower($header->key) !== "content-type") {
+				continue;
+			}
+
+			return explode(";", $header->value)[0];
+		}
+
+		return null;
+	}
+
 	public function setStatus(int $status, ?string $statusText):void {
 		$this->waitingComplete();
 		$this->status = $status;
@@ -104,11 +117,19 @@ class ResponseEntity {
 		$this->body = $bodyData;
 	}
 
+	public function getBody():string {
+		return $this->body;
+	}
+
 	private function waitingComplete():void {
 		$this->millisecondsWaiting = round(microtime(true) - $this->initTimestamp, 2);
 	}
 
 	private function receivingComplete(int $bytes):void {
+		if(!isset($this->millisecondsWaiting)) {
+			$this->millisecondsWaiting = 0;
+		}
+
 		$this->millisecondsReceiving = round(microtime(true) - $this->initTimestamp - $this->millisecondsWaiting, 2);
 		$this->bytes = $bytes;
 	}

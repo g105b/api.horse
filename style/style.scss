@@ -1,12 +1,17 @@
 @import "variable/break";
 @import "variable/palette";
+
 @import "mixin/icon";
+
 @import "decoration/user-interface";
 @import "decoration/panel";
 @import "decoration/sidebar";
 @import "decoration/http-attributes";
 @import "decoration/empty-message";
+@import "decoration/syntax-highlighter";
+
 @import "object/page-layout";
+
 @import "component/global-header";
 @import "component/request-editor";
 @import "component/request-sidebar";
@@ -18,6 +23,7 @@
 @import "component/webhook-editor";
 @import "component/webhook-viewer";
 @import "component/http-message";
+
 @import "element/article";
 @import "element/body";
 @import "element/button";
@@ -40,4 +46,8 @@
 
 .panel {
 	@extend %d-panel;
+}
+
+.syntax-highlighter {
+	@extend %d-syntax-highlighter;
 }

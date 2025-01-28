@@ -139,6 +139,8 @@ request-topbar {
 					}
 
 					select {
+						text-align: left;
+
 						&.single {
 							appearance: none;
 							pointer-events: none;
@@ -148,8 +150,6 @@ request-topbar {
 							text-align: right;
 							font-weight: bold;
 						}
-
-						text-align: left;
 					}
 				}
 

@@ -220,6 +220,14 @@ function autoSubmit(e) {
 function formChangeAutoSave(e) {
 	let form = e.target;
 	if(form.form instanceof HTMLFormElement) {
+		let element = form;
+		element.classList.add("input-changed");
+		(function(c_element) {
+			setTimeout(function(){
+				c_element.classList.remove("input-changed");
+			}, 100);
+		})(element);
+
 		form = form.form;
 	}
 
@@ -233,6 +241,12 @@ function formSubmitAutoSave(e) {
 	if(form.form instanceof HTMLFormElement) {
 		form = form.form;
 	}
+
+	let recentlyChangedInput = form.querySelector(".input-changed");
+	if(recentlyChangedInput) {
+		return;
+	}
+
 	let submitter = null;
 	if(e.submitter instanceof HTMLButtonElement) {
 		submitter = e.submitter;

@@ -15,7 +15,7 @@
 
 			<span class="timing" data-bind:title="Waiting {{millisecondsWaiting}} ms, receiving {{millisecondsReceiving}} ms">Completed in <span data-bind:text="millisecondsTotal">000</span> ms</span>
 			<span class="size" data-bind:text="size">000 B</span>
-			<http-message />
+			<http-message data-bind:data-content-type="contentType" data-bind:data-id="id" />
 		</details>
 	</li>
 </ul>

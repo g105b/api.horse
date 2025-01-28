@@ -24,6 +24,10 @@ class RequestEntity {
 		public readonly string $id,
 	) {}
 
+	public function getMethod():string {
+		return $this->method;
+	}
+
 	#[BindGetter]
 	public function getNameOrId():string {
 		return empty($this->name) ? $this->id : $this->name;

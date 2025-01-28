@@ -45,6 +45,9 @@ class SecretRepository extends Repository {
 	}
 
 	private function write(array $secretAssocData):void {
+		if(!is_dir(dirname($this->secretIniFile))) {
+			mkdir(dirname($this->secretIniFile), recursive: true);
+		}
 		$fh = fopen($this->secretIniFile, "w");
 		foreach($secretAssocData as $key => $value) {
 			$escapedValue = str_replace('"', '\"', $value);

@@ -1,0 +1,107 @@
+/*
+ * This decorator is applied to the outer-most details element.
+ */
+%d-syntax-highlighter {
+	position: relative;
+
+	&::after {
+		position: absolute;
+		display: block;
+		content: "";
+		top: 0;
+		right: 0;
+		padding: 0.1rem 0.25rem;
+		border-radius: 0.25rem;
+		color: var(--pal-2);
+		background-color: color-mix(in srgb, var(--pal-1), var(--pal-2));
+		font-weight: bold;
+		pointer-events: none;
+	}
+
+	&.syntax-highlighter-json {
+		&::after {
+			content: "JSON";
+		}
+	}
+
+	&[open], details[open] {
+		>summary {
+			* {
+				display: none;
+			}
+		}
+	}
+
+	summary {
+		position: relative;
+		z-index: 1;
+		padding-left: 1rem;
+		margin-left: -1rem;
+
+		details {
+			summary {
+				display: inline;
+
+				&::marker {
+					display: none;
+					content: "";
+				}
+			}
+		}
+	}
+
+	details {
+		&[open] {
+			display: block;
+		}
+		&:not([open]) {
+			padding-left: 1rem;
+		}
+	}
+
+	.nested {
+		margin-left: 1rem;
+	}
+
+	.data-structure {
+		margin-top: -1rem;
+	}
+
+	.syntax {
+		white-space: pre-line;
+		vertical-align: top;
+
+		&.syntax-array-bracket {
+			color: color-mix(in srgb, var(--pal-1), var(--pal-2));
+
+			&:last-child {
+				margin-left: -1rem;
+			}
+		}
+		&.syntax-array-separator {
+			color: color-mix(in srgb, var(--pal-1), var(--pal-2));
+		}
+		&.syntax-key {
+			float: left;
+			padding-right: 0.5rem;
+
+			~details[open] {
+				>summary {
+					~.data-structure {
+						.syntax:first-of-type {
+							margin-left: 1.25rem;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.data-element-list {
+		&::before {
+			content: attr(data-index) ":";
+			color: var(--pal-7);
+			opacity: 0.5;
+		}
+	}
+}

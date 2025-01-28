@@ -85,12 +85,14 @@ function do_update(
 		$requestEntity = $requestRepository->create($entityName ?: null);
 	}
 
+	$urlSuffix = "";
+
 	$endpointString = $input->getString("endpoint");
 	if($queryString = parse_url($endpointString, PHP_URL_QUERY)) {
 		$endpointString = strtok($endpointString, "?");
 		parse_str($queryString, $queryParts);
 		if($queryParts) {
-			$requestEntity->queryStringParameters = [];
+			$urlSuffix = "?editor=query-string-parameter";
 		}
 
 		foreach($queryParts as $key => $value) {
@@ -103,7 +105,7 @@ function do_update(
 	$requestEntity->endpoint = $endpointString;
 
 	$requestRepository->update($requestEntity);
-	$response->redirect("../$requestEntity->id/");
+	$response->redirect("../$requestEntity->id/$urlSuffix");
 }
 
 function do_new_query_parameter(

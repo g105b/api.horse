@@ -7,17 +7,23 @@ use Gt\Fetch\Http;
 use Gt\Http\Response;
 
 class FetchHandler {
-	public function fetchResponse(RequestEntity $requestEntity):ResponseEntity {
-		$responseEntity = new ResponseEntity($requestEntity);
+	public function fetchResponse(
+		RequestEntity $requestEntity,
+		?Http $http = null,
+	):ResponseEntity {
+		$responseEntity = new ResponseEntity();
 
 		$curlOptions = [
 			CURLOPT_TIMEOUT => 5,
 		];
-		$http = new Http($curlOptions);
+		/** @var Http $http */
+		if(!$http) {
+			$http = new Http($curlOptions);
+		}
 
 		$uri = $requestEntity->getFetchableUri();
 		$init = [
-			"method" => $requestEntity->method,
+			"method" => $requestEntity->getMethod(),
 		];
 		if($headers = $requestEntity->getFetchableHeaders()) {
 			$init["headers"] = $headers;

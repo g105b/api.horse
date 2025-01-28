@@ -1,4 +1,5 @@
 <?php
+use App\SyntaxHighlighter\JsonSyntaxHighlighter;
 use App\Request\RequestEntity;
 use App\Response\ResponseRepository;
 use Gt\Dom\Element;
@@ -20,6 +21,16 @@ function go(
 
 	if($bindCount === 0) {
 		$element->querySelector("button[name=do][value=clear]")->remove();
+	}
+
+	foreach($element->querySelectorAll("http-message") as $httpMessageElement) {
+		$contentType = $httpMessageElement->dataset->get("content-type");
+		$formatter = null;
+		if($contentType === "application/json") {
+			$formatter = new JsonSyntaxHighlighter();
+		}
+
+		$formatter?->format($httpMessageElement);
 	}
 }
 
