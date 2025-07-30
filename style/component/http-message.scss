@@ -90,19 +90,5 @@ http-message {
 				font-style: italic;
 			}
 		}
-
-		.type {
-			white-space: pre-line;
-
-			&.type-integer, &.type-double, &.type-null, &.type-boolean {
-				font-weight: bold;
-				text-transform: uppercase;
-				color: var(--pal-8);
-			}
-			&.type-string {
-				font-weight: bold;
-				color: var(--pal-10);
-			}
-		}
 	}
 }

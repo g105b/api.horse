@@ -3,6 +3,7 @@
  */
 %d-syntax-highlighter {
 	position: relative;
+	font-family: monospace;
 
 	&::after {
 		position: absolute;
@@ -102,6 +103,30 @@
 			content: attr(data-index) ":";
 			color: var(--pal-7);
 			opacity: 0.5;
+		}
+	}
+
+	.data-element {
+		display: inline-block;
+	}
+
+	summary, .data-element {
+		.type {
+			white-space: pre-line;
+
+			&.type-integer, &.type-double, &.type-null, &.type-boolean {
+				font-weight: bold;
+				text-transform: uppercase;
+				color: var(--pal-8);
+			}
+			&.type-string {
+				font-weight: bold;
+				color: var(--pal-10);
+			}
+		}
+
+		.scalar {
+			display: inline-block;
 		}
 	}
 }

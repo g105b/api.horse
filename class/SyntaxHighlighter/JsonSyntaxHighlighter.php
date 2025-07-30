@@ -8,8 +8,8 @@ use Gt\Logger\Log;
 class JsonSyntaxHighlighter extends SyntaxHighlighter{
 	public function format(Element $element):void {
 		$id = $element->dataset->get("id");
-		$cacheFile = "data/html-cache/response-formatted/$id.html";
-		if(file_exists($cacheFile)) {
+		$cacheFile = $id ? "data/html-cache/response-formatted/$id.html" : null;
+		if($cacheFile && file_exists($cacheFile)) {
 			$html = file_get_contents($cacheFile);
 			$element->innerHTML = $html;
 			return;
@@ -17,8 +17,14 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 
 		$document = $element->ownerDocument;
 
-		$responseBodyElement = $element->querySelector(".response-body");
-		$rawBodyString = $responseBodyElement->innerHTML;
+		if($element->classList->contains("syntax-highlight")) {
+			$syntaxHighlightElement = $element;
+		}
+		else {
+			$syntaxHighlightElement = $element->querySelector(".syntax-highlight");
+		}
+
+		$rawBodyString = $syntaxHighlightElement->innerHTML;
 		$json = json_decode($rawBodyString, true);
 		if($jsonError = json_last_error()) {
 			Log::info("Error decoding JSON (error $jsonError) - " . json_last_error_msg());
@@ -27,17 +33,20 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 
 		$fragment = $document->createDocumentFragment();
 		$this->output($json, $fragment);
-		$responseBodyElement->innerHTML = "";
+		$syntaxHighlightElement->innerHTML = "";
 		if($fragment->childNodes->length > 0) {
-			$appended = $responseBodyElement->appendChild($fragment);
+			$appended = $syntaxHighlightElement->appendChild($fragment);
 			$appended->classList->add("syntax-highlighter", "syntax-highlighter-json");
 		}
 
 		$html = $element->innerHTML;
-		if(!is_dir(dirname($cacheFile))) {
-			mkdir(dirname($cacheFile), recursive: true);
+
+		if($cacheFile) {
+			if(!is_dir(dirname($cacheFile))) {
+				mkdir(dirname($cacheFile), recursive: true);
+			}
+			file_put_contents($cacheFile, $html);
 		}
-//		file_put_contents($cacheFile, $html);
 	}
 
 	private function output(
@@ -46,7 +55,13 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 		int $nestingLevel = 0,
 	):void {
 		if(is_scalar($json) || is_null($json)) {
-			$this->outputBasicType($json, $outputTo, $nestingLevel);
+			$outerWrapper = $outputTo->ownerDocument->createElement("div");
+			$outerWrapper->classList->add("scalar");
+			$innerWrapper = $outputTo->ownerDocument->createElement("div");
+			$innerWrapper->classList->add("data-element");
+			$outputTo->appendChild($outerWrapper);
+			$outerWrapper->appendChild($innerWrapper);
+			$this->outputBasicType($json, $innerWrapper, $nestingLevel);
 		}
 		else {
 			$this->outputDataStructure($json, $outputTo, $nestingLevel);
