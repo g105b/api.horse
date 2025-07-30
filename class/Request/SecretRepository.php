@@ -19,12 +19,14 @@ class SecretRepository extends Repository {
 
 	public function create(string $key, string $value):void {
 		$key = strtoupper($key);
+		$key = str_replace(" ", "_", $key);
 		$newSecretAssoc = $this->secretAssoc;
 		$newSecretAssoc[$key] = $value;
 		$this->write($newSecretAssoc);
 	}
 
 	public function remove(string $key):void {
+		var_dump($key);die();
 		$newSecretAssoc = $this->secretAssoc;
 		unset($newSecretAssoc[$key]);
 		$this->write($newSecretAssoc);

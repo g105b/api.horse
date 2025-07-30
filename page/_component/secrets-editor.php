@@ -16,7 +16,7 @@ function do_delete(
 	Input $input,
 	Response $response,
 ):void {
-	$secretRepository->remove($input->getString("key"));
+//	$secretRepository->remove($input->getString("key"));
 	$response->reload();
 }
 
