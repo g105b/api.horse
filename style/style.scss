@@ -53,11 +53,11 @@
 }
 
 form.submitting {
-	cursor: wait;
+	cursor: progress;
 	opacity: 0.5;
 	transition: opacity 0.25s ease-in-out;
 
 	* {
-		cursor: wait;
+		cursor: progress;
 	}
 }
