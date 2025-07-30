@@ -262,10 +262,10 @@ class RequestEntity {
 	 * @return array<QueryStringEntity|HeaderEntity|BodyParameterEntity>
 	 */
 	private function injectKeyValuePairs(
-		array $kvpEntityArray,
+		?array $kvpEntityArray,
 		array $secretList,
-	):array {
-		foreach($kvpEntityArray as $kvpEntity) {
+	):?array {
+		foreach($kvpEntityArray ?? [] as $kvpEntity) {
 			$kvpEntity->key = $this->injectString($kvpEntity->key, $secretList);
 			if($kvpEntity->value) {
 				$kvpEntity->value = $this->injectString($kvpEntity->value, $secretList);

@@ -56,6 +56,10 @@
 			align-items: center;
 			padding: 1rem;
 
+			&:nth-child(even) {
+				background-color: var(--pal-3);
+			}
+
 			>span {
 				font-family: monospace;
 			}
