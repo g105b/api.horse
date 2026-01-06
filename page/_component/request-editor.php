@@ -192,9 +192,15 @@ function do_save_header(
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
+	$key = $input->getString("key");
+	$value = $input->getString("value");
+
 	$headerEntity = $requestEntity->getHeaderById($input->getString("id"));
-	$headerEntity->key = $input->getString("key");
-	$headerEntity->value = $input->getString("value");
+	$headerEntity->key = $key;
+	$headerEntity->value = $value;
+	if(strtolower($key) === "content-type") {
+		$requestEntity->inferredContentType = false;
+	}
 	$requestRepository->update($requestEntity);
 	$response->redirect("../$requestEntity->id/?editor=header");
 }
@@ -248,6 +254,26 @@ function do_set_body_type(
 				$existingParameter->value,
 			);
 		}
+	}
+
+	$foundContentTypeHeader = false;
+	if(!$requestEntity->inferredContentType) {
+		foreach($requestEntity->headers as $header) {
+			if(strtolower($header->key) === "content-type") {
+				$foundContentTypeHeader = true;
+			}
+		}
+	}
+
+	if(!$foundContentTypeHeader) {
+		$contentType = match($type) {
+			"json", "xml" => "application/$type",
+			"text" => "text/plain",
+			"form-multipart" => "multipart/form-data",
+			"form-url" => "application/x-www-form-urlencoded",
+			default => "application/octet-stream",
+		};
+		$requestEntity->inferContentType($contentType);
 	}
 
 	$requestEntity->setBody($bodyEntity);

@@ -18,6 +18,7 @@ class RequestEntity {
 	public ?array $queryStringParameters = null;
 	/** @var null|array<HeaderEntity> */
 	public ?array $headers = null;
+	public bool $inferredContentType = false;
 	public ?BodyEntity $body = null;
 
 	public function __construct(
@@ -254,6 +255,16 @@ class RequestEntity {
 			);
 		}
 		return $clone;
+	}
+
+	public function inferContentType(string $contentType):void {
+		foreach($this->headers as $header) {
+			if(strtolower($header->key) === "content-type") {
+				$this->deleteHeaderEntity($header);
+			}
+		}
+		$this->addHeader("Content-type", $contentType);
+		$this->inferredContentType = true;
 	}
 
 	/**
