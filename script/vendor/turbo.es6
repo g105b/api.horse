@@ -1,21 +1,22 @@
 /*
-# `data-turbo="autosave"`
+# `data-flux="autosave"`
 On buttons, this will visually hide the button, but automatically "click" it
 every time its containing form changes.
  */
 const DEBUG = true;
+alert("TURBO?");
 
-DEBUG && console.group("TURBO!");
+DEBUG && console.group("flux!");
 
 const parser = new DOMParser();
-let turboElementList = document.querySelectorAll("[data-turbo]");
+let turboElementList = document.querySelectorAll("[data-flux]");
 let updateElementCollection = {};
-DEBUG && console.debug("Turbo element list:", turboElementList);
+DEBUG && console.debug("flux element list:", turboElementList);
 let turboStyle = document.createElement("style");
 document.head.append(turboStyle);
-turboStyle.id = "turbo-style";
+turboStyle.id = "flux-style";
 turboStyle.innerHTML = `
-[data-turbo="autosave"] {
+[data-flux="autosave"] {
 	display: none;
 }
 `;
@@ -47,7 +48,7 @@ DEBUG && console.debug("Hooked addEventListener", Element.prototype.addEventList
 turboElementList.forEach(init);
 
 function init(turboElement) {
-	let turboType = turboElement.dataset["turbo"];
+	let turboType = turboElement.dataset["flux"];
 
 	if(turboType === "autosave") {
 		initAutoSave(turboElement);
@@ -66,7 +67,7 @@ function init(turboElement) {
 		initAutoSubmit(turboElement);
 	}
 	else {
-		console.error(`Unknown turbo element type: ${turboType}`, turboElement);
+		console.error(`Unknown flux element type: ${turboType}`, turboElement);
 	}
 }
 
@@ -168,7 +169,7 @@ function processUpdateElements(newDocument) {
 		});
 	}
 
-	document.querySelectorAll("[data-turbo-autofocus]").forEach(autofocusElement => {
+	document.querySelectorAll("[data-flux-autofocus]").forEach(autofocusElement => {
 		autofocusElement.focus();
 	});
 }
@@ -193,7 +194,7 @@ function initAutoSave(turboElement) {
 			value: turboElement.value,
 		}
 	};
-	// turboElement.form.classList.add("turbo-has-obj");
+	// turboElement.form.classList.add("flux-has-obj");
 	turboElement.form.dataset["turboObj"] = "";
 	turboElement.form.addEventListener("change", formChangeAutoSave);
 	turboElement.form.addEventListener("submit", formSubmitAutoSave);
@@ -350,8 +351,8 @@ function reattachTurboElements(oldElement, newElement) {
 		return;
 	}
 
-	newElement.querySelectorAll("[data-turbo]").forEach(init);
-	oldElement.querySelectorAll("[data-turbo-obj]").forEach(turboElement => {
+	newElement.querySelectorAll("[data-flux]").forEach(init);
+	oldElement.querySelectorAll("[data-flux-obj]").forEach(turboElement => {
 		let xPath = getXPathForElement(turboElement, oldElement);
 		let newTurboElement = newElement.ownerDocument.evaluate(xPath, newElement).iterateNext();
 		if(newTurboElement) {
