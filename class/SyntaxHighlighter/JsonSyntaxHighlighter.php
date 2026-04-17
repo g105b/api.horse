@@ -80,7 +80,7 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 		if(is_null($value)) {
 			$value = "null";
 		}
-		elseif(is_Bool($value)) {
+		elseif(is_bool($value)) {
 			$value = $value ? "true" : "false";
 		}
 		elseif(is_string($value)) {
@@ -105,7 +105,7 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 		$summaryEl = $document->createElement("summary");
 		$detailsEl->appendChild($summaryEl);
 		$expandedEl = $document->createElement("div");
-		$expandedEl->classList->add("data-structure", "nested");
+		$expandedEl->classList->add("data-structure", "nested", "nested-$nestingLevel");
 		if(array_is_list($data)) {
 			$expandedEl->classList->add("data-structure-list");
 		}
@@ -119,7 +119,7 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 		$openingBracketCharacter = array_is_list($data) ? "[" : "{";
 		$openingBracketEl = $document->createElement("span");
 		$openingBracketEl->textContent = str_repeat("\t", $nestingLevel) . $openingBracketCharacter;
-		$openingBracketEl->classList->add("syntax", "syntax-array-bracket");
+		$openingBracketEl->classList->add("syntax", "syntax-array-bracket", "syntax-array-bracket-opening");
 		$expandedOpeningBracketEl = $openingBracketEl->cloneNode(true);
 		$expandedEl->appendChild($expandedOpeningBracketEl);
 		$summaryEl->appendChild($openingBracketEl);
@@ -131,20 +131,10 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 			$expandedRow = $document->createElement("div");
 			$expandedEl->appendChild($expandedRow);
 			$expandedRow->classList->add("data-element");
-
+//
 			$keyElement = $document->createElement("span");
 			$keyElement->textContent = '"' . $key . '": ';
 			$keyElement->classList->add("syntax", "syntax-summary-key");
-
-			$this->output($value, $summaryEl, $nestingLevel + 1);
-			$this->output($value, $expandedRow, $nestingLevel + 1);
-
-			$separatorEl = $document->createElement("span");
-			$separatorEl->textContent = ", ";
-			$separatorEl->classList->add("syntax", "syntax-array-separator");
-			$summaryEl->appendChild($separatorEl);
-			$expandedSeparatorEl = $separatorEl->cloneNode(true);
-			$expandedRow->appendChild($expandedSeparatorEl);
 
 			if(array_is_list($data)) {
 				$expandedRow->classList->add("data-element-list");
@@ -156,11 +146,23 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 				$expandedKeyElement->classList->add("syntax", "syntax-key");
 				$expandedRow->prepend($expandedKeyElement);
 			}
+//
+			$this->output($value, $summaryEl, $nestingLevel + 1);
+			$this->output($value, $expandedRow, $nestingLevel + 1);
+
+			$separatorEl = $document->createElement("span");
+			$separatorEl->textContent = ", ";
+			$separatorEl->classList->add("syntax", "syntax-array-separator", "kv-$key-$value");
+			$summaryEl->appendChild($separatorEl);
+			$expandedSeparatorEl = $separatorEl->cloneNode(true);
+			$expandedRow->appendChild($expandedSeparatorEl);
 
 			if(array_is_list($data)) {
 				$expandedRow->dataset->set("index", $key);
 			}
 		}
+
+// Remove the last separator elements, if they exist:
 		$separatorEl?->remove();
 		$expandedSeparatorEl?->remove();
 
@@ -173,7 +175,7 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 		$closingBracketCharacter = array_is_list($data) ? "]" : "}";
 		$closingBracketEl = $document->createElement("span");
 		$closingBracketEl->textContent = str_repeat("\t", $nestingLevel) . $closingBracketCharacter;
-		$closingBracketEl->classList->add("syntax", "syntax-array-bracket");
+		$closingBracketEl->classList->add("syntax", "syntax-array-bracket", "syntax-array-bracket-closing");
 		$summaryEl->appendChild($closingBracketEl);
 		$expandedClosingBracketEl = $closingBracketEl->cloneNode(true);
 		$expandedEl->appendChild($expandedClosingBracketEl);

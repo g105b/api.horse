@@ -2,6 +2,7 @@
 use App\SyntaxHighlighter\JsonSyntaxHighlighter;
 use App\Request\RequestEntity;
 use App\Response\ResponseRepository;
+use App\SyntaxHighlighter\SyntaxHighlighter;
 use Gt\Dom\Element;
 use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
@@ -26,8 +27,9 @@ function go(
 	foreach($element->querySelectorAll("http-message") as $httpMessageElement) {
 		$contentType = $httpMessageElement->dataset->get("content-type");
 		$formatter = null;
-		if($contentType === "application/json") {
-			$formatter = new JsonSyntaxHighlighter();
+		if(array_key_exists($contentType, SyntaxHighlighter::CONTENT_TYPE_CLASS_MAP)) {
+			$formatterClassName = SyntaxHighlighter::CONTENT_TYPE_CLASS_MAP[$contentType];
+			$formatter = new $formatterClassName();
 		}
 
 		$formatter?->format($httpMessageElement);

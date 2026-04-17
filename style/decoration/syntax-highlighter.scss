@@ -1,5 +1,7 @@
 /*
  * This decorator is applied to the outer-most details element.
+
+ TODO: Take a look at the red commas - they need shifting up a line BUT not always
  */
 %d-syntax-highlighter {
 	position: relative;
@@ -28,8 +30,43 @@
 	&[open], details[open] {
 		>summary {
 			* {
-				display: none;
+				display: none !important;
 			}
+		}
+	}
+
+	details {
+		padding-left: 1rem;
+
+		&[open] {
+			display: block;
+			padding-left: initial;
+
+			+.syntax-array-separator {
+				position: absolute;
+				margin-top: -1rem;
+				margin-left: 0.5rem;
+			}
+		}
+		&:not([open]) {
+			display: inline-block;
+
+			>summary {
+				display: inline list-item;
+				padding-left: 0;
+
+				summary {
+					display: inline;
+				}
+			}
+
+			.syntax-array-separator {
+				margin-right: 0.5rem;
+			}
+		}
+
+		+.syntax-array-separator {
+			display: inline-block;
 		}
 	}
 
@@ -39,25 +76,19 @@
 		padding-left: 1rem;
 		margin-left: -1rem;
 
-		details {
-			summary {
-				display: inline;
-
-				&::marker {
-					display: none;
-					content: "";
-				}
-			}
+		>* {
+			display: inline-block;
 		}
+
+		summary {
+			padding-left: 0.5rem;
+			margin-left: -0.5rem;
+		}
+
 	}
 
-	details {
-		&[open] {
-			display: block;
-		}
-		&:not([open]) {
-			padding-left: 1rem;
-		}
+	.scalar {
+		display: inline-block;
 	}
 
 	.nested {
@@ -66,6 +97,28 @@
 
 	.data-structure {
 		margin-top: -1rem;
+
+		>.syntax {
+			&.syntax-array-bracket {
+				&:last-child {
+					margin-left: -1rem;
+				}
+
+				&.syntax-array-bracket-opening {
+
+				}
+			}
+		}
+
+		&:not(.nested-0) {
+			&.data-structure {
+				>.syntax-array-bracket-opening {
+					&:first-of-type {
+						margin-left: 1.25rem;
+					}
+				}
+			}
+		}
 	}
 
 	.syntax {
@@ -74,10 +127,6 @@
 
 		&.syntax-array-bracket {
 			color: color-mix(in srgb, var(--pal-1), var(--pal-2));
-
-			&:last-child {
-				margin-left: -1rem;
-			}
 		}
 		&.syntax-array-separator {
 			color: color-mix(in srgb, var(--pal-1), var(--pal-2));
@@ -85,32 +134,24 @@
 		&.syntax-key {
 			float: left;
 			padding-right: 0.5rem;
-
-			~details[open] {
-				>summary {
-					~.data-structure {
-						.syntax:first-of-type {
-							margin-left: 1.25rem;
-						}
-					}
-				}
-			}
 		}
 	}
 
 	.data-element-list {
 		&::before {
 			content: attr(data-index) ":";
+			float: left;
+			margin-right: 0.5rem;
 			color: var(--pal-7);
 			opacity: 0.5;
 		}
 	}
 
-	.data-element {
-		display: inline-block;
-	}
+	//.data-element {
+	//	display: inline-block;
+	//}
 
-	summary, .data-element {
+	//summary, .data-element {
 		.type {
 			white-space: pre-line;
 
@@ -124,9 +165,9 @@
 				color: var(--pal-10);
 			}
 		}
-
-		.scalar {
-			display: inline-block;
-		}
-	}
+	//
+	//	.scalar {
+	//		display: inline-block;
+	//	}
+	//}
 }
