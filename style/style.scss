@@ -34,6 +34,8 @@
 @import "element/select";
 @import "element/textarea";
 
+@import "page/_error/404";
+
 :focus {
 	--theme-outline: var(--pal-7);
 	outline: 2px solid var(--theme-outline);
