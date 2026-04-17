@@ -8,14 +8,14 @@ API testing without horsing around.
 ## Development goals
 
 - [x] Full request tester and response logger
-- [ ] Secrets, so your shared links don't include keys & tokens
+- [x] Secrets, so your shared links don't include keys & tokens
 - [ ] Instant sharable links to your session
 - [ ] Hosted endpoints for sending requests to
 
 ### Future goals
 
 - [ ] An API gateway to provide logging and debugging to third party APIs
-- [ ] Make the user interface look less Githubby.
+- [ ] Make the user interface look less Githubby (hire a designer)
 
 ## Development status
 
@@ -23,7 +23,7 @@ Each piece of the user interface is composed of [its own custom HTML element][cu
 
 ### Why does it look like Github?
 
-Currently the user interface is built to look and feel just like Github. This is intentional, because I personally have no ability at creating good designs, but I am quite comfortable in implementing a design once I can see it. I'm really familiar with Github's user interface, so for now I've just copied that. Once the product's in use, I'll hire a graphic designer to give it its own look and feel.
+Currently the user interface is built to look and feel just like Github. This is intentional, because I personally have no ability at creating good designs, but I am quite comfortable at implementing a design once I can see it. I'm really familiar with Github's user interface, so for now I've just copied that. Once the product's in use, I'll hire a graphic designer to give it its own look and feel.
 
 ## What's with the name? 🐴
 
