@@ -13,7 +13,8 @@ function go(
 	?RequestEntity $requestEntity,
 	ResponseRepository $responseRepository,
 ):void {
-	$bindCount = $binder->bindList($responseRepository->getAll($requestEntity));
+	$responseEntityList = $responseRepository->getAll($requestEntity);
+	$bindCount = $binder->bindList($responseEntityList);
 
 	$detailsList = $element->querySelectorAll("ul>li>details");
 	if($lastDetailsElement = $detailsList[$detailsList?->count() - 1]) {
@@ -24,15 +25,21 @@ function go(
 		$element->querySelector("button[name=do][value=clear]")->remove();
 	}
 
-	foreach($element->querySelectorAll("http-message") as $httpMessageElement) {
+	foreach($element->querySelectorAll("http-message") as $i => $httpMessageElement) {
+		$responseEntity = $responseEntityList[$i] ?? null;
+		if(!$responseEntity || is_null($responseEntity->body)) {
+			continue;
+		}
+
 		$contentType = $httpMessageElement->dataset->get("content-type");
+		/** @var ?SyntaxHighlighter $formatter */
 		$formatter = null;
 		if(array_key_exists($contentType, SyntaxHighlighter::CONTENT_TYPE_CLASS_MAP)) {
 			$formatterClassName = SyntaxHighlighter::CONTENT_TYPE_CLASS_MAP[$contentType];
 			$formatter = new $formatterClassName();
 		}
 
-		$formatter?->format($httpMessageElement);
+		$formatter?->format($httpMessageElement, $responseEntity->body);
 	}
 }
 

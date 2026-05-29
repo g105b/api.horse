@@ -1,6 +1,7 @@
 {
 	"require": {
 		"ext-curl": "*",
+		"ext-dom": "*",
 		"phpgt/webengine": "dev-master"
 	},
 	"require-dev": {

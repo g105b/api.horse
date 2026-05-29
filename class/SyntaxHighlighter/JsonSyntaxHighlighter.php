@@ -6,7 +6,7 @@ use Gt\Dom\Element;
 use Gt\Logger\Log;
 
 class JsonSyntaxHighlighter extends SyntaxHighlighter{
-	public function format(Element $element):void {
+	public function format(Element $element, string $rawBody):void {
 		$id = $element->dataset->get("id");
 		$cacheFile = $id ? "data/html-cache/response-formatted/$id.html" : null;
 		if($cacheFile && file_exists($cacheFile)) {
@@ -24,8 +24,7 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 			$syntaxHighlightElement = $element->querySelector(".syntax-highlight");
 		}
 
-		$rawBodyString = $syntaxHighlightElement->innerHTML;
-		$json = json_decode($rawBodyString, true);
+		$json = json_decode($rawBody, true);
 		if($jsonError = json_last_error()) {
 			Log::info("Error decoding JSON (error $jsonError) - " . json_last_error_msg());
 			return;

@@ -27,6 +27,28 @@
 		}
 	}
 
+	&.syntax-highlighter-xml {
+		&::after {
+			content: "XML";
+		}
+
+		summary {
+			padding-left: 0;
+			margin-left: 0;
+		}
+	}
+
+	&.syntax-highlighter-html {
+		&::after {
+			content: "HTML";
+		}
+
+		summary {
+			padding-left: 0;
+			margin-left: 0;
+		}
+	}
+
 	&[open], details[open] {
 		>summary {
 			* {
@@ -85,6 +107,10 @@
 			margin-left: -0.5rem;
 		}
 
+		>.syntax-indent {
+			display: none;
+		}
+
 	}
 
 	.scalar {
@@ -134,6 +160,27 @@
 		&.syntax-key {
 			float: left;
 			padding-right: 0.5rem;
+		}
+		&.syntax-tag-name {
+			color: var(--pal-9);
+			font-weight: bold;
+		}
+		&.syntax-tag-angle, &.syntax-attribute-equals, &.syntax-attribute-quote {
+			color: color-mix(in srgb, var(--pal-1), var(--pal-2));
+		}
+		&.syntax-indent {
+			display: inline-block;
+			white-space: pre;
+			tab-size: 4;
+		}
+		&.syntax-attribute-name {
+			color: var(--pal-7);
+		}
+		&.syntax-attribute-value, &.syntax-text {
+			color: var(--pal-10);
+		}
+		&.syntax-comment, &.syntax-cdata, &.syntax-processing-instruction, &.syntax-doctype, &.syntax-ellipsis {
+			color: var(--pal-8);
 		}
 	}
 
