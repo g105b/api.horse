@@ -1,3 +1,5 @@
+@use "../variable/break";
+
 %d-sidebar {
 	--theme-bg: var(--pal-2);
 	--theme-fg: var(--pal-1);
@@ -7,7 +9,7 @@
 	display: block;
 	flex-shrink: 0;
 
-	@media(min-width: $break-small) {
+	@media(min-width: break.$break-small) {
 		width: 24rem;
 	}
 

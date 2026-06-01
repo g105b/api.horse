@@ -1,8 +1,10 @@
+@use "../variable/break";
+
 %o-page-layout {
 	display: flex;
 	flex-direction: column;
 
-	@media(min-width: $break-small) {
+	@media(min-width: break.$break-small) {
 		flex-direction: row;
 	}
 

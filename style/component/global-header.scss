@@ -1,3 +1,5 @@
+@use "../variable/break";
+
 global-header {
 	display: block;
 	position: relative;
@@ -37,7 +39,7 @@ global-header {
 		padding: 0;
 		overflow-x: scroll;
 
-		@media(min-width: $break-small) {
+		@media(min-width: break.$break-small) {
 			&::-webkit-scrollbar {
 				display: none;
 			}
@@ -65,6 +67,7 @@ global-header {
 				color: var(--pal-1);
 				transition: background-color 0.1s ease-in-out;
 				opacity: 0.75;
+				font-weight: 500;
 
 				&::before {
 					content: "";

@@ -1,3 +1,5 @@
+@use "../decoration/user-interface" as *;
+
 button {
 	@extend %d-user-interface;
 	--theme-bg: var(--pal-3);

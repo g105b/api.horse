@@ -1,3 +1,7 @@
+@use "../variable/break";
+@use "../mixin/icon";
+@use "empty-message" as *;
+
 %d-panel {
 	--theme-border: var(--pal-4);
 	--theme-bg: var(--pal-3);
@@ -7,9 +11,9 @@
 	display: block;
 	margin: 0 1rem;
 	width: calc(100% - 2rem);
-	max-width: $break-small;
+	max-width: break.$break-small;
 
-	@media(min-width: $break-medium) {
+	@media(min-width: break.$break-medium) {
 		width: calc(50% - 2rem);
 	}
 
@@ -46,7 +50,7 @@
 		list-style-type: none;
 		margin: 2rem 0;
 		padding: 0;
-		max-width: $break-small;
+		max-width: break.$break-small;
 		border: 1px solid var(--theme-border);
 		border-radius: 0.25rem;
 
@@ -69,7 +73,7 @@
 			padding: 0.5rem;
 
 			&::before {
-				@include icon("trash");
+				@include icon.icon("trash");
 			}
 
 			span {
@@ -138,7 +142,9 @@
 				margin-top: 1rem;
 
 				button {
-					@extend .positive;
+					--theme-bg: var(--pal-8);
+					--theme-fg: var(--pal-2);
+					--theme-border: var(--pal-9);
 					width: 100%;
 				}
 			}
@@ -186,7 +192,7 @@
 					font-weight: bold;
 
 					&::before {
-						@include icon("chevron-down");
+						@include icon.icon("chevron-down");
 						margin-right: 1rem;
 						transition: scale 0.1s ease-in-out;
 					}

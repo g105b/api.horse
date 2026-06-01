@@ -1,3 +1,5 @@
+@use "../object/page-layout" as *;
+
 main {
 	@extend %o-page-layout;
 

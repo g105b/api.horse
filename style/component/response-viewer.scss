@@ -1,3 +1,7 @@
+@use "../decoration/empty-message" as *;
+@use "../decoration/http-attributes" as *;
+@use "../decoration/panel" as *;
+
 response-viewer {
 	@extend %d-panel;
 

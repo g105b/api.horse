@@ -1,3 +1,6 @@
+@use "../decoration/http-attributes" as *;
+@use "../decoration/panel" as *;
+
 webhook-viewer {
 	@extend %d-panel;
 

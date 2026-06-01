@@ -1,3 +1,5 @@
+@use "../decoration/user-interface" as *;
+
 input {
 	@extend %d-user-interface;
 }

@@ -2,10 +2,11 @@
  * This decorator is applied to the outer-most details element.
 
  TODO: Take a look at the red commas - they need shifting up a line BUT not always
+ TODO: Take a look at HTML/XML opening summary markers - they aren't aligned to the left of the summaries properly
  */
 %d-syntax-highlighter {
 	position: relative;
-	font-family: monospace;
+	font-family: "Monaspace Neon", monospace;
 
 	&::after {
 		position: absolute;
@@ -194,27 +195,17 @@
 		}
 	}
 
-	//.data-element {
-	//	display: inline-block;
-	//}
+	.type {
+		white-space: pre-line;
 
-	//summary, .data-element {
-		.type {
-			white-space: pre-line;
-
-			&.type-integer, &.type-double, &.type-null, &.type-boolean {
-				font-weight: bold;
-				text-transform: uppercase;
-				color: var(--pal-8);
-			}
-			&.type-string {
-				font-weight: bold;
-				color: var(--pal-10);
-			}
+		&.type-integer, &.type-double, &.type-null, &.type-boolean {
+			font-weight: bold;
+			text-transform: uppercase;
+			color: var(--pal-8);
 		}
-	//
-	//	.scalar {
-	//		display: inline-block;
-	//	}
-	//}
+		&.type-string {
+			font-weight: bold;
+			color: var(--pal-10);
+		}
+	}
 }

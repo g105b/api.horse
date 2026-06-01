@@ -1,3 +1,5 @@
+@use "../decoration/panel" as *;
+
 webhook-editor {
 	@extend %d-panel;
 

@@ -1,3 +1,5 @@
+@use "../decoration/user-interface" as *;
+
 select {
 	@extend %d-user-interface;
 }

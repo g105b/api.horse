@@ -14,7 +14,7 @@ use App\Response\ResponseRepository;
 use Gt\Http\Uri;
 use Gt\Routing\Path\DynamicPath;
 use Gt\Session\Session;
-use Gt\WebEngine\Middleware\DefaultServiceLoader;
+use GT\WebEngine\Service\DefaultServiceLoader;
 
 class ServiceLoader extends DefaultServiceLoader {
 	public function loadShareId():ShareId {

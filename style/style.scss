@@ -1,40 +1,34 @@
-@import "variable/break";
-@import "variable/palette";
+@use "font/mona-sans";
+@use "font/monspace-neon";
 
-@import "mixin/icon";
+@use "variable/palette";
 
-@import "decoration/user-interface";
-@import "decoration/panel";
-@import "decoration/sidebar";
-@import "decoration/http-attributes";
-@import "decoration/empty-message";
-@import "decoration/syntax-highlighter";
+@use "decoration/panel" as *;
+@use "decoration/syntax-highlighter" as *;
 
-@import "object/page-layout";
+@use "component/global-header";
+@use "component/request-editor";
+@use "component/request-sidebar";
+@use "component/request-topbar";
+@use "component/response-viewer";
+@use "component/secrets-editor";
+@use "component/webhook-sidebar";
+@use "component/webhook-create";
+@use "component/webhook-editor";
+@use "component/webhook-viewer";
+@use "component/http-message";
 
-@import "component/global-header";
-@import "component/request-editor";
-@import "component/request-sidebar";
-@import "component/request-topbar";
-@import "component/response-viewer";
-@import "component/secrets-editor";
-@import "component/webhook-sidebar";
-@import "component/webhook-create";
-@import "component/webhook-editor";
-@import "component/webhook-viewer";
-@import "component/http-message";
+@use "element/article";
+@use "element/body";
+@use "element/button";
+@use "element/dialog";
+@use "element/html";
+@use "element/input";
+@use "element/main";
+@use "element/select";
+@use "element/textarea";
 
-@import "element/article";
-@import "element/body";
-@import "element/button";
-@import "element/dialog";
-@import "element/html";
-@import "element/input";
-@import "element/main";
-@import "element/select";
-@import "element/textarea";
-
-@import "page/_error/404";
+@use "page/_error/404" as error-404;
 
 :focus {
 	--theme-outline: var(--pal-7);
