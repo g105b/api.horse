@@ -91,6 +91,33 @@ class ResponseEntity {
 		return null;
 	}
 
+	#[BindGetter]
+	public function getDisplayBody():string {
+		if($this->isImage()) {
+			return "";
+		}
+
+		return $this->body ?? "";
+	}
+
+	public function isImage():bool {
+		$contentType = $this->getContentType();
+		if(!$contentType) {
+			return false;
+		}
+
+		return str_starts_with(strtolower($contentType), "image/");
+	}
+
+	public function getBodyDataUri():?string {
+		$contentType = $this->getContentType();
+		if(!$contentType || is_null($this->body) || !$this->isImage()) {
+			return null;
+		}
+
+		return "data:$contentType;base64," . base64_encode($this->body);
+	}
+
 	public function setStatus(int $status, ?string $statusText):void {
 		$this->waitingComplete();
 		$this->status = $status;

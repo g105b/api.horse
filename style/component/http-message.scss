@@ -11,6 +11,7 @@ http-message {
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+			font-family: "Monaspace Neon", monospace;
 
 			&::marker {
 				content: "";
@@ -41,7 +42,7 @@ http-message {
 			border: 1px solid var(--theme-border);
 			padding: 0.5rem;
 			border-radius: 0.25rem;
-			font-family: monospace;
+			font-family: "Monaspace Neon", monospace;
 			margin-top: 1rem;
 			overflow-x: scroll;
 
@@ -58,16 +59,13 @@ http-message {
 		}
 	}
 
+	.response-image,
 	.response-body {
 		position: relative;
 		margin-top: 3rem;
 		background-color: var(--theme-bg);
 		border: 1px solid var(--theme-border);
-		padding: 0.5rem;
 		border-radius: 0.25rem;
-		font-family: "Monaspace Neon", monospace;
-		white-space: pre;
-		overflow-x: scroll;
 
 		&::before {
 			position: absolute;
@@ -79,6 +77,25 @@ http-message {
 			left: 0;
 			font-family: sans-serif;
 		}
+	}
+
+	.response-image {
+		padding: 1rem;
+		overflow: auto;
+
+		img {
+			display: block;
+			max-width: 100%;
+			height: auto;
+			margin: 0 auto;
+		}
+	}
+
+	.response-body {
+		padding: 0.5rem;
+		font-family: "Monaspace Neon", monospace;
+		white-space: pre;
+		overflow-x: scroll;
 
 		&:empty {
 			background-color: transparent;

@@ -32,23 +32,23 @@ class FetchHandler {
 			$init["body"] = $requestEntity->getFetchableBody();
 		}
 
-		$http->fetch($uri, $init)
-		->then(function(Response $response)use($responseEntity) {
-			$responseEntity->setStatus($response->status, $response->statusText);
+		$response = $http->awaitFetch($uri, $init);
+		$responseEntity->setStatus($response->status, $response->statusText);
 
-			foreach($response->headers as $header) {
-				$responseEntity->addHeader(
-					$header->getName(),
-					$header->getValuesCommaSeparated(),
-				);
-			}
+		foreach($response->headers as $header) {
+			$responseEntity->addHeader(
+				$header->getName(),
+				$header->getValuesCommaSeparated(),
+			);
+		}
 
-			return $response->text();
-		})->then(function(string $responseText)use($responseEntity) {
-			$responseEntity->setBody($responseText);
-		});
+		if(str_starts_with(strtolower($response->type), "image/")) {
+			$responseEntity->setBody((string)$response->awaitArrayBuffer());
+		}
+		else {
+			$responseEntity->setBody($response->awaitText());
+		}
 
-		$http->wait();
 		return $responseEntity;
 	}
 }

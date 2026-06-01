@@ -31,6 +31,16 @@ function go(
 			continue;
 		}
 
+		if($responseEntity->isImage()) {
+			$responseBodyElement = $httpMessageElement->querySelector(".response-body");
+			$responseBodyElement->hidden = true;
+			$responseBodyElement->textContent = "";
+			$imageContainer = $httpMessageElement->querySelector(".response-image");
+			$imageContainer->hidden = false;
+			$imageContainer->querySelector("img")->src = $responseEntity->getBodyDataUri();
+			continue;
+		}
+
 		$contentType = $httpMessageElement->dataset->get("content-type");
 		/** @var ?SyntaxHighlighter $formatter */
 		$formatter = null;
