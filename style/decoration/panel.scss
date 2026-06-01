@@ -11,9 +11,9 @@
 	display: block;
 	margin: 0 1rem;
 	width: calc(100% - 2rem);
-	max-width: break.$break-small;
+	max-width: break.$small;
 
-	@media(min-width: break.$break-medium) {
+	@media(min-width: break.$medium) {
 		width: calc(50% - 2rem);
 	}
 
@@ -50,7 +50,7 @@
 		list-style-type: none;
 		margin: 2rem 0;
 		padding: 0;
-		max-width: break.$break-small;
+		max-width: break.$small;
 		border: 1px solid var(--theme-border);
 		border-radius: 0.25rem;
 

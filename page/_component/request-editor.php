@@ -10,6 +10,7 @@ use App\Request\RequestEntity;
 use App\Request\RequestRepository;
 use App\Request\SecretRepository;
 use App\Response\ResponseRepository;
+use App\Slug;
 use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\NodeList;
@@ -29,7 +30,7 @@ function go(
 	$binder->bindData($requestEntity);
 
 	if(!$requestEntity) {
-		$element->querySelector("button[value=delete-request]")->remove();
+		$element->querySelector("form.delete")->remove();
 	}
 
 	$document->querySelectorAll("[autofocus]")->forEach(function(Element $el) {
@@ -66,6 +67,34 @@ function do_delete_request(
 
 	$requestRepository->delete($requestEntity);
 	$response->redirect("../");
+}
+
+function do_duplicate_request(
+	RequestRepository $requestRepository,
+	RequestEntity $requestEntity,
+	Response $response,
+):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
+	$baseName = $requestEntity->name ?: $requestEntity->id;
+	$copyName = "$baseName (copy)";
+	$copyNumber = 2;
+
+	while($requestRepository->retrieve((string)new Slug($copyName))) {
+		$copyName = "$baseName (copy $copyNumber)";
+		$copyNumber++;
+	}
+
+	/** @var RequestEntity $duplicate */
+	$duplicate = unserialize(serialize($requestEntity));
+	$duplicate = $duplicate->with(["id" => (string)new Slug($copyName)]);
+	$duplicate->name = $copyName;
+
+	$requestRepository->update($duplicate);
+	$response->redirect("../$duplicate->id/");
 }
 
 function do_update(

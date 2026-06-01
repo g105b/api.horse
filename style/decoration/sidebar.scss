@@ -9,7 +9,7 @@
 	display: block;
 	flex-shrink: 0;
 
-	@media(min-width: break.$break-small) {
+	@media(min-width: break.$small) {
 		width: 24rem;
 	}
 
