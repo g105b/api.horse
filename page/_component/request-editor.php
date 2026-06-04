@@ -399,6 +399,8 @@ function do_send(
 
 	$requestEntity = $requestEntity->withInjectedSecrets($secretRepository->getAll());
 	$responseEntity = $fetchHandler->fetchResponse($requestEntity);
+// TODO: Stop deleting all the responses after issue #3 is implemented.
+	$responseRepository->deleteAll($requestEntity);
 	$responseRepository->storeResponse($requestEntity, $responseEntity);
 	$response->reload();
 }
