@@ -20,6 +20,7 @@
 		padding: 0;
 
 		>li {
+			position: relative;
 			margin: 0.5rem 0;
 
 			&.end-of-section {
@@ -53,6 +54,14 @@
 				a {
 					--theme-bg: var(--pal-3);
 					--theme-fg: var(--pal-1);
+				}
+			}
+
+			&.flux-drag-order-dragging {
+				opacity: 1;
+
+				a {
+					outline: 4px solid var(--pal-5);
 				}
 			}
 
@@ -92,6 +101,47 @@
 				&[href$="/_new/"]::before {
 					background-image: url("/asset/icon/diff-added.svg");
 				}
+			}
+
+			form.drag-drop {
+				display: flex;
+				position: absolute;
+				top: 0.5rem;
+				right: 1.5rem;
+				bottom: 0.5rem;
+
+				opacity: 0;
+				transition: opacity 0.1s ease-in-out;
+
+				.drag-handle {
+					outline: none;
+
+					&::before {
+						content: "";
+						display: block;
+						height: 100%;
+						aspect-ratio: 1;
+						background-color: var(--pal-1);
+						mask-image: url("/asset/icon/grip-horizontal.svg");
+						mask-size: 100%;
+						mask-repeat: no-repeat;
+						opacity: 0.5;
+					}
+
+					&:hover::before {
+						opacity: 1;
+					}
+				}
+
+				input, button {
+					padding: 0;
+					width: 3rem;
+					height: 100%;
+				}
+			}
+
+			&:hover form.drag-drop {
+				opacity: 1;
 			}
 		}
 	}

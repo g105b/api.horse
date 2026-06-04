@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "299237303d6dfd62d2fd950dec9e52e0",
+    "content-hash": "98d33e908afacf049e2eb43637bcc42f",
     "packages": [
         {
             "name": "composer/semver",
@@ -848,16 +848,16 @@
         },
         {
             "name": "phpgt/daemon",
-            "version": "v1.1.5",
+            "version": "v1.1.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/phpgt/Daemon.git",
-                "reference": "413e16b54de6e1fd5c2b646b485f88a86dfedd9a"
+                "reference": "cc932f51523988df8d27c05ee1122b2922806a13"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/phpgt/Daemon/zipball/413e16b54de6e1fd5c2b646b485f88a86dfedd9a",
-                "reference": "413e16b54de6e1fd5c2b646b485f88a86dfedd9a",
+                "url": "https://api.github.com/repos/phpgt/Daemon/zipball/cc932f51523988df8d27c05ee1122b2922806a13",
+                "reference": "cc932f51523988df8d27c05ee1122b2922806a13",
                 "shasum": ""
             },
             "require": {
@@ -873,6 +873,7 @@
             "type": "library",
             "autoload": {
                 "psr-4": {
+                    "GT\\Daemon\\": "./src",
                     "Gt\\Daemon\\": "./src"
                 }
             },
@@ -880,15 +881,15 @@
             "description": "Background script execution with cross-platform compatible streaming.",
             "support": {
                 "issues": "https://github.com/phpgt/Daemon/issues",
-                "source": "https://github.com/phpgt/Daemon/tree/v1.1.5"
+                "source": "https://github.com/phpgt/Daemon/tree/v1.1.6"
             },
             "funding": [
                 {
-                    "url": "https://github.com/sponsors/PhpGt",
+                    "url": "https://github.com/sponsors/phpgt",
                     "type": "github"
                 }
             ],
-            "time": "2026-03-11T14:11:10+00:00"
+            "time": "2026-06-04T07:48:06+00:00"
         },
         {
             "name": "phpgt/database",
@@ -2139,17 +2140,11 @@
         },
         {
             "name": "phpgt/webengine",
-            "version": "v5.0.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/phpgt/WebEngine.git",
-                "reference": "6ac8b55740e586340f89bac33898c7612f0bb841"
-            },
+            "version": "dev-master",
             "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/phpgt/WebEngine/zipball/6ac8b55740e586340f89bac33898c7612f0bb841",
-                "reference": "6ac8b55740e586340f89bac33898c7612f0bb841",
-                "shasum": ""
+                "type": "path",
+                "url": "/home/g105b/Code/PhpGt/WebEngine",
+                "reference": "6e1ceb4af0f54d2c16765495639ec344e62891aa"
             },
             "require": {
                 "ext-curl": "*",
@@ -2200,13 +2195,36 @@
                     "GT\\WebEngine\\": "./src/"
                 }
             },
-            "notification-url": "https://packagist.org/downloads/",
+            "autoload-dev": {
+                "psr-4": {
+                    "GT\\WebEngine\\Test\\": "./test/phpunit"
+                }
+            },
+            "scripts": {
+                "phpunit": [
+                    "vendor/bin/phpunit --configuration phpunit.xml"
+                ],
+                "phpstan": [
+                    "vendor/bin/phpstan analyse --memory-limit=512M --level 6 src"
+                ],
+                "phpcs": [
+                    "vendor/bin/phpcs src --standard=phpcs.xml"
+                ],
+                "phpmd": [
+                    "vendor/bin/phpmd src/ text phpmd.xml"
+                ],
+                "test": [
+                    "@phpunit",
+                    "@phpstan",
+                    "@phpcs",
+                    "@phpmd"
+                ]
+            },
             "license": [
                 "MIT"
             ],
             "description": "Minimalistic, ergonomic PHP toolkit.",
             "keywords": [
-                "Toolbox",
                 "framework",
                 "gt",
                 "php",
@@ -2214,20 +2232,20 @@
                 "phpgt",
                 "prototype",
                 "router",
+                "toolbox",
                 "webengine",
                 "webservice"
             ],
-            "support": {
-                "issues": "https://github.com/phpgt/WebEngine/issues",
-                "source": "https://github.com/phpgt/WebEngine/tree/v5.0.0"
-            },
             "funding": [
                 {
-                    "url": "https://github.com/sponsors/phpgt",
-                    "type": "github"
+                    "type": "github",
+                    "url": "https://github.com/sponsors/phpgt"
                 }
             ],
-            "time": "2026-05-05T08:06:12+00:00"
+            "transport-options": {
+                "symlink": true,
+                "relative": false
+            }
         },
         {
             "name": "psr/container",
@@ -4275,9 +4293,18 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [],
+    "aliases": [
+        {
+            "package": "phpgt/webengine",
+            "version": "9999999-dev",
+            "alias": "5.0.1",
+            "alias_normalized": "5.0.1.0"
+        }
+    ],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": {
+        "phpgt/webengine": 20
+    },
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

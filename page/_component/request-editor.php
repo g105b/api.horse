@@ -10,7 +10,6 @@ use App\Request\RequestEntity;
 use App\Request\RequestRepository;
 use App\Request\SecretRepository;
 use App\Response\ResponseRepository;
-use App\Slug;
 use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\NodeList;
@@ -82,15 +81,20 @@ function do_duplicate_request(
 	$baseName = $requestEntity->name ?: $requestEntity->id;
 	$copyName = "$baseName (copy)";
 	$copyNumber = 2;
+	$existingNameList = array_map(
+		fn(RequestEntity $request) => $request->name ?: $request->id,
+		$requestRepository->retrieveAll(),
+	);
 
-	while($requestRepository->retrieve((string)new Slug($copyName))) {
+	while(in_array($copyName, $existingNameList, true)) {
 		$copyName = "$baseName (copy $copyNumber)";
 		$copyNumber++;
 	}
 
 	/** @var RequestEntity $duplicate */
 	$duplicate = unserialize(serialize($requestEntity));
-	$duplicate = $duplicate->with(["id" => (string)new Slug($copyName)]);
+	$duplicateId = $requestRepository->create($copyName)->id;
+	$duplicate = $duplicate->with(["id" => $duplicateId]);
 	$duplicate->name = $copyName;
 
 	$requestRepository->update($duplicate);
