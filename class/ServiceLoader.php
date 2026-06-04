@@ -72,7 +72,14 @@ class ServiceLoader extends DefaultServiceLoader {
 		// if user has no collections, create one
 		$allCollectionList = $collectionRepository->retrieveAll();
 		if(!$allCollectionList) {
-			return $collectionRepository->create();
+			if($collectionRepository instanceof PrivateCollectionRepository) {
+				$collection = $collectionRepository->create();
+				$collectionRepository->save($collection);
+				$collectionRepository->setCurrent($collection);
+				return $collection;
+			}
+
+			throw new \RuntimeException("No collections available.");
 		}
 
 		return $allCollectionList[0];

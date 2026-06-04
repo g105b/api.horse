@@ -12,7 +12,7 @@
 		<button class="positive" onclick="newModal.showModal();"><span>New collection</span></button>
 	</div>
 
-	<form method="post" class="collections">
+	<form method="post" class="collections" data-flux="update-inner">
 		<label>
 			<span>Switch collections</span>
 
@@ -28,7 +28,7 @@
 </dialog>
 
 <dialog id="editModal">
-	<form method="post">
+	<form method="post" data-flux="update-inner">
 		<h1>Edit this collection</h1>
 
 		<label>

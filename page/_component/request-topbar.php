@@ -103,6 +103,7 @@ function do_delete(
 	$firstCollection = $collectionRepository->retrieveAll()[0] ?? null;
 	if(!$firstCollection) {
 		$firstCollection = $collectionRepository->create();
+		$collectionRepository->save($firstCollection);
 	}
 	$collectionRepository->setCurrent($firstCollection);
 	$newId = $firstCollection->id;

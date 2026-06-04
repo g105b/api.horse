@@ -50,16 +50,16 @@ class CollectionRepository extends Repository {
 			);
 		}
 
-		if(!$collectionList) {
-			array_push($collectionList, new CollectionEntity(self::DEFAULT_COLLECTION_NAME, CollectionMode::request));
-		}
-
 		return $collectionList;
 	}
 
 	public function setCurrent(string|CollectionEntity $collection):void {
 		if(is_string($collection)) {
-			$collection = $this->retrieve($collection, false);
+			$collection = $this->retrieve($collection);
+		}
+
+		if(!$collection) {
+			return;
 		}
 
 		$filePath = "$this->dataDir/" . self::CURRENT_COLLECTION_FILE;
@@ -72,7 +72,8 @@ class CollectionRepository extends Repository {
 			return null;
 		}
 
-		return $this->retrieve(file_get_contents($filePath), false);
+		$currentId = trim(file_get_contents($filePath));
+		return $this->retrieve($currentId);
 	}
 
 }
