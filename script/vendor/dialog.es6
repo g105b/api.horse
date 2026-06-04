@@ -36,6 +36,7 @@ function confirm(messageText) {
 		cancelButton.textContent = "Cancel";
 
 		let actions = document.createElement("div");
+		actions.classList.add("actions");
 		actions.style.display = "flex";
 		actions.style.justifyContent = "space-between";
 		actions.append(okButton, cancelButton);
