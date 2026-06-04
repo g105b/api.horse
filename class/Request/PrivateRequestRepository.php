@@ -59,7 +59,8 @@ class PrivateRequestRepository extends RequestRepository {
 				mkdir($deletedDir, recursive: true);
 			}
 
-			rename($dirPath, "$deletedDir/$requestEntity->id");
+			$deletedPath = $this->getAvailableDeletedPath($requestEntity->id);
+			rename($dirPath, $deletedPath);
 		}
 	}
 
@@ -176,5 +177,22 @@ class PrivateRequestRepository extends RequestRepository {
 		}
 
 		return $matches[1];
+	}
+
+	private function getAvailableDeletedPath(string $requestId):string {
+		$deletedDir = "$this->dataDir/_deleted";
+		$path = "$deletedDir/$requestId";
+		if(!file_exists($path)) {
+			return $path;
+		}
+
+		$suffix = 2;
+		do {
+			$path = "$deletedDir/$requestId-$suffix";
+			$suffix++;
+		}
+		while(file_exists($path));
+
+		return $path;
 	}
 }

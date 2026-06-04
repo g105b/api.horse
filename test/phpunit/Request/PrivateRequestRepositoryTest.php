@@ -79,6 +79,20 @@ class PrivateRequestRepositoryTest extends TestCase {
 		self::assertDirectoryExists("$this->tempDir/002-second-request");
 	}
 
+	public function testDelete_archivesToUniqueDirectoryWhenDeletedIdAlreadyExists():void {
+		$sut = new PrivateRequestRepository($this->tempDir);
+
+		$request = $sut->create("Test");
+		mkdir("$this->tempDir/_deleted", recursive: true);
+		mkdir("$this->tempDir/_deleted/000-test", recursive: true);
+
+		$sut->delete($request);
+
+		self::assertDirectoryDoesNotExist("$this->tempDir/000-test");
+		self::assertDirectoryExists("$this->tempDir/_deleted/000-test");
+		self::assertDirectoryExists("$this->tempDir/_deleted/000-test-2");
+	}
+
 	private function deleteDir(string $dir):void {
 		if(!is_dir($dir)) {
 			return;

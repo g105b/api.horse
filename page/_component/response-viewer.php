@@ -21,8 +21,8 @@ function go(
 		$lastDetailsElement->open = true;
 	}
 
-	if($bindCount === 0) {
-		$element->querySelector("button[name=do][value=clear]")->remove();
+	if(count($responseEntityList) <= 1) {
+		$element->querySelector("button[name=do][value=clear]")->hidden = true;
 	}
 
 	foreach($element->querySelectorAll("http-message") as $i => $httpMessageElement) {
