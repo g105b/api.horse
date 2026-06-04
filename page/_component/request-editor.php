@@ -1,5 +1,6 @@
 <?php
 use App\Http\FetchHandler;
+use App\Http\UnauthorisedRedirect;
 use App\Request\BodyEntityForm;
 use App\Request\BodyEntityMultipart;
 use App\Request\BodyEntityRaw;
@@ -10,11 +11,13 @@ use App\Request\RequestEntity;
 use App\Request\RequestRepository;
 use App\Request\SecretRepository;
 use App\Response\ResponseRepository;
+use App\UnauthorisedUri;
 use Gt\Dom\Element;
 use Gt\Dom\HTMLDocument;
 use Gt\Dom\NodeList;
 use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
+use Gt\Http\Uri;
 use Gt\Input\Input;
 use Gt\Routing\Path\DynamicPath;
 use Gt\Ulid\Ulid;
@@ -58,9 +61,10 @@ function do_delete_request(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 	Response $response,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -72,9 +76,10 @@ function do_duplicate_request(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 	Response $response,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -104,12 +109,12 @@ function do_duplicate_request(
 function do_update(
 	Input $input,
 	Response $response,
-
 	RequestRepository $requestRepository,
 	?RequestEntity $requestEntity,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -145,9 +150,10 @@ function do_new_query_parameter(
 	Response $response,
 	RequestRepository $requestRepository,
 	?RequestEntity $requestEntity,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -165,9 +171,10 @@ function do_save_query_parameter(
 	Response $response,
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -183,9 +190,10 @@ function do_delete_query_parameter(
 	Response $response,
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -199,9 +207,10 @@ function do_new_header(
 	Response $response,
 	RequestRepository $requestRepository,
 	?RequestEntity $requestEntity,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -219,9 +228,10 @@ function do_save_header(
 	Response $response,
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -243,9 +253,10 @@ function do_delete_header(
 	Response $response,
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -260,9 +271,10 @@ function do_set_body_type(
 	Response $response,
 	RequestRepository $requestRepository,
 	?RequestEntity $requestEntity,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -319,9 +331,10 @@ function do_save_body_raw(
 	RequestEntity $requestEntity,
 	Input $input,
 	Response $response,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -334,9 +347,10 @@ function do_new_body_parameter(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 	Response $response,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -350,9 +364,10 @@ function do_save_body_parameter(
 	RequestEntity $requestEntity,
 	Input $input,
 	Response $response,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -368,9 +383,10 @@ function do_delete_body_parameter(
 	RequestEntity $requestEntity,
 	Input $input,
 	Response $response,
+	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 
@@ -387,13 +403,14 @@ function do_send(
 	?RequestEntity $requestEntity,
 	FetchHandler $fetchHandler,
 	Response $response,
+	Uri $uri,
 ):void {
 	if(!$requestEntity) {
 		$response->reload();
 	}
 
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 

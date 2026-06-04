@@ -99,7 +99,7 @@
 					background-image: url("/asset/icon/key-asterisk.svg");
 				}
 
-				&[href$="/_new/"]::before {
+				&[href*="/_new/"]::before {
 					background-image: url("/asset/icon/diff-added.svg");
 				}
 			}
