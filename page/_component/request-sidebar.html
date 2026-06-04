@@ -6,7 +6,15 @@
 		<a href="/request/{{shareId}}/{{collectionId}}/_new/">New request</a>
 	</li>
 
-	<li data-list>
-		<a href="/request/{{shareId}}/{{collectionId}}/{{id}}/" data-bind:text="nameOrId">word1-word2-word3</a>
+	<li data-list data-flux="drag-order">
+		<a href="/request/{{shareId}}/{{collectionId}}/{{id}}/" data-bind:text="nameOrId" draggable="false">word1-word2-word3</a>
+
+		<form method="post" class="drag-drop">
+			<input type="hidden" name="id" data-bind:value="id" />
+			<label>
+				<input type="number" name="order" />
+			</label>
+			<button name="do" value="order">Order</button>
+		</form>
 	</li>
 </menu>

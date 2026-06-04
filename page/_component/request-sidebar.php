@@ -1,9 +1,12 @@
 <?php
 use App\Request\Collection\CollectionEntity;
+use App\Request\PrivateRequestRepository;
 use App\Request\RequestRepository;
 use App\ShareId;
+use Gt\Input\Input;
 use Gt\Dom\Element;
 use Gt\DomTemplate\Binder;
+use Gt\Http\Response;
 use Gt\Http\Uri;
 
 function go(
@@ -28,4 +31,35 @@ function go(
 
 		$menuLink->parentElement->classList->add("selected");
 	}
+}
+
+function do_order(
+	Input $input,
+	Response $response,
+	RequestRepository $requestRepository,
+	Uri $uri,
+):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		$response->reload();
+	}
+	/** @var PrivateRequestRepository $requestRepository */
+
+	$requestId = $input->getString("id");
+	$order = $input->getInt("order");
+	$idMap = $requestRepository->reorder($requestId, $order);
+
+	$pathParts = explode("/", trim($uri->getPath(), "/"));
+	$currentRequestId = $pathParts[3] ?? null;
+	if($currentRequestId && isset($idMap[$currentRequestId])) {
+		$pathParts[3] = $idMap[$currentRequestId];
+		$redirectPath = "/" . implode("/", $pathParts) . "/";
+		$query = $uri->getQuery();
+		if($query) {
+			$redirectPath .= "?$query";
+		}
+
+		$response->redirect($redirectPath);
+	}
+
+	$response->reload();
 }
