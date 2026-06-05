@@ -1,11 +1,11 @@
 <?php
-use App\Http\UnauthorisedRedirect;
 use App\SyntaxHighlighter\JsonSyntaxHighlighter;
 use App\Request\PrivateRequestRepository;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
 use App\Response\ResponseRepository;
 use App\SyntaxHighlighter\SyntaxHighlighter;
+use App\UnauthorisedUri;
 use Gt\Dom\Element;
 use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
@@ -18,14 +18,14 @@ function go(
 	ResponseRepository $responseRepository,
 ):void {
 	$responseEntityList = $responseRepository->getAll($requestEntity);
-	$bindCount = $binder->bindList($responseEntityList);
+	$binder->bindList($responseEntityList);
 
 	$detailsList = $element->querySelectorAll("ul>li>details");
 	if($lastDetailsElement = $detailsList[$detailsList?->count() - 1]) {
 		$lastDetailsElement->open = true;
 	}
 
-	if(count($responseEntityList) <= 1) {
+	if(empty($responseEntityList)) {
 		$element->querySelector("button[name=do][value=clear]")->hidden = true;
 	}
 
@@ -65,8 +65,7 @@ function do_clear(
 	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		UnauthorisedRedirect::redirect($response, $uri);
-		return;
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 
 	$responseRepository->deleteAll($requestEntity);
