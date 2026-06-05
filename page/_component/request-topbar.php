@@ -2,12 +2,14 @@
 use App\Request\Collection\CollectionEntity;
 use App\Request\Collection\CollectionRepository;
 use App\Request\Collection\PrivateCollectionRepository;
+use App\ShareId;
 use App\Slug;
 use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
 use Gt\Http\Uri;
 use Gt\Input\Input;
 use Gt\Routing\Path\DynamicPath;
+use Gt\Session\Session;
 
 function go(
 	CollectionRepository $collectionRepository,
@@ -114,4 +116,30 @@ function do_delete(
 	$uriPathParts[4] = "_new";
 	$uriPath = implode("/", $uriPathParts);
 	$response->redirect($uriPath);
+}
+
+function do_fork(
+	CollectionRepository $collectionRepository,
+	CollectionEntity $collection,
+	Input $input,
+	Response $response,
+	Session $session,
+):void {
+	$shareId = $session->get(ShareId::class);
+	if(!$shareId) {
+		$shareId = new ShareId();
+		$session->set(ShareId::class, $shareId);
+	}
+
+	$targetCollectionRepository = new PrivateCollectionRepository(
+		"data/$shareId",
+		$collection->mode,
+	);
+	$forkedCollection = $targetCollectionRepository->fork(
+		$collectionRepository,
+		$collection,
+		$input->getString("name"),
+	);
+	$targetCollectionRepository->setCurrent($forkedCollection);
+	$response->redirect("/request/$shareId/$forkedCollection->id/_new/");
 }

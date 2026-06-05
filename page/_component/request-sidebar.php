@@ -1,8 +1,10 @@
 <?php
+use App\Http\UnauthorisedRedirect;
 use App\Request\Collection\CollectionEntity;
 use App\Request\PrivateRequestRepository;
 use App\Request\RequestRepository;
 use App\ShareId;
+use App\UnauthorisedUri;
 use Gt\Input\Input;
 use Gt\Dom\Element;
 use Gt\DomTemplate\Binder;
@@ -20,6 +22,11 @@ function go(
 	$binder->bindKeyValue("shareId", $shareId);
 	$binder->bindKeyValue("collectionId", $collectionEntity->id);
 	$binder->bindList($requestRepository->retrieveAll());
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		if($newRequestLink = $element->querySelector("menu a[href$='/_new/']")) {
+			$newRequestLink->href .= "?unauthorised=_new";
+		}
+	}
 
 	$uriPath = trim($uri->getPath(), "/");
 
@@ -40,7 +47,7 @@ function do_order(
 	Uri $uri,
 ):void {
 	if(!$requestRepository instanceof PrivateRequestRepository) {
-		$response->reload();
+		$response->redirect(new UnauthorisedUri($uri, __FUNCTION__));
 	}
 	/** @var PrivateRequestRepository $requestRepository */
 

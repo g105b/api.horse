@@ -1,9 +1,13 @@
 <?php
 use Gt\Dom\Element;
-use Gt\Dom\HTMLDocument;
 use Gt\Http\Uri;
+use GT\Input\Input;
 
-function go(Uri $uri, Element $element):void {
+function go(
+	Element $element,
+	Input $input,
+	Uri $uri,
+):void {
 	$uriPath = $uri->getPath();
 
 	foreach($element->querySelectorAll("menu a") as $link) {
@@ -11,5 +15,9 @@ function go(Uri $uri, Element $element):void {
 		if(str_starts_with($link->href, $uriPathFirstSlash)) {
 			$link->parentElement->classList->add("selected");
 		}
+	}
+
+	if($input->contains("unauthorised")) {
+		$element->querySelector("#sharedReadOnlyDialog")->open = true;
 	}
 }

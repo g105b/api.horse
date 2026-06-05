@@ -1,11 +1,15 @@
 <?php
+use App\Http\UnauthorisedRedirect;
 use App\SyntaxHighlighter\JsonSyntaxHighlighter;
+use App\Request\PrivateRequestRepository;
 use App\Request\RequestEntity;
+use App\Request\RequestRepository;
 use App\Response\ResponseRepository;
 use App\SyntaxHighlighter\SyntaxHighlighter;
 use Gt\Dom\Element;
 use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
+use Gt\Http\Uri;
 
 function go(
 	Element $element,
@@ -54,10 +58,17 @@ function go(
 }
 
 function do_clear(
+	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 	ResponseRepository $responseRepository,
 	Response $response,
+	Uri $uri,
 ):void {
+	if(!$requestRepository instanceof PrivateRequestRepository) {
+		UnauthorisedRedirect::redirect($response, $uri);
+		return;
+	}
+
 	$responseRepository->deleteAll($requestEntity);
 	$response->reload();
 }

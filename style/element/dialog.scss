@@ -1,4 +1,6 @@
 dialog {
+	z-index: 100;
+
 	&:not(.special) {
 		border-radius: 1rem;
 		border: none;
