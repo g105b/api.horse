@@ -1,4 +1,38 @@
+document.querySelectorAll("dialog[data-dialog='auto-modal'][open]:not([data-dialog='confirm'])").forEach(openAsModal);
 document.querySelectorAll("[data-confirm]").forEach(initConfirm);
+
+const observer = new MutationObserver(mutations => {
+	for(const mutation of mutations) {
+		for(const node of mutation.addedNodes) {
+			if(!(node instanceof HTMLElement)) {
+				continue;
+			}
+
+			if(node instanceof HTMLDialogElement && node.open && !node.matches("[data-dialog='confirm']")) {
+				openAsModal(node);
+			}
+
+			if(node.matches("[data-confirm]")) {
+				initConfirm(node);
+			}
+			node.querySelectorAll?.("[data-confirm]").forEach(initConfirm);
+		}
+	}
+});
+
+observer.observe(document.body, {
+	childList: true,
+	subtree: true,
+});
+
+function openAsModal(dialog) {
+	console.log("OAM:", dialog);
+	if(dialog.open) {
+		dialog.close();
+		dialog.showModal();
+	}
+}
+
 
 function initConfirm(element) {
 	let messageText = element.dataset["confirm"];
