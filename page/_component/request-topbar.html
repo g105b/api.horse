@@ -7,7 +7,7 @@
 
 	<div class="top-actions">
 		<a href="/" class="shared-show shared-show-only">← Back to your collections</a>
-		<button class="shared-show"><span>Fork</span></button>
+		<button class="shared-show shared-show-only" onclick="forkModal.showModal()"><span>Fork</span></button>
 		<button onclick="editModal.showModal();"><span>Edit</span></button>
 		<button class="positive" onclick="newModal.showModal();"><span>New collection</span></button>
 	</div>
@@ -58,6 +58,24 @@
 		</label>
 		<div class="actions">
 			<button name="do" value="create" class="positive">Create</button>
+			<button name="do" value="cancel" formnovalidate formmethod="dialog">Cancel</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog id="forkModal">
+	<form method="post">
+		<h1>Fork this collection</h1>
+
+		<p>This collection was made in a different browser session and to edit it, you must fork the collection into your current session.</p>
+		<p>All of the entities will be copied to the new fork, but any secrets will be lost.</p>
+
+		<label>
+			<span>Name</span>
+			<input name="name" placeholder="A friendly name for this collection of requests" required autocomplete="off" data-bind:value="name" />
+		</label>
+		<div class="actions">
+			<button name="do" value="fork" class="positive">Fork</button>
 			<button name="do" value="cancel" formnovalidate formmethod="dialog">Cancel</button>
 		</div>
 	</form>
