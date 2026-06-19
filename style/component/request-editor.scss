@@ -36,16 +36,16 @@ request-editor {
 	form.primary {
 		transition: opacity 0.5s;
 
-		&.submitting {
-			//@keyframes loading {
-			//	from {
-			//		opacity: 1;
-			//	}
-			//}
+		&.flux-form-waiting {
+			@keyframes loading {
+				from {
+					opacity: 1;
+				}
+			}
 
 			cursor: wait;
 			opacity: 0.5;
-			//animation: loading s infinite;
+			animation: loading 1s 1s both;
 
 			button {
 				pointer-events: none;
