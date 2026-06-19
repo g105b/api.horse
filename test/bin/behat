@@ -1,0 +1,97 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+APP_HOST="${BEHAT_APP_HOST:-127.0.0.1}"
+CHROME_HOST="${BEHAT_CHROME_HOST:-127.0.0.1}"
+CHROME_BIN="${CHROME_BIN:-}"
+BEHAT_BIN="${BEHAT_BIN:-vendor/bin/behat}"
+
+pick_port() {
+	php -r '$socket = stream_socket_server("tcp://127.0.0.1:0", $errno, $errstr); if(!$socket) {fwrite(STDERR, $errstr . PHP_EOL); exit(1);} $name = stream_socket_get_name($socket, false); fclose($socket); echo substr(strrchr($name, ":"), 1);'
+}
+
+APP_PORT="${BEHAT_APP_PORT:-$(pick_port)}"
+CHROME_PORT="${BEHAT_CHROME_PORT:-$(pick_port)}"
+APP_COMMAND="${BEHAT_APP_COMMAND:-php -d display_errors=0 -S ${APP_HOST}:${APP_PORT} -t ${ROOT_DIR}/www ${ROOT_DIR}/vendor/phpgt/webengine/go.php}"
+
+if [[ -z "$CHROME_BIN" ]]; then
+	for candidate in google-chrome-stable google-chrome chromium-browser chromium; do
+		if command -v "$candidate" >/dev/null 2>&1; then
+			CHROME_BIN="$(command -v "$candidate")"
+			break
+		fi
+	done
+fi
+
+if [[ -z "$CHROME_BIN" ]]; then
+	echo "No Chrome/Chromium binary found." >&2
+	echo "Set CHROME_BIN to a local Chrome or Chromium executable." >&2
+	exit 1
+fi
+
+if [[ ! -x "$ROOT_DIR/$BEHAT_BIN" ]]; then
+	echo "Behat executable not found at $ROOT_DIR/$BEHAT_BIN" >&2
+	echo "Run composer install first or set BEHAT_BIN." >&2
+	exit 1
+fi
+
+wait_for_port() {
+	local host="$1"
+	local port="$2"
+	local label="$3"
+	local timeout="${4:-50}"
+	local i
+
+	for ((i = 0; i < timeout; i++)); do
+		if bash -c "exec 3<>/dev/tcp/${host}/${port}" >/dev/null 2>&1; then
+			return 0
+		fi
+		sleep 0.1
+	done
+
+	echo "Timed out waiting for ${label} on ${host}:${port}" >&2
+	return 1
+}
+
+cleanup() {
+	if [[ -n "${APP_PID:-}" ]]; then
+		kill "$APP_PID" >/dev/null 2>&1 || true
+		wait "$APP_PID" 2>/dev/null || true
+	fi
+	if [[ -n "${CHROME_PID:-}" ]]; then
+		kill "$CHROME_PID" >/dev/null 2>&1 || true
+		wait "$CHROME_PID" 2>/dev/null || true
+	fi
+	if [[ -n "${CHROME_PROFILE_DIR:-}" && -d "${CHROME_PROFILE_DIR:-}" ]]; then
+		rm -rf "$CHROME_PROFILE_DIR" 2>/dev/null || true
+	fi
+}
+
+trap cleanup EXIT INT TERM
+
+cd "$ROOT_DIR"
+
+export BEHAT_BASE_URL="http://${APP_HOST}:${APP_PORT}"
+export BEHAT_CHROME_API_URL="http://${CHROME_HOST}:${CHROME_PORT}"
+
+$APP_COMMAND >/tmp/api-horse-behat-app.log 2>&1 &
+APP_PID=$!
+wait_for_port "$APP_HOST" "$APP_PORT" "PHP application"
+
+CHROME_PROFILE_DIR="$(mktemp -d /tmp/api-horse-behat-chrome.XXXXXX)"
+"$CHROME_BIN" \
+	--headless=new \
+	--disable-dev-shm-usage \
+	--disable-gpu \
+	--no-first-run \
+	--no-default-browser-check \
+	--no-sandbox \
+	--remote-debugging-address="$CHROME_HOST" \
+	--remote-debugging-port="$CHROME_PORT" \
+	--user-data-dir="$CHROME_PROFILE_DIR" \
+	about:blank >/tmp/api-horse-behat-chrome.log 2>&1 &
+CHROME_PID=$!
+wait_for_port "$CHROME_HOST" "$CHROME_PORT" "Chromium remote debugger"
+
+"$ROOT_DIR/$BEHAT_BIN" "$@"

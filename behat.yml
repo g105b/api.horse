@@ -1,0 +1,21 @@
+default:
+  autoload:
+    '': "%paths.base%/test/behat/bootstrap"
+  suites:
+    default:
+      paths:
+        - test/behat
+      contexts:
+        - FeatureContext
+  extensions:
+    DMore\ChromeExtension\Behat\ServiceContainer\ChromeExtension: ~
+    Behat\MinkExtension:
+      base_url: "%env(BEHAT_BASE_URL)%"
+      default_session: chrome
+      javascript_session: chrome
+      browser_name: chrome
+      sessions:
+        chrome:
+          chrome:
+            api_url: "%env(BEHAT_CHROME_API_URL)%"
+            dom_wait_timeout: 5000
