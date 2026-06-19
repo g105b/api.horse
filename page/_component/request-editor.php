@@ -57,7 +57,7 @@ function go(
 	}
 }
 
-function do_delete_request(
+function do_delete(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 	Response $response,
@@ -72,7 +72,7 @@ function do_delete_request(
 	$response->redirect("../");
 }
 
-function do_duplicate_request(
+function do_duplicate(
 	RequestRepository $requestRepository,
 	RequestEntity $requestEntity,
 	Response $response,
