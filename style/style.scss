@@ -28,7 +28,7 @@
 @use "element/select";
 @use "element/textarea";
 
-@use "page/_error/404" as error-404;
+@use "page/_error";
 
 :focus {
 	--theme-outline: var(--pal-7);
