@@ -126,6 +126,10 @@ function do_update(
 	$urlSuffix = "";
 
 	$endpointString = $input->getString("endpoint");
+	if(!str_contains($endpointString, "//")) {
+		$endpointString = "http://$endpointString";
+	}
+
 	if($queryString = parse_url($endpointString, PHP_URL_QUERY)) {
 		$endpointString = strtok($endpointString, "?");
 		parse_str($queryString, $queryParts);
