@@ -1,16 +1,9 @@
 {
-	"repositories": [{
-		"type": "path",
-		"url": "/home/g105b/Code/PhpGt/WebEngine",
-		"options": {
-			"symlink": true
-		}
-	}],
-
 	"require": {
 		"ext-curl": "*",
 		"ext-dom": "*",
-		"phpgt/webengine": "dev-master as 5.0.1"
+		"phpgt/webengine": "^5.0",
+		"phpgt/fetch": "^1.2"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^10.4",
