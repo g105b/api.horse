@@ -42,6 +42,10 @@ request-topbar {
 				outline: none;
 			}
 		}
+		@media(min-width: break.$medium) {
+			min-height: 0;
+			padding-bottom: 0;
+		}
 
 		.top-actions {
 			display: flex;
@@ -100,6 +104,7 @@ request-topbar {
 			@media(min-width: break.$small) {
 				justify-content: stretch;
 				padding: 0;
+				background-color: transparent;
 			}
 
 			&[method=dialog] {

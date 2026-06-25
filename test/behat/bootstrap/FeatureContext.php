@@ -4,10 +4,34 @@ use Behat\Gherkin\Node\PyStringNode;
 use Behat\Mink\Element\NodeElement;
 use Behat\Mink\Exception\ExpectationException;
 use Behat\MinkExtension\Context\MinkContext;
+use function PHPUnit\Framework\assertEquals;
 
 class FeatureContext extends MinkContext {
+	/** @Then the :component input :inputName should contain :value */
+	public function theInputShouldContain(string $componentName, string $inputName, string $value):void {
+		$component = $this->getSession()->getPage()->find("css", $componentName);
+		if(!$component) {
+			throw new ExpectationException(
+				"Could not find component '$componentName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		$field = $component->find("css", "[name='$inputName']");
+		if(!$field) {
+			throw new ExpectationException(
+				"Could not find input '$inputName' in '$componentName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		assertEquals($value, $field->getValue());
+	}
+
 	/** @Given I fill in the :component input :inputName with :value */
 	public function iFillInTheInputWith(string $componentName, string $inputName, string $value):void {
+		$this->flushActiveFluxAutoSave();
+
 		$component = $this->getSession()->getPage()->find("css", $componentName);
 		if(!$component) {
 			throw new ExpectationException(
@@ -27,6 +51,14 @@ class FeatureContext extends MinkContext {
 		$field->click();
 		$field->setValue($value);
 		$this->focusElement($field);
+	}
+
+	public function pressButton($button):void {
+		$this->flushActiveFluxAutoSave();
+
+		$button = $this->fixStepArgument($button);
+		$this->getSession()->getPage()->pressButton($button);
+		$this->waitForFlux();
 	}
 
 	/** @Then I should see :content in the :componentName */
@@ -54,33 +86,24 @@ class FeatureContext extends MinkContext {
 					};
 				}
 
-				const submitter = form.querySelector(
-					'button:not([type]), button[type="submit"], ' +
-					'input[type="submit"], input[type="image"]'
-				);
-
-				if(!form.checkValidity()) {
-					const invalid = form.querySelector(":invalid");
+				if(form.fluxObj?.autoSave && form.querySelector('button[data-flux="autosave"]')) {
+					element.blur();
 					return {
-						submitted: false,
-						message: invalid
-							? `Form validation failed on '${invalid.name || invalid.id || invalid.tagName}'.`
-							: "Form validation failed.",
+						submitted: true,
+						waitForFlux: true,
 					};
 				}
 
-				if(form.requestSubmit) {
-					form.requestSubmit(submitter || undefined);
+				const button = form.querySelector("button");
+				if(button) {
+					button.click();
 					return { submitted: true };
 				}
 
-				if(submitter) {
-					submitter.click();
-					return { submitted: true };
-				}
-
-				form.submit();
-				return { submitted: true };
+				return {
+					submitted: false,
+					message: "The focused element's form does not contain a button.",
+				};
 			})()
 			JS);
 
@@ -90,6 +113,33 @@ class FeatureContext extends MinkContext {
 				$this->getSession()->getDriver()
 			);
 		}
+
+		if($result["waitForFlux"] ?? false) {
+			$this->waitForFlux();
+		}
+	}
+
+	private function flushActiveFluxAutoSave():void {
+		$result = $this->getSession()->evaluateScript(<<<'JS'
+			(function() {
+				const element = document.activeElement;
+				const form = element?.form || element?.closest?.("form");
+				if(form?.fluxObj?.autoSave && form.querySelector('button[data-flux="autosave"]')) {
+					element.blur();
+					return true;
+				}
+
+				return false;
+			})()
+			JS);
+
+		if($result) {
+			$this->waitForFlux();
+		}
+	}
+
+	private function waitForFlux():void {
+		$this->getSession()->wait(5000, "document.querySelector('.flux-form-waiting') === null");
 	}
 
 	private function focusElement(NodeElement $element):void {

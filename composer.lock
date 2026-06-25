@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "2227605e439a7ef3e7efba693142c33d",
+    "content-hash": "4c64d22d8fcab5c9d220dd88792d9bc5",
     "packages": [
         {
             "name": "composer/semver",
@@ -2141,11 +2141,17 @@
         },
         {
             "name": "phpgt/webengine",
-            "version": "dev-master",
+            "version": "v5.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/phpgt/WebEngine.git",
+                "reference": "6ac8b55740e586340f89bac33898c7612f0bb841"
+            },
             "dist": {
-                "type": "path",
-                "url": "/home/g105b/Code/PhpGt/WebEngine",
-                "reference": "286c4057333e1e21e6e962efa44d934f402c3caf"
+                "type": "zip",
+                "url": "https://api.github.com/repos/phpgt/WebEngine/zipball/6ac8b55740e586340f89bac33898c7612f0bb841",
+                "reference": "6ac8b55740e586340f89bac33898c7612f0bb841",
+                "shasum": ""
             },
             "require": {
                 "ext-curl": "*",
@@ -2196,36 +2202,13 @@
                     "GT\\WebEngine\\": "./src/"
                 }
             },
-            "autoload-dev": {
-                "psr-4": {
-                    "GT\\WebEngine\\Test\\": "./test/phpunit"
-                }
-            },
-            "scripts": {
-                "phpunit": [
-                    "vendor/bin/phpunit --configuration phpunit.xml"
-                ],
-                "phpstan": [
-                    "vendor/bin/phpstan analyse --memory-limit=512M --level 6 src"
-                ],
-                "phpcs": [
-                    "vendor/bin/phpcs src --standard=phpcs.xml"
-                ],
-                "phpmd": [
-                    "vendor/bin/phpmd src/ text phpmd.xml"
-                ],
-                "test": [
-                    "@phpunit",
-                    "@phpstan",
-                    "@phpcs",
-                    "@phpmd"
-                ]
-            },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
                 "MIT"
             ],
             "description": "Minimalistic, ergonomic PHP toolkit.",
             "keywords": [
+                "Toolbox",
                 "framework",
                 "gt",
                 "php",
@@ -2233,20 +2216,20 @@
                 "phpgt",
                 "prototype",
                 "router",
-                "toolbox",
                 "webengine",
                 "webservice"
             ],
+            "support": {
+                "issues": "https://github.com/phpgt/WebEngine/issues",
+                "source": "https://github.com/phpgt/WebEngine/tree/v5.0.0"
+            },
             "funding": [
                 {
-                    "type": "github",
-                    "url": "https://github.com/sponsors/phpgt"
+                    "url": "https://github.com/sponsors/phpgt",
+                    "type": "github"
                 }
             ],
-            "transport-options": {
-                "symlink": true,
-                "relative": false
-            }
+            "time": "2026-05-05T08:06:12+00:00"
         },
         {
             "name": "psr/container",
@@ -2573,20 +2556,20 @@
     "packages-dev": [
         {
             "name": "behat/behat",
-            "version": "v3.31.0",
+            "version": "v3.32.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Behat/Behat.git",
-                "reference": "7fbdcda54ed653f032dd4fe1da5b2bb1546b24d6"
+                "reference": "b9b89cf7a3b24c04d6e2d2865ed51bc5e1700de9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Behat/Behat/zipball/7fbdcda54ed653f032dd4fe1da5b2bb1546b24d6",
-                "reference": "7fbdcda54ed653f032dd4fe1da5b2bb1546b24d6",
+                "url": "https://api.github.com/repos/Behat/Behat/zipball/b9b89cf7a3b24c04d6e2d2865ed51bc5e1700de9",
+                "reference": "b9b89cf7a3b24c04d6e2d2865ed51bc5e1700de9",
                 "shasum": ""
             },
             "require": {
-                "behat/gherkin": "^4.15.0",
+                "behat/gherkin": "^4.17.0",
                 "composer-runtime-api": "^2.2",
                 "composer/xdebug-handler": "^1.4 || ^2.0 || ^3.0",
                 "ext-mbstring": "*",
@@ -2657,7 +2640,7 @@
             ],
             "support": {
                 "issues": "https://github.com/Behat/Behat/issues",
-                "source": "https://github.com/Behat/Behat/tree/v3.31.0"
+                "source": "https://github.com/Behat/Behat/tree/v3.32.0"
             },
             "funding": [
                 {
@@ -2673,7 +2656,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2026-04-19T21:04:32+00:00"
+            "time": "2026-06-20T08:34:52+00:00"
         },
         {
             "name": "behat/gherkin",
@@ -7180,18 +7163,9 @@
             "time": "2025-11-17T20:03:58+00:00"
         }
     ],
-    "aliases": [
-        {
-            "package": "phpgt/webengine",
-            "version": "9999999-dev",
-            "alias": "5.0.1",
-            "alias_normalized": "5.0.1.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "phpgt/webengine": 20
-    },
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {

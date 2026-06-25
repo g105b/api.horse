@@ -2,6 +2,7 @@
 namespace App;
 
 use App\Http\FetchHandler;
+use App\Http\RateLimiter;
 use App\Request\Collection\CollectionEntity;
 use App\Request\Collection\CollectionMode;
 use App\Request\Collection\CollectionRepository;
@@ -133,5 +134,9 @@ class ServiceLoader extends DefaultServiceLoader {
 
 	public function loadFetchHandler():FetchHandler {
 		return new FetchHandler();
+	}
+
+	public function loadRateLimiter():RateLimiter {
+		return new RateLimiter("data/rate-limit.dat");
 	}
 }

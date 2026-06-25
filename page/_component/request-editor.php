@@ -1,6 +1,6 @@
 <?php
 use App\Http\FetchHandler;
-use App\Http\UnauthorisedRedirect;
+use App\Http\RateLimiter;
 use App\Request\BodyEntityForm;
 use App\Request\BodyEntityMultipart;
 use App\Request\BodyEntityRaw;
@@ -19,7 +19,7 @@ use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
 use Gt\Http\Uri;
 use Gt\Input\Input;
-use Gt\Routing\Path\DynamicPath;
+use Gt\Session\Session;
 use Gt\Ulid\Ulid;
 
 function go(
@@ -126,6 +126,10 @@ function do_update(
 	$urlSuffix = "";
 
 	$endpointString = $input->getString("endpoint");
+	if(!str_contains($endpointString, "//")) {
+		$endpointString = "http://$endpointString";
+	}
+
 	if($queryString = parse_url($endpointString, PHP_URL_QUERY)) {
 		$endpointString = strtok($endpointString, "?");
 		parse_str($queryString, $queryParts);
@@ -402,7 +406,9 @@ function do_send(
 	SecretRepository $secretRepository,
 	?RequestEntity $requestEntity,
 	FetchHandler $fetchHandler,
+	RateLimiter $rateLimiter,
 	Response $response,
+	Session $session,
 	Uri $uri,
 ):void {
 	if(!$requestEntity) {
@@ -415,6 +421,8 @@ function do_send(
 	/** @var PrivateRequestRepository $requestRepository */
 
 	$requestEntity = $requestEntity->withInjectedSecrets($secretRepository->getAll());
+	$requestUri = $requestEntity->getFetchableUri();
+	$rateLimiter->limit($requestUri->getHost(), $session->getId());
 	$responseEntity = $fetchHandler->fetchResponse($requestEntity);
 // TODO: Stop deleting all the responses after issue #3 is implemented.
 	$responseRepository->deleteAll($requestEntity);
