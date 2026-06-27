@@ -9,9 +9,9 @@ class MemorableId implements Stringable {
 	public string $animal;
 
 	public function __construct(
-		string $modifier = null,
-		string $description = null,
-		string $animal = null,
+		?string $modifier = null,
+		?string $description = null,
+		?string $animal = null,
 	) {
 		$this->modifier = $modifier ?? $this->randomModifier();
 		$this->description = $description ?? $this->randomDescription();

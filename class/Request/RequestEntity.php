@@ -117,7 +117,7 @@ class RequestEntity {
 
 	public function addQueryParameter(
 		string $key = "",
-		string $value = null,
+		?string $value = null,
 	):void {
 		if(is_null($this->queryStringParameters)) {
 			$this->queryStringParameters = [];

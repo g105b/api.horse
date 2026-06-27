@@ -3,6 +3,7 @@ namespace App\Http;
 
 use App\Request\RequestEntity;
 use App\Response\ResponseEntity;
+use Gt\Http\ArrayBuffer;
 use Gt\Fetch\Http;
 use Gt\Http\Response;
 
@@ -43,12 +44,23 @@ class FetchHandler {
 		}
 
 		if(str_starts_with(strtolower($response->type), "image/")) {
-			$responseEntity->setBody((string)$response->awaitArrayBuffer());
+			$responseEntity->setBody($this->arrayBufferToString(
+				$response->awaitArrayBuffer(),
+			));
 		}
 		else {
 			$responseEntity->setBody($response->awaitText());
 		}
 
 		return $responseEntity;
+	}
+
+	private function arrayBufferToString(ArrayBuffer $arrayBuffer):string {
+		$body = "";
+		foreach($arrayBuffer as $byte) {
+			$body .= chr($byte);
+		}
+
+		return $body;
 	}
 }
