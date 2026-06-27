@@ -20,3 +20,22 @@ Feature: Request
     And I fill in the "request-editor" input "endpoint" with "example.com"
     And I submit the form
     Then the "request-editor" input "endpoint" should contain "http://example.com"
+
+  Scenario: Add multiple requests
+    Given I am on the homepage
+    And I fill in the "request-editor" input "name" with "First request"
+    And I fill in the "request-editor" input "endpoint" with "https://example.com?request=1"
+    And I submit the form
+    And I follow "New request"
+    When I fill in the "request-editor" input "name" with "Second request"
+    And I fill in the "request-editor" input "endpoint" with "https://example.com?request=2"
+    And I submit the form
+    And I follow "New request"
+    When I fill in the "request-editor" input "name" with "Third request"
+    And I fill in the "request-editor" input "endpoint" with "https://example.com?request=3"
+    And I submit the form
+    When I go to the homepage
+    Then I should see "First request" in the "request-sidebar"
+    And I should see "Second request" in the "request-sidebar"
+    And I should see "Third request" in the "request-sidebar"
+
