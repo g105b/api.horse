@@ -1,0 +1,15 @@
+HTTP/1.1 200 OK
+Content-Type: text/html; charset=UTF-8
+Cache-Control: no-store
+X-Api-Horse-Fake-Server: true
+
+<!doctype html>
+<html>
+<head>
+	<title>Example Domain</title>
+</head>
+<body>
+	<h1>Example Domain</h1>
+	<p>This response came from the Api Horse Behat fake server.</p>
+</body>
+</html>

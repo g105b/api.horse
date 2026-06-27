@@ -82,4 +82,49 @@ class FetchHandlerTest extends TestCase {
 			$responseEntity->getBodyDataUri(),
 		);
 	}
+
+	public function testFetchResponseRewritesConfiguredBehatHostsToFakeServer():void {
+		$previousFakeServerUrl = getenv("BEHAT_FAKE_SERVER_URL");
+		$previousFakeServerHosts = getenv("BEHAT_FAKE_SERVER_HOSTS");
+		putenv("BEHAT_FAKE_SERVER_URL=http://127.0.0.1:9876");
+		putenv("BEHAT_FAKE_SERVER_HOSTS=example.com,api.example.test");
+
+		try {
+			$requestEntity = new RequestEntity("request-1");
+			$requestEntity->method = "GET";
+			$requestEntity->endpoint = "https://example.com/path/to-resource?request=1";
+
+			$response = new Response(
+				200,
+				new ResponseHeaders(["Content-Type" => "text/plain"]),
+			);
+			$response->getBody()->write("fake response");
+
+			$http = self::createMock(Http::class);
+			$http->expects(self::once())
+				->method("awaitFetch")
+				->with(
+					self::callback(fn($uri) => (string)$uri === "http://127.0.0.1:9876/path/to-resource?request=1"),
+					["method" => "GET"],
+				)
+				->willReturn($response);
+
+			$responseEntity = (new FetchHandler())->fetchResponse($requestEntity, $http);
+
+			self::assertSame("fake response", $responseEntity->getBody());
+		}
+		finally {
+			self::restoreEnv("BEHAT_FAKE_SERVER_URL", $previousFakeServerUrl);
+			self::restoreEnv("BEHAT_FAKE_SERVER_HOSTS", $previousFakeServerHosts);
+		}
+	}
+
+	private static function restoreEnv(string $name, string|false $value):void {
+		if($value === false) {
+			putenv($name);
+			return;
+		}
+
+		putenv("$name=$value");
+	}
 }
