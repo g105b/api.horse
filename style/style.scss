@@ -29,6 +29,7 @@
 @use "element/textarea";
 
 @use "page/_error";
+@use "variable/break";
 
 :focus {
 	--theme-outline: var(--pal-7);
@@ -55,5 +56,44 @@ form.submitting {
 
 	* {
 		cursor: progress;
+	}
+}
+
+body {
+	min-height: 100svh;
+}
+
+body>footer {
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	background-color: var(--pal-3);
+	border-top: 1px solid var(--pal-4);
+
+	@media(min-width: break.$small) {
+		display: flex;
+		gap: 2rem;
+		justify-content: center;
+	}
+
+	p {
+		margin: 0;
+		text-align: center;
+
+		a {
+			display: block;
+			padding: 0.5rem;
+			font-size: 0.8rem;
+			text-transform: uppercase;
+			text-decoration: none;
+			font-weight: bold;
+			color: var(--pal-1);
+			opacity: 0.5;
+
+			&:hover {
+				opacity: 1;
+			}
+		}
 	}
 }
