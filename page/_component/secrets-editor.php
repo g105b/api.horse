@@ -9,10 +9,12 @@ use Gt\Http\Uri;
 use Gt\Input\Input;
 
 function go(
+	CollectionRepository $collectionRepository,
 	SecretRepository $secretRepository,
 	Binder $binder,
 ):void {
-	$binder->bindList($secretRepository->getAll());
+	$showSecretSuffix = $collectionRepository instanceof PrivateCollectionRepository;
+	$binder->bindList($secretRepository->getAll($showSecretSuffix));
 }
 
 function do_delete(

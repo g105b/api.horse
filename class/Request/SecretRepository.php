@@ -33,13 +33,13 @@ class SecretRepository extends Repository {
 	}
 
 	/** @return array<SecretEntity> */
-	public function getAll():array {
+	public function getAll(bool $showSecretSuffix = true):array {
 		$secretArray = [];
 
 		foreach($this->secretAssoc as $key => $value) {
 			array_push(
 				$secretArray,
-				new SecretEntity($key, $value)
+				new SecretEntity($key, $value, $showSecretSuffix)
 			);
 		}
 
