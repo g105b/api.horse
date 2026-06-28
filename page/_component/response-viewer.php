@@ -1,8 +1,11 @@
 <?php
 use App\SyntaxHighlighter\JsonSyntaxHighlighter;
+use App\Request\Collection\CollectionRepository;
+use App\Request\Collection\PrivateCollectionRepository;
 use App\Request\PrivateRequestRepository;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
+use App\Request\SecretRepository;
 use App\Response\ResponseRepository;
 use App\SyntaxHighlighter\SyntaxHighlighter;
 use App\UnauthorisedUri;
@@ -15,9 +18,17 @@ function go(
 	Element $element,
 	Binder $binder,
 	?RequestEntity $requestEntity,
+	CollectionRepository $collectionRepository,
 	ResponseRepository $responseRepository,
+	SecretRepository $secretRepository,
 ):void {
 	$responseEntityList = $responseRepository->getAll($requestEntity);
+	$showSecretSuffix = $collectionRepository instanceof PrivateCollectionRepository;
+	$secretList = $secretRepository->getAll($showSecretSuffix);
+	$responseEntityList = array_map(
+		fn($responseEntity) => $responseEntity->withRedactedSecrets($secretList),
+		$responseEntityList,
+	);
 	$binder->bindList($responseEntityList);
 
 	$detailsList = $element->querySelectorAll("ul>li>details");
@@ -45,6 +56,7 @@ function go(
 			continue;
 		}
 
+		$httpMessageElement->dataset->set("id", "");
 		$contentType = $httpMessageElement->dataset->get("content-type");
 		/** @var ?SyntaxHighlighter $formatter */
 		$formatter = null;

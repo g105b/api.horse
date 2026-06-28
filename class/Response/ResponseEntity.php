@@ -3,6 +3,7 @@ namespace App\Response;
 
 use App\Http\HeaderEntity;
 use App\Request\RequestEntity;
+use App\Request\SecretEntity;
 use Gt\DomTemplate\BindGetter;
 use Gt\Ulid\Ulid;
 
@@ -146,6 +147,46 @@ class ResponseEntity {
 
 	public function getBody():string {
 		return $this->body;
+	}
+
+	/** @param array<SecretEntity> $secretList */
+	public function withRedactedSecrets(array $secretList):self {
+		if(empty($secretList)) {
+			return $this;
+		}
+
+		usort(
+			$secretList,
+			fn(SecretEntity $a, SecretEntity $b) => strlen($b->getSecretValue()) <=> strlen($a->getSecretValue()),
+		);
+
+		$clone = clone($this);
+		if($clone->headers) {
+			$clone->headers = array_map(function(HeaderEntity $header)use($secretList):HeaderEntity {
+				$header = clone($header);
+				$header->value = $this->redactString($header->value, $secretList);
+				return $header;
+			}, $clone->headers);
+		}
+		if(!is_null($clone->body)) {
+			$clone->body = $this->redactString($clone->body, $secretList);
+		}
+
+		return $clone;
+	}
+
+	/** @param array<SecretEntity> $secretList */
+	private function redactString(string $value, array $secretList):string {
+		foreach($secretList as $secret) {
+			$secretValue = $secret->getSecretValue();
+			if($secretValue === "") {
+				continue;
+			}
+
+			$value = str_replace($secretValue, $secret->censoredValue, $value);
+		}
+
+		return $value;
 	}
 
 	private function waitingComplete():void {
