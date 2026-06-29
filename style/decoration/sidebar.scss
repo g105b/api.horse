@@ -1,4 +1,5 @@
 @use "../variable/break";
+@use "../variable/palette";
 
 %d-sidebar {
 	--theme-bg: var(--pal-2);
@@ -99,6 +100,12 @@
 
 				&[href*="/_new/"]::before {
 					background-image: url("/asset/icon/diff-added.svg");
+				}
+
+				@include palette.when-dark {
+					&::before {
+						filter: invert(1);
+					}
 				}
 			}
 
