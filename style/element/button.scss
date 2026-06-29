@@ -26,7 +26,7 @@ button {
 
 	&.positive {
 		--theme-bg: var(--pal-8);
-		--theme-fg: var(--pal-2);
+		--theme-fg: white;
 		--theme-border: var(--pal-9);
 	}
 
@@ -37,7 +37,7 @@ button {
 
 		&:hover, &:focus, &:active {
 			--theme-bg: var(--pal-10);
-			--theme-fg: var(--pal-3);
+			--theme-fg: white;
 			--theme-ui--border: var(--theme-border);
 			--theme-ui--outline: var(--theme-border);
 		}
