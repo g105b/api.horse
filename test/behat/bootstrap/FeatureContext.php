@@ -159,4 +159,28 @@ class FeatureContext extends MinkContext {
 			})()
 			JS);
 	}
+
+	/** @When I press the theme toggle */
+	public function iPressTheThemeToggle():void {
+		$button = $this->getSession()->getPage()->find("css", "[data-theme-toggle]");
+		if(!$button) {
+			throw new ExpectationException(
+				"Could not find the theme toggle button.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		$button->press();
+	}
+
+	/** @Then the colour scheme override should be :mode */
+	public function theColourSchemeOverrideShouldBe(string $mode):void {
+		$mode = $this->fixStepArgument($mode);
+		$result = $this->getSession()->evaluateScript(<<<'JS'
+			document.documentElement.dataset.theme || "system"
+			JS
+		);
+
+		assertEquals($mode, $result);
+	}
 }
