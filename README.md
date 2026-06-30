@@ -83,7 +83,9 @@ Secrets are not copied when a collection is forked. The forked collection keeps 
 
 API.horse is built using [PHP.GT/WebEngine], my own hand-coded framework that aims to combat the nonsense associated with modern web dev. I consider AI to be mainly nonsense. WebEngine is designed to promote and prioritise human thinking. The robots are taking over, but not in my repositories! I believe that we should reach for AI as a useful tool when it can positively augment our human creativity, but currently the tools all seem to prefer trying to do the creative bit for us - and all that achieves is us humans are pushed to one side, becoming nothing more than quality control - and ironically, there's often very little quality output - so it just takes all the joy out of programming for me. I'm not saying don't use AI, I'm just saying to consider what job it's taking off us before we ask it for help.
 
-The horsey pictures you'll find in the error pages are hand-drawn by my wife Sarah. She also takes photographs at [Sarah's Lens](https://www.sarahslens.com).
+The horsey drawing used in the error pages is hand-drawn by my wife Sarah. She also takes photographs at [Sarah's Lens](https://www.sarahslens.com).
+
+The horsey photo used in the social card image is taken by [Rebecca Scholz](https://pixabay.com/photos/horse-mare-bridle-animal-3390256/). I didn't know what to put on the social card image, so I used her royalty free photo I found.
 
 [API.horse]: https://api.horse/
 [PHP.GT/WebEngine]: https://www.php.gt/WebEngine/
