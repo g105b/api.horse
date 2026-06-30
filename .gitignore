@@ -4,3 +4,4 @@
 /data/
 /node_modules
 config.*.ini
+test/phpunit/.phpunit.cache/

@@ -2,4 +2,26 @@ article {
 	p {
 		line-height: 1.5;
 	}
+
+	ul, ol {
+		li {
+			margin-bottom: 0.5rem;
+		}
+	}
+
+	ul {
+		>li {
+			&:has(input[type='checkbox']) {
+				display: flow-root;
+				list-style-type: none;
+
+				input {
+					float: left;
+					width: auto;
+					margin: 0;
+					margin-right: 0.5rem;
+				}
+			}
+		}
+	}
 }

@@ -170,6 +170,9 @@ global-header {
 				&[href^="/sponsor"]::before {
 					background-image: url("/asset/icon/sponsor-tiers.svg");
 				}
+				&[href^="/readme"]::before {
+					background-image: url("/asset/icon/book.svg");
+				}
 				&[href^="https://github.com"]::before {
 					background-image: url("/asset/icon/mark-github.svg");
 				}

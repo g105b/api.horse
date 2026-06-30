@@ -29,7 +29,8 @@ function do_delete(
 		return;
 	}
 
-	$response->reload();
+	$secretRepository->remove($input->getString("key"));
+	$response->redirect($uri->getPath());
 }
 
 function do_add(

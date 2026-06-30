@@ -6,6 +6,7 @@ APP_HOST="${BEHAT_APP_HOST:-127.0.0.1}"
 CHROME_HOST="${BEHAT_CHROME_HOST:-127.0.0.1}"
 CHROME_BIN="${CHROME_BIN:-}"
 BEHAT_BIN="${BEHAT_BIN:-vendor/bin/behat}"
+FAKE_SERVER_HOST="${BEHAT_FAKE_SERVER_HOST:-127.0.0.1}"
 
 pick_port() {
 	php -r '$socket = stream_socket_server("tcp://127.0.0.1:0", $errno, $errstr); if(!$socket) {fwrite(STDERR, $errstr . PHP_EOL); exit(1);} $name = stream_socket_get_name($socket, false); fclose($socket); echo substr(strrchr($name, ":"), 1);'
@@ -13,7 +14,9 @@ pick_port() {
 
 APP_PORT="${BEHAT_APP_PORT:-$(pick_port)}"
 CHROME_PORT="${BEHAT_CHROME_PORT:-$(pick_port)}"
+FAKE_SERVER_PORT="${BEHAT_FAKE_SERVER_PORT:-$(pick_port)}"
 APP_COMMAND="${BEHAT_APP_COMMAND:-php -d display_errors=0 -S ${APP_HOST}:${APP_PORT} -t ${ROOT_DIR}/www ${ROOT_DIR}/vendor/phpgt/webengine/go.php}"
+FAKE_SERVER_COMMAND="${BEHAT_FAKE_SERVER_COMMAND:-php -d display_errors=0 -S ${FAKE_SERVER_HOST}:${FAKE_SERVER_PORT} ${ROOT_DIR}/test/behat/fake-server.php}"
 
 if [[ -z "$CHROME_BIN" ]]; then
 	for candidate in google-chrome-stable google-chrome chromium-browser chromium; do
@@ -59,6 +62,10 @@ cleanup() {
 		kill "$APP_PID" >/dev/null 2>&1 || true
 		wait "$APP_PID" 2>/dev/null || true
 	fi
+	if [[ -n "${FAKE_SERVER_PID:-}" ]]; then
+		kill "$FAKE_SERVER_PID" >/dev/null 2>&1 || true
+		wait "$FAKE_SERVER_PID" 2>/dev/null || true
+	fi
 	if [[ -n "${CHROME_PID:-}" ]]; then
 		kill "$CHROME_PID" >/dev/null 2>&1 || true
 		wait "$CHROME_PID" 2>/dev/null || true
@@ -74,6 +81,13 @@ cd "$ROOT_DIR"
 
 export BEHAT_BASE_URL="http://${APP_HOST}:${APP_PORT}"
 export BEHAT_CHROME_API_URL="http://${CHROME_HOST}:${CHROME_PORT}"
+export BEHAT_FAKE_SERVER_URL="http://${FAKE_SERVER_HOST}:${FAKE_SERVER_PORT}"
+export BEHAT_FAKE_SERVER_HOSTS="${BEHAT_FAKE_SERVER_HOSTS:-example.com}"
+export BEHAT_FAKE_RESPONSE_FILE="${BEHAT_FAKE_RESPONSE_FILE:-${ROOT_DIR}/test/behat/response/example.com.http}"
+
+$FAKE_SERVER_COMMAND >/tmp/api-horse-behat-fake-server.log 2>&1 &
+FAKE_SERVER_PID=$!
+wait_for_port "$FAKE_SERVER_HOST" "$FAKE_SERVER_PORT" "fake HTTP server"
 
 $APP_COMMAND >/tmp/api-horse-behat-app.log 2>&1 &
 APP_PID=$!
