@@ -36,6 +36,9 @@ global-header {
 	}
 
 	.theme-toggle {
+		position: absolute;
+		left: 10rem;
+		top: 1.25rem;
 		display: flex;
 		align-items: center;
 		justify-content: center;
