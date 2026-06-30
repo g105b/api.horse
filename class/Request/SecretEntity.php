@@ -10,6 +10,7 @@ class SecretEntity {
 	public function __construct(
 		public string $key,
 		private readonly string $value,
+		bool $showSuffix = true,
 	) {
 		$censoredCharactersToShow = self::CENSORED_CHARACTERS_TO_SHOW;
 
@@ -17,9 +18,10 @@ class SecretEntity {
 			$censoredCharactersToShow = floor(strlen($value) / 2);
 		}
 
-		$this->censoredValue =
-			str_repeat("•", self::CENSORED_LENGTH) .
-			substr($this->value, -$censoredCharactersToShow);
+		$this->censoredValue = str_repeat("•", self::CENSORED_LENGTH);
+		if($showSuffix) {
+			$this->censoredValue .= substr($this->value, -$censoredCharactersToShow);
+		}
 	}
 
 	public function getSecretValue():string {

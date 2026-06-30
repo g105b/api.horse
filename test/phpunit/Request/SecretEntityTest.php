@@ -34,4 +34,14 @@ class SecretEntityTest extends TestCase {
 		$expectedCensor .= "p";
 		self::assertSame($expectedCensor, $sut->censoredValue);
 	}
+
+	public function testCensoredValueFullyRedacted():void {
+		$sut = new SecretEntity(
+			"EXAMPLE_KEY",
+			"example value",
+			false,
+		);
+		$expectedCensor = str_repeat(SecretEntity::CENSOR_CHARACTER, SecretEntity::CENSORED_LENGTH);
+		self::assertSame($expectedCensor, $sut->censoredValue);
+	}
 }
