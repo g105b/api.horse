@@ -391,4 +391,62 @@ class FeatureContext extends MinkContext {
 		$text = str_replace("\r\n", "\n", $text);
 		return trim($text);
 	}
+
+	/** @When I press the theme toggle */
+	public function iPressTheThemeToggle():void {
+		$button = $this->getSession()->getPage()->find("css", "[data-theme-toggle]");
+		if(!$button) {
+			throw new ExpectationException(
+				"Could not find the theme toggle button.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		$button->press();
+	}
+
+	/** @Then the colour scheme override should be :mode */
+	public function theColourSchemeOverrideShouldBe(string $mode):void {
+		$mode = $this->fixStepArgument($mode);
+		$result = $this->getSession()->evaluateScript(<<<'JS'
+			document.documentElement.dataset.theme || "system"
+			JS
+		);
+
+		assertEquals($mode, $result);
+	}
+
+	/** @Then the colour scheme override should be visually distinct from system */
+	public function theColourSchemeOverrideShouldBeVisuallyDistinctFromSystem():void {
+		$result = $this->getSession()->evaluateScript(<<<'JS'
+			(() => {
+				const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+					? "dark"
+					: "light";
+				return {
+					actual: document.documentElement.dataset.theme || "system",
+					expected: systemTheme === "light" ? "dark" : "light",
+				};
+			})()
+			JS);
+
+		assertEquals($result["expected"], $result["actual"]);
+	}
+
+	/** @Then the colour scheme override should visually match system */
+	public function theColourSchemeOverrideShouldVisuallyMatchSystem():void {
+		$result = $this->getSession()->evaluateScript(<<<'JS'
+			(() => {
+				const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+					? "dark"
+					: "light";
+				return {
+					actual: document.documentElement.dataset.theme || "system",
+					expected: systemTheme,
+				};
+			})()
+			JS);
+
+		assertEquals($result["expected"], $result["actual"]);
+	}
 }
