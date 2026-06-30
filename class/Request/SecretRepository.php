@@ -26,7 +26,6 @@ class SecretRepository extends Repository {
 	}
 
 	public function remove(string $key):void {
-		var_dump($key);die();
 		$newSecretAssoc = $this->secretAssoc;
 		unset($newSecretAssoc[$key]);
 		$this->write($newSecretAssoc);

@@ -32,4 +32,29 @@ foreach($headerLines as $headerLine) {
 	header($headerLine, false);
 }
 
+$requestBody = file_get_contents("php://input") ?: "";
+$body = str_replace(
+	[
+		"{{method}}",
+		"{{path}}",
+		"{{query}}",
+		"{{body}}",
+	],
+	[
+		$_SERVER["REQUEST_METHOD"] ?? "",
+		parse_url($_SERVER["REQUEST_URI"] ?? "", PHP_URL_PATH) ?: "",
+		$_SERVER["QUERY_STRING"] ?? "",
+		$requestBody,
+	],
+	$body,
+);
+$body = preg_replace_callback(
+	"/\{\{header:([^}]+)}}/",
+	function(array $matches):string {
+		$headerName = strtoupper(str_replace("-", "_", $matches[1]));
+		return $_SERVER["HTTP_$headerName"] ?? "";
+	},
+	$body,
+);
+
 echo $body;

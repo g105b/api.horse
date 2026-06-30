@@ -53,6 +53,134 @@ class FeatureContext extends MinkContext {
 		$this->focusElement($field);
 	}
 
+	/** @Given I fill in the request editor :editorName input :inputName with :value */
+	public function iFillInTheRequestEditorInputWith(
+		string $editorName,
+		string $inputName,
+		string $value,
+	):void {
+		$this->flushActiveFluxAutoSave();
+
+		$editor = $this->getRequestEditor($editorName);
+		$this->openElement($editor);
+
+		$field = $editor->find("css", "[name='$inputName']");
+		if(!$field) {
+			throw new ExpectationException(
+				"Could not find input '$inputName' in request editor '$editorName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		$field->click();
+		$field->setValue($value);
+		$this->focusElement($field);
+	}
+
+	/** @When I press :button in the request editor :editorName */
+	public function iPressInTheRequestEditor(string $button, string $editorName):void {
+		$this->flushActiveFluxAutoSave();
+
+		$editor = $this->getRequestEditor($editorName);
+		$this->openElement($editor);
+
+		$buttonElement = $editor->findButton($button);
+		if(!$buttonElement) {
+			throw new ExpectationException(
+				"Could not find button '$button' in request editor '$editorName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		$buttonElement->click();
+		$this->waitForFlux();
+	}
+
+	/** @Given I fill in row :rowNumber of the request editor :editorName input :inputName with :value */
+	public function iFillInRowOfTheRequestEditorInputWith(
+		int $rowNumber,
+		string $editorName,
+		string $inputName,
+		string $value,
+	):void {
+		$this->flushActiveFluxAutoSave();
+
+		$row = $this->getRequestEditorRow($editorName, $rowNumber);
+		$field = $row->find("css", "[name='$inputName']");
+		if(!$field) {
+			throw new ExpectationException(
+				"Could not find input '$inputName' in row $rowNumber of request editor '$editorName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		$field->click();
+		$field->setValue($value);
+		$this->focusElement($field);
+	}
+
+	/** @When I press :button in row :rowNumber of the request editor :editorName */
+	public function iPressInRowOfTheRequestEditor(
+		string $button,
+		int $rowNumber,
+		string $editorName,
+	):void {
+		$this->flushActiveFluxAutoSave();
+
+		$row = $this->getRequestEditorRow($editorName, $rowNumber);
+		$buttonElement = $row->findButton($button);
+		if(!$buttonElement) {
+			throw new ExpectationException(
+				"Could not find button '$button' in row $rowNumber of request editor '$editorName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		$buttonElement->click();
+		$this->waitForFlux();
+	}
+
+	/** @When I press :button in the :componentName row containing :text */
+	public function iPressInTheRowContaining(
+		string $button,
+		string $componentName,
+		string $text,
+	):void {
+		$this->flushActiveFluxAutoSave();
+
+		$component = $this->getSession()->getPage()->find("css", $componentName);
+		if(!$component) {
+			throw new ExpectationException(
+				"Could not find component '$componentName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		foreach($component->findAll("css", "li") as $row) {
+			if(!str_contains($row->getText(), $text)) {
+				continue;
+			}
+
+			$buttonElement = $row->findButton($button);
+			if(!$buttonElement) {
+				throw new ExpectationException(
+					"Could not find button '$button' in '$componentName' row containing '$text'.",
+					$this->getSession()->getDriver()
+				);
+			}
+
+			$this->acceptConfirm();
+			$buttonElement->click();
+			$this->waitForFlux();
+			return;
+		}
+
+		throw new ExpectationException(
+			"Could not find '$componentName' row containing '$text'.",
+			$this->getSession()->getDriver()
+		);
+	}
+
 	public function pressButton($button):void {
 		$this->flushActiveFluxAutoSave();
 
@@ -64,6 +192,47 @@ class FeatureContext extends MinkContext {
 	/** @Then I should see :content in the :componentName */
 	public function iShouldSeeInThe(string $content, string $componentName):void {
 		$this->assertSession()->elementTextContains("css", $componentName, $content);
+	}
+
+	/** @Then I should see the secret :key with value :value */
+	public function iShouldSeeTheSecretWithValue(string $key, string $value):void {
+		$component = $this->getSession()->getPage()->find("css", "secrets-editor");
+		if(!$component) {
+			throw new ExpectationException(
+				"Could not find component 'secrets-editor'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		foreach($component->findAll("css", "ul.kvp > li") as $row) {
+			if(str_contains($row->getText(), $key)
+			&& str_contains($row->getText(), $value)) {
+				return;
+			}
+		}
+
+		throw new ExpectationException(
+			"Could not find secret '$key' with value '$value'.",
+			$this->getSession()->getDriver()
+		);
+	}
+
+	/** @Then the request raw message should be: */
+	public function theRequestRawMessageShouldBe(PyStringNode $expected):void {
+		$field = $this->getSession()
+			->getPage()
+			->find("css", "request-editor textarea[name='message']");
+		if(!$field) {
+			throw new ExpectationException(
+				"Could not find the raw request message textarea.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		assertEquals(
+			$this->normaliseMultilineText($expected->getRaw()),
+			$this->normaliseMultilineText($field->getValue()),
+		);
 	}
 
 	/** @Given I submit the form */
@@ -158,5 +327,68 @@ class FeatureContext extends MinkContext {
 				}
 			})()
 			JS);
+	}
+
+	private function acceptConfirm():void {
+		$this->getSession()->executeScript("window.confirm = function() { return true; }");
+	}
+
+	private function openElement(NodeElement $element):void {
+		$xpath = json_encode($element->getXpath());
+		$this->getSession()->executeScript(<<<JS
+			(function() {
+				const element = document.evaluate(
+					$xpath,
+					document,
+					null,
+					XPathResult.FIRST_ORDERED_NODE_TYPE,
+					null
+				).singleNodeValue;
+				if(element) {
+					element.open = true;
+				}
+			})()
+			JS);
+	}
+
+	private function getRequestEditor(string $editorName):NodeElement {
+		$editor = $this->getSession()
+			->getPage()
+			->find("css", "request-editor [data-editor='$editorName']");
+		if(!$editor) {
+			throw new ExpectationException(
+				"Could not find request editor '$editorName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		return $editor;
+	}
+
+	private function getRequestEditorRow(
+		string $editorName,
+		int $rowNumber,
+	):NodeElement {
+		$editor = $this->getRequestEditor($editorName);
+		$this->openElement($editor);
+
+		$rowList = array_values(array_filter(
+			$editor->findAll("css", "ul.multiple > li"),
+			fn(NodeElement $row) => $row->isVisible(),
+		));
+		$row = $rowList[$rowNumber - 1] ?? null;
+		if(!$row) {
+			throw new ExpectationException(
+				"Could not find row $rowNumber in request editor '$editorName'.",
+				$this->getSession()->getDriver()
+			);
+		}
+
+		return $row;
+	}
+
+	private function normaliseMultilineText(string $text):string {
+		$text = str_replace("\r\n", "\n", $text);
+		return trim($text);
 	}
 }

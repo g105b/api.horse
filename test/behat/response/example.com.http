@@ -11,5 +11,13 @@ X-Api-Horse-Fake-Server: true
 <body>
 	<h1>Example Domain</h1>
 	<p>This response came from the Api Horse Behat fake server.</p>
+	<ul>
+		<li>Method: {{method}}</li>
+		<li>Path: {{path}}</li>
+		<li>Query: {{query}}</li>
+		<li>Request header one: {{header:X-Request-One}}</li>
+		<li>Request header two: {{header:X-Request-Two}}</li>
+		<li>Request body: {{body}}</li>
+	</ul>
 </body>
 </html>
