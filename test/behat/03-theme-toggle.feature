@@ -4,8 +4,8 @@ Feature: Colour scheme
     Given I am on the homepage
     Then the colour scheme override should be "system"
     When I press the theme toggle
-    Then the colour scheme override should be "light"
+    Then the colour scheme override should be visually distinct from system
     When I press the theme toggle
-    Then the colour scheme override should be "dark"
+    Then the colour scheme override should visually match system
     When I press the theme toggle
     Then the colour scheme override should be "system"

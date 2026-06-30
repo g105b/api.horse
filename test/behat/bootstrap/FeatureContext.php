@@ -183,4 +183,38 @@ class FeatureContext extends MinkContext {
 
 		assertEquals($mode, $result);
 	}
+
+	/** @Then the colour scheme override should be visually distinct from system */
+	public function theColourSchemeOverrideShouldBeVisuallyDistinctFromSystem():void {
+		$result = $this->getSession()->evaluateScript(<<<'JS'
+			(() => {
+				const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+					? "dark"
+					: "light";
+				return {
+					actual: document.documentElement.dataset.theme || "system",
+					expected: systemTheme === "light" ? "dark" : "light",
+				};
+			})()
+			JS);
+
+		assertEquals($result["expected"], $result["actual"]);
+	}
+
+	/** @Then the colour scheme override should visually match system */
+	public function theColourSchemeOverrideShouldVisuallyMatchSystem():void {
+		$result = $this->getSession()->evaluateScript(<<<'JS'
+			(() => {
+				const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+					? "dark"
+					: "light";
+				return {
+					actual: document.documentElement.dataset.theme || "system",
+					expected: systemTheme,
+				};
+			})()
+			JS);
+
+		assertEquals($result["expected"], $result["actual"]);
+	}
 }

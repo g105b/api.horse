@@ -2,9 +2,9 @@ const STORAGE_KEY = "theme";
 const MODES = ["system", "light", "dark"];
 
 const LABELS = {
-	system: "Colour scheme: System",
-	light: "Colour scheme: Light",
-	dark: "Colour scheme: Dark",
+	system: "System theme",
+	light: "Light theme",
+	dark: "Dark theme",
 };
 
 const THEME_COLORS = {
@@ -47,8 +47,11 @@ function updateToggleButton(mode) {
 	}
 
 	button.dataset.themeMode = mode;
-	button.setAttribute("aria-label", LABELS[mode]);
-	button.setAttribute("title", LABELS[mode]);
+
+	const label = button.querySelector(".theme-toggle-label");
+	if (label) {
+		label.textContent = LABELS[mode];
+	}
 }
 
 function updateMetaThemeColor(mode) {
@@ -62,7 +65,8 @@ function updateMetaThemeColor(mode) {
 
 function cycleTheme() {
 	const current = getStoredTheme();
-	const next = MODES[(MODES.indexOf(current) + 1) % MODES.length];
+	const sequence = getModeSequence();
+	const next = sequence[(sequence.indexOf(current) + 1) % sequence.length];
 
 	if (next === "system") {
 		localStorage.removeItem(STORAGE_KEY);
@@ -71,6 +75,12 @@ function cycleTheme() {
 	}
 
 	applyTheme(next);
+}
+
+function getModeSequence() {
+	return getEffectiveTheme("system") === "light"
+		? ["system", "dark", "light"]
+		: ["system", "light", "dark"];
 }
 
 function initThemeToggle() {

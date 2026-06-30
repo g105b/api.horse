@@ -53,12 +53,17 @@ global-header {
 		color: var(--pal-1);
 		cursor: pointer;
 
-		&:hover, &:focus {
+		&:hover, &:focus, &:active {
 			background-color: var(--pal-4);
+
+			.theme-toggle-label {
+				display: block;
+			}
 		}
 
-		.theme-toggle-icon {
-			display: none;
+		&::before {
+			content: "";
+			display: block;
 			width: 1rem;
 			height: 1rem;
 			opacity: 0.75;
@@ -67,26 +72,39 @@ global-header {
 			background-repeat: no-repeat;
 		}
 
-		&[data-theme-mode="system"] .theme-toggle-icon-system,
-		&[data-theme-mode="light"] .theme-toggle-icon-light,
-		&[data-theme-mode="dark"] .theme-toggle-icon-dark {
-			display: block;
-		}
-
-		.theme-toggle-icon-system {
+		&[data-theme-mode="system"]::before {
 			background-image: url("/asset/icon/device-desktop.svg");
 		}
 
-		.theme-toggle-icon-light {
+		&[data-theme-mode="light"]::before {
 			background-image: url("/asset/icon/sun.svg");
 		}
 
-		.theme-toggle-icon-dark {
+		&[data-theme-mode="dark"]::before {
 			background-image: url("/asset/icon/moon.svg");
 		}
 
+		.theme-toggle-label {
+			position: absolute;
+			top: calc(100% + 0.5rem);
+			left: 50%;
+			z-index: 2;
+			display: none;
+			padding: 0.25rem 0.5rem;
+			border: 1px solid var(--pal-1);
+			border-radius: 0.375rem;
+			background-color: var(--pal-1);
+			color: var(--pal-3);
+			font-size: 0.8125rem;
+			font-weight: 500;
+			line-height: 1.2;
+			white-space: nowrap;
+			transform: translateX(-50%);
+			pointer-events: none;
+		}
+
 		@include palette.when-dark {
-			.theme-toggle-icon {
+			&::before {
 				filter: invert(1);
 			}
 		}
