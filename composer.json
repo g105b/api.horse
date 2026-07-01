@@ -3,7 +3,8 @@
 		"ext-curl": "*",
 		"ext-dom": "*",
 		"phpgt/webengine": "^5.0",
-		"phpgt/fetch": "^1.2"
+		"phpgt/fetch": "^1.2",
+		"league/commonmark": "^2.8"
 	},
 	"require-dev": {
 		"phpunit/phpunit": "^10.4",
