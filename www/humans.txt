@@ -1,0 +1,15 @@
+/* TEAM */
+	Developer: Greg Bowler.
+	Contact: greg@g105b.com
+	Telephone: +447825577482
+	From: Derby, UK
+
+/* THANKS */
+	Contributors: See https://github.com/g105b/api.horse/graphs/contributors
+	Artwork: Sarah Bowler, https://sarahslens.com
+	Photography: Rebecca Scholz, https://pixabay.com/users/rebeccaspictures-18516/
+
+/* SITE */
+	Standards: HTML, CSS, PHP
+	Tools: PHP.GT/WebEngine
+	Software: JetBrains PhpStorm, Arch Linux, Debian Linux, Inkscape, GitHub
