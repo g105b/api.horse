@@ -8,6 +8,7 @@
 	<div class="top-actions">
 		<a href="/" class="shared-show shared-show-only">← Back to your collections</a>
 		<button class="shared-show shared-show-only" onclick="forkModal.showModal()"><span>Fork</span></button>
+		<button class="share shared-hide" onclick="shareModal.showModal()"><span>Share</span></button>
 		<button onclick="editModal.showModal();"><span>Edit</span></button>
 		<button class="positive" onclick="newModal.showModal();"><span>New collection</span></button>
 	</div>
@@ -23,6 +24,22 @@
 
 		<div class="actions">
 			<button name="do" value="change-collection">Change collection</button>
+		</div>
+	</form>
+</dialog>
+
+<dialog id="shareModal">
+	<form method="post" data-flux="update-inner">
+		<h1>Share this collection</h1>
+
+		<label>
+			<span>Share link</span>
+			<input name="shareLink" data-bind:value="shareLink" readonly />
+			<button class="copy-share-link" formnovalidate><span>Copy</span></button>
+		</label>
+		<div class="actions">
+			<button name="do" value="share" class="positive">Share</button>
+			<button name="do" value="close" formnovalidate formmethod="dialog">Close</button>
 		</div>
 	</form>
 </dialog>

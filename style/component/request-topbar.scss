@@ -1,4 +1,5 @@
 @use "../variable/break";
+@use "../mixin/icon";
 
 request-topbar {
 	>button {
@@ -67,6 +68,16 @@ request-topbar {
 				&.positive {
 					@media(min-width: break.$small) {
 						flex-grow: 1;
+					}
+				}
+
+				&.share {
+					display: flex;
+					align-items: center;
+					gap: 0.5rem;
+
+					&::after {
+						@include icon.icon("share");
 					}
 				}
 			}
@@ -175,6 +186,17 @@ request-topbar {
 		&:not(.shared) {
 			*.shared-show-only {
 				display: none;
+			}
+		}
+	}
+
+	dialog#shareModal {
+		button.copy-share-link {
+			span {
+				display: none;
+			}
+			&::after {
+				@include icon.icon("copy");
 			}
 		}
 	}
