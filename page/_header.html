@@ -3,25 +3,23 @@
 <head>
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
-	<meta name="description" content="Test API requests and webhook endpoints" />
-	<meta property="og:title" content="">
-	<meta property="og:type" content="">
-	<meta property="og:url" content="">
-	<meta property="og:image" content="">
+	<meta name="description" content="Test API requests, inspect responses, and share reproducible API debugging sessions." />
+	<meta property="og:title" content="API testing without horsing around." />
+	<meta property="og:description" content="Test API requests, inspect responses, and share reproducible API debugging sessions." />
+	<meta property="og:type" content="website" />
+	<meta property="og:url" content="https://api.horse/" />
+	<meta property="og:image" content="https://api.horse/asset/social-card.png" />
 	<meta name="theme-color" content="#f6f8fa">
 	<script>
-		(function() {
-			var theme = localStorage.getItem("theme");
-			if(theme === "light" || theme === "dark") {
-				document.documentElement.dataset.theme = theme;
-			}
-		})();
+		let theme = localStorage.getItem("theme");
+		if(theme) { document.documentElement.dataset.theme = theme; }
 	</script>
 
 	<title>api.horse</title>
 	<link rel="icon" href="/asset/horse-face.png" sizes="any" />
 	<link rel="manifest" href="/asset/site.webmanifest" />
 	<link rel="stylesheet" href="/style.css" />
+	<script async defer data-domain="api.horse" src="https://traffic.brightflair.com/js/p.js"></script>
 	<script src="/script.js" defer></script>
 </head>
 <body>
