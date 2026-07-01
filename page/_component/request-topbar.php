@@ -16,14 +16,18 @@ function go(
 	CollectionEntity $collection,
 	DynamicPath $dynamicPath,
 	Binder $binder,
+	Uri $uri,
 ):void {
+	$shareId = $dynamicPath->get("share-id");
+	$collectionId = $dynamicPath->get("collection-id");
+
 	$binder->bindKeyValue("shared", !($collectionRepository instanceof PrivateCollectionRepository));
 
 	if($collectionRepository instanceof PrivateCollectionRepository) {
 		$numCollections = $binder->bindList($collectionRepository->retrieveAll());
 	}
 	else {
-		$current = $collectionRepository->retrieve($dynamicPath->get("collection-id"));
+		$current = $collectionRepository->retrieve($collectionId);
 		$numCollections = $binder->bindList([$current]);
 	}
 
@@ -32,6 +36,9 @@ function go(
 	}
 
 	$binder->bindData($collection);
+
+	$shareLink = $uri->withQuery("")->withPath("/request/$shareId/$collectionId/");
+	$binder->bindKeyValue("shareLink", $shareLink);
 }
 
 function do_rename(

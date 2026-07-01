@@ -191,12 +191,24 @@ request-topbar {
 	}
 
 	dialog#shareModal {
-		button.copy-share-link {
-			span {
-				display: none;
+		label {
+			position: relative;
+
+			input {
+				width: calc(100% - 4rem);
 			}
-			&::after {
-				@include icon.icon("copy");
+
+			button.copy-share-link {
+				position: absolute;
+				bottom: 0;
+				right: 0;
+
+				span {
+					display: none;
+				}
+				&::after {
+					@include icon.icon("copy");
+				}
 			}
 		}
 	}
