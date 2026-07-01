@@ -8,12 +8,17 @@ body.dir--_error {
 
 		img {
 			max-width: 24rem;
+			max-height: 40svh;
 			margin-top: 4rem;
 		}
 
 		h1 {
-			font-size: 10rem;
+			font-size: 5rem;
 			margin: 0;
+
+			@media(min-width: break.$medium) {
+				font-size: 10rem;
+			}
 		}
 
 		details {
