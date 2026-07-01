@@ -3,6 +3,7 @@
 	Contact: greg@g105b.com
 	Telephone: +447825577482
 	From: Derby, UK
+	Sponsor: https://github.com/sponsors/g105b
 
 /* THANKS */
 	Contributors: See https://github.com/g105b/api.horse/graphs/contributors
