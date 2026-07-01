@@ -1,0 +1,29 @@
+body.uri--mailing-list {
+	.thanks {
+		@keyframes greenfade {
+			from {
+				background-color: #c7f87b;
+			}
+		}
+
+		margin-bottom: 16rem;
+		animation: greenfade 0.5s 1s 1 ease-in-out both;
+	}
+
+	form {
+		margin-top: 4rem;
+
+		label {
+			display: block;
+			margin: 1rem 0;
+
+			>span {
+				&:first-child {
+					display: block;
+					font-weight: bold;
+					margin: 0.5rem 0;
+				}
+			}
+		}
+	}
+}

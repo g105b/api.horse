@@ -173,6 +173,12 @@ global-header {
 				&[href^="/readme"]::before {
 					background-image: url("/asset/icon/book.svg");
 				}
+				&[href^="/mailing-list"] {
+					white-space: nowrap;
+				}
+				&[href^="/mailing-list"]::before {
+					background-image: url("/asset/icon/mail.svg");
+				}
 				&[href^="https://github.com"]::before {
 					background-image: url("/asset/icon/mark-github.svg");
 				}

@@ -2,4 +2,9 @@
 
 input {
 	@extend %d-user-interface;
+
+	&[type='checkbox'],&[type='radio'] {
+		float: left;
+		width: auto;
+	}
 }
