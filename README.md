@@ -7,14 +7,15 @@ API testing without horsing around.
 
 # Project overview
 
-## Development goals
+## Development goals (v1)
 
 - [x] Full request tester and response logger
 - [x] Secrets, so your shared links don't include keys & tokens
 - [x] Instant sharable links to your session
 
-## Future goals
+## Future goals (v2)
 
+- [ ] Auth - persistent authentication to remember your requests
 - [ ] Webhooks - hosted endpoints for sending requests to
 - [ ] Gateway - an API proxy for logging and debugging third party APIs
 - [ ] Make the user interface look less Githubby (hire a designer)

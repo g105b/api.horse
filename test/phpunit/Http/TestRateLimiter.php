@@ -8,10 +8,10 @@ class TestRateLimiter extends RateLimiter {
 	public array $sleepList = [];
 
 	public function __construct(
-		string $dataFile,
+		string $dataDir,
 		public float $time,
 	) {
-		parent::__construct($dataFile);
+		parent::__construct($dataDir);
 	}
 
 	protected function getTime():float {

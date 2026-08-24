@@ -137,6 +137,6 @@ class ServiceLoader extends DefaultServiceLoader {
 	}
 
 	public function loadRateLimiter():RateLimiter {
-		return new RateLimiter("data/rate-limit.dat");
+		return new RateLimiter("data/rate-limit");
 	}
 }

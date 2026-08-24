@@ -15,35 +15,44 @@ class RateLimiterTest extends TestCase {
 		$this->deleteDir($this->tempDir);
 	}
 
-	public function testLimit_enforcesHostLimitAcrossSessions():void {
-		$sut = new TestRateLimiter("$this->tempDir/rate-limit.dat", 100);
+	public function testLimit_enforcesHostLimitAcrossIpAddresses():void {
+		$sut = new TestRateLimiter("$this->tempDir/rate-limit", 100);
 
-		$sut->limit("example.com", "session-1");
-		$sut->limit("example.com", "session-2");
+		$sut->limit("example.com", "192.0.2.1");
+		$sut->limit("example.com", "192.0.2.2");
 
 		self::assertSame([2.0], $sut->sleepList);
 	}
 
-	public function testLimit_enforcesSessionLimitAcrossHosts():void {
-		$sut = new TestRateLimiter("$this->tempDir/rate-limit.dat", 100);
+	public function testLimit_enforcesIpLimitAcrossHosts():void {
+		$sut = new TestRateLimiter("$this->tempDir/rate-limit", 100);
 
-		$sut->limit("example.com", "session-1");
-		$sut->limit("example.org", "session-1");
+		$sut->limit("example.com", "192.0.2.1");
+		$sut->limit("example.org", "192.0.2.1");
 
 		self::assertSame([2.0], $sut->sleepList);
 	}
 
 	public function testLimit_increasesCooldownUntilReset():void {
-		$sut = new TestRateLimiter("$this->tempDir/rate-limit.dat", 100);
+		$sut = new TestRateLimiter("$this->tempDir/rate-limit", 100);
 
-		$sut->limit("example.com", "session-1");
-		$sut->limit("example.com", "session-2");
-		$sut->limit("example.com", "session-3");
+		$sut->limit("example.com", "192.0.2.1");
+		$sut->limit("example.com", "192.0.2.2");
+		$sut->limit("example.com", "192.0.2.3");
 
 		$sut->time = 701;
-		$sut->limit("example.com", "session-4");
+		$sut->limit("example.com", "192.0.2.4");
 
 		self::assertSame([2.0, 5.0], $sut->sleepList);
+	}
+
+	public function testLimit_storesReadableIpAndHostFiles():void {
+		$sut = new TestRateLimiter("$this->tempDir/rate-limit", 100);
+
+		$sut->limit("example.com", "2001:db8::1");
+
+		self::assertFileExists("$this->tempDir/rate-limit/ip/2001:db8::1.dat");
+		self::assertFileExists("$this->tempDir/rate-limit/host/example.com.dat");
 	}
 
 	private function deleteDir(string $dir):void {

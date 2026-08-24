@@ -17,9 +17,9 @@ use Gt\Dom\HTMLDocument;
 use Gt\Dom\NodeList;
 use Gt\DomTemplate\Binder;
 use Gt\Http\Response;
+use Gt\Http\ServerInfo;
 use Gt\Http\Uri;
 use Gt\Input\Input;
-use Gt\Session\Session;
 use Gt\Ulid\Ulid;
 
 function go(
@@ -409,7 +409,7 @@ function do_send(
 	FetchHandler $fetchHandler,
 	RateLimiter $rateLimiter,
 	Response $response,
-	Session $session,
+	ServerInfo $serverInfo,
 	Uri $uri,
 ):void {
 	if(!$requestEntity) {
@@ -423,7 +423,7 @@ function do_send(
 
 	$requestEntity = $requestEntity->withInjectedSecrets($secretRepository->getAll());
 	$requestUri = $requestEntity->getFetchableUri();
-	$rateLimiter->limit($requestUri->getHost(), $session->getId());
+	$rateLimiter->limit($requestUri->getHost(), $serverInfo->getRemoteAddress());
 	$responseEntity = $fetchHandler->fetchResponse($requestEntity);
 // TODO: Stop deleting all the responses after issue #3 is implemented.
 	$responseRepository->deleteAll($requestEntity);

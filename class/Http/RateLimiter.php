@@ -8,70 +8,72 @@ class RateLimiter {
 	const int RESET_SECONDS = 20;
 
 	public function __construct(
-		private readonly string $dataFile,
+		private readonly string $dataDir,
 	) {}
 
 	public function limit(
 		string $host,
-		string $session,
+		string $ipAddress,
 	):void {
 		$now = $this->getTime();
-		$hostKey = $this->getKey("host", $host);
-		$sessionKey = $this->getKey("session", $session);
+		$ipHandle = $this->openDataFile("ip", $this->normaliseIpAddress($ipAddress));
+		$hostHandle = $this->openDataFile("host", strtolower($host));
 
-		$handle = $this->openDataFile();
-		flock($handle, LOCK_EX);
+		// Always acquire the IP lock first so concurrent requests cannot deadlock.
+		flock($ipHandle, LOCK_EX);
+		flock($hostHandle, LOCK_EX);
 
-		/** @var array<string, array<string, float|int>> $state */
-		$state = $this->readState($handle);
-		$hostBucket = $this->getBucket($state, $hostKey, $now);
-		$sessionBucket = $this->getBucket($state, $sessionKey, $now);
+		$ipBucket = $this->getBucket($this->readState($ipHandle), $now);
+		$hostBucket = $this->getBucket($this->readState($hostHandle), $now);
 
 		$hostLimited = $this->isLimited($hostBucket, $now);
-		$sessionLimited = $this->isLimited($sessionBucket, $now);
+		$ipLimited = $this->isLimited($ipBucket, $now);
 
 		if($hostLimited) {
 			$hostBucket["cooldown"]++;
 			$hostBucket["lastLimitedAt"] = $now;
 		}
-		if($sessionLimited) {
-			$sessionBucket["cooldown"]++;
-			$sessionBucket["lastLimitedAt"] = $now;
+		if($ipLimited) {
+			$ipBucket["cooldown"]++;
+			$ipBucket["lastLimitedAt"] = $now;
 		}
 
 		$hostAvailableAt = $this->getAvailableTime($hostBucket, $now);
-		$sessionAvailableAt = $this->getAvailableTime($sessionBucket, $now);
-		$availableAt = max($hostAvailableAt, $sessionAvailableAt);
+		$ipAvailableAt = $this->getAvailableTime($ipBucket, $now);
+		$availableAt = max($hostAvailableAt, $ipAvailableAt);
 
 		$hostBucket["lastRequestAt"] = $availableAt;
-		$sessionBucket["lastRequestAt"] = $availableAt;
-		$state[$hostKey] = $hostBucket;
-		$state[$sessionKey] = $sessionBucket;
+		$ipBucket["lastRequestAt"] = $availableAt;
 
-		$this->writeState($handle, $state);
-		flock($handle, LOCK_UN);
-		fclose($handle);
+		$this->writeState($ipHandle, $ipBucket);
+		$this->writeState($hostHandle, $hostBucket);
+		flock($hostHandle, LOCK_UN);
+		flock($ipHandle, LOCK_UN);
+		fclose($hostHandle);
+		fclose($ipHandle);
 
 		if($availableAt > $now) {
 			$this->sleep($availableAt - $now);
 		}
 	}
 
-	private function getKey(
-		string $type,
-		string $value,
-	):string {
-		return "$type:" . hash("sha256", strtolower($value));
+	private function normaliseIpAddress(string $ipAddress):string {
+		$packedAddress = inet_pton($ipAddress);
+		if($packedAddress === false) {
+			throw new RuntimeException("Invalid IP address.");
+		}
+
+		return inet_ntop($packedAddress);
 	}
 
 	/** @return resource */
-	private function openDataFile() {
-		$dir = dirname($this->dataFile);
+	private function openDataFile(string $type, string $name) {
+		$dir = "$this->dataDir/$type";
 		if(!is_dir($dir)) {
 			mkdir($dir, recursive: true);
 		}
 
-		$handle = fopen($this->dataFile, "c+");
+		$handle = fopen("$dir/$name.dat", "c+");
 		if(!$handle) {
 			throw new RuntimeException("Unable to open rate limiter data file.");
 		}
@@ -81,7 +83,7 @@ class RateLimiter {
 
 	/**
 	 * @param resource $handle
-	 * @return array<string, array<string, float|int>>
+	 * @return array<string, float|int>
 	 */
 	private function readState($handle):array {
 		rewind($handle);
@@ -99,15 +101,12 @@ class RateLimiter {
 	}
 
 	/**
-	 * @param array<string, array<string, float|int>> $state
 	 * @return array<string, float|int>
 	 */
 	private function getBucket(
-		array $state,
-		string $key,
+		array $bucket,
 		float $now,
 	):array {
-		$bucket = $state[$key] ?? [];
 		$lastLimitedAt = $bucket["lastLimitedAt"] ?? 0;
 
 		if($lastLimitedAt <= $now - self::RESET_SECONDS) {
@@ -145,7 +144,7 @@ class RateLimiter {
 
 	/**
 	 * @param resource $handle
-	 * @param array<string, array<string, float|int>> $state
+	 * @param array<string, float|int> $state
 	 */
 	private function writeState(
 		$handle,
