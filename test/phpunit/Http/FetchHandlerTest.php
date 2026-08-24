@@ -119,6 +119,60 @@ class FetchHandlerTest extends TestCase {
 		}
 	}
 
+	public function testFetchResponseRejectsOversizedRequestBody():void {
+		$requestEntity = new RequestEntity("request-1");
+		$requestEntity->method = "POST";
+		$requestEntity->endpoint = "https://example.com/items";
+		$requestEntity->setBody(new BodyEntityRaw("body-1", "text"));
+		$requestEntity->body->content = str_repeat("x", FetchHandler::MAX_REQUEST_BODY_BYTES + 1);
+
+		$http = self::createMock(Http::class);
+		$http->expects(self::never())->method("awaitFetch");
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage("Request body exceeds the maximum size");
+
+		(new FetchHandler())->fetchResponse($requestEntity, $http);
+	}
+
+	public function testFetchResponseRejectsOversizedResponseBody():void {
+		$requestEntity = new RequestEntity("request-1");
+		$requestEntity->method = "GET";
+		$requestEntity->endpoint = "https://example.com/items";
+
+		$response = new Response(200);
+		$response->getBody()->write(str_repeat("x", FetchHandler::MAX_RESPONSE_BODY_BYTES + 1));
+
+		$http = self::createMock(Http::class);
+		$http->method("awaitFetch")->willReturn($response);
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage("Response body exceeds the maximum size");
+
+		(new FetchHandler())->fetchResponse($requestEntity, $http);
+	}
+
+	public function testFetchResponseRejectsOversizedResponseHeaders():void {
+		$requestEntity = new RequestEntity("request-1");
+		$requestEntity->method = "GET";
+		$requestEntity->endpoint = "https://example.com/items";
+
+		$response = new Response(
+			200,
+			new ResponseHeaders([
+				"X-Large" => str_repeat("x", FetchHandler::MAX_RESPONSE_HEADER_BYTES),
+			]),
+		);
+
+		$http = self::createMock(Http::class);
+		$http->method("awaitFetch")->willReturn($response);
+
+		$this->expectException(\RuntimeException::class);
+		$this->expectExceptionMessage("Response headers exceed the maximum size");
+
+		(new FetchHandler())->fetchResponse($requestEntity, $http);
+	}
+
 	private static function restoreEnv(string $name, string|false $value):void {
 		if($value === false) {
 			putenv($name);
