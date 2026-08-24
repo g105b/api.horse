@@ -1,5 +1,6 @@
 {
 	"require": {
+		"php": ">=8.4",
 		"ext-curl": "*",
 		"ext-dom": "*",
 		"phpgt/webengine": "^5.0",

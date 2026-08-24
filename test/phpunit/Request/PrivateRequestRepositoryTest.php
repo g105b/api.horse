@@ -1,9 +1,9 @@
 <?php
 namespace App\Test\Request;
 
+use App\Request\MaximumRequestCountException;
 use App\Request\PrivateRequestRepository;
 use App\Request\RequestEntity;
-use OverflowException;
 use PHPUnit\Framework\TestCase;
 
 class PrivateRequestRepositoryTest extends TestCase {
@@ -52,7 +52,7 @@ class PrivateRequestRepositoryTest extends TestCase {
 			);
 		}
 
-		$this->expectException(OverflowException::class);
+		$this->expectException(MaximumRequestCountException::class);
 		$sut->create("One too many");
 	}
 

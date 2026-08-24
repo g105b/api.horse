@@ -68,7 +68,7 @@ class PrivateRequestRepository extends RequestRepository {
 	public function reorder(string $requestId, int $targetOrder):array {
 		$requestList = $this->retrieveAll();
 		if(count($requestList) > self::MAX_REQUEST_INDEX + 1) {
-			throw new \OverflowException("Maximum request count per collection exceeded.");
+			throw new MaximumRequestCountException("Maximum request count per collection exceeded.");
 		}
 
 		$currentOrder = null;
@@ -153,7 +153,7 @@ class PrivateRequestRepository extends RequestRepository {
 
 		$nextIndex++;
 		if($nextIndex > self::MAX_REQUEST_INDEX) {
-			throw new \OverflowException("Maximum request count per collection exceeded.");
+			throw new MaximumRequestCountException("Maximum request count per collection exceeded.");
 		}
 
 		return $nextIndex;

@@ -1,8 +1,6 @@
 <?php
 namespace App\Http;
 
-use RuntimeException;
-
 class RateLimiter {
 	const int LIMIT_SECONDS = 1;
 	const int RESET_SECONDS = 20;
@@ -60,7 +58,7 @@ class RateLimiter {
 	private function normaliseIpAddress(string $ipAddress):string {
 		$packedAddress = inet_pton($ipAddress);
 		if($packedAddress === false) {
-			throw new RuntimeException("Invalid IP address.");
+			throw new RateLimiterException("Invalid IP address.");
 		}
 
 		return inet_ntop($packedAddress);
@@ -75,7 +73,7 @@ class RateLimiter {
 
 		$handle = fopen("$dir/$name.dat", "c+");
 		if(!$handle) {
-			throw new RuntimeException("Unable to open rate limiter data file.");
+			throw new RateLimiterException("Unable to open rate limiter data file.");
 		}
 
 		return $handle;

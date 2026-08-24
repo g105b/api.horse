@@ -1,4 +1,6 @@
 <?php
 namespace App;
 
-class ApiHorseException extends \RuntimeException {}
+use RuntimeException;
+
+class ApiHorseException extends RuntimeException {}

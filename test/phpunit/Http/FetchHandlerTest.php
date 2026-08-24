@@ -1,7 +1,9 @@
 <?php
 namespace App\Test\Http;
 
+use App\Http\FetchException;
 use App\Http\FetchHandler;
+use App\Http\NetworkTargetException;
 use App\Request\BodyEntityRaw;
 use App\Request\RequestEntity;
 use App\Response\ResponseEntity;
@@ -129,7 +131,7 @@ class FetchHandlerTest extends TestCase {
 		$http = self::createMock(Http::class);
 		$http->expects(self::never())->method("awaitFetch");
 
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(FetchException::class);
 		$this->expectExceptionMessage("Request body exceeds the maximum size");
 
 		(new FetchHandler())->fetchResponse($requestEntity, $http);
@@ -146,7 +148,7 @@ class FetchHandlerTest extends TestCase {
 		$http = self::createMock(Http::class);
 		$http->method("awaitFetch")->willReturn($response);
 
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(FetchException::class);
 		$this->expectExceptionMessage("Response body exceeds the maximum size");
 
 		(new FetchHandler())->fetchResponse($requestEntity, $http);
@@ -167,10 +169,21 @@ class FetchHandlerTest extends TestCase {
 		$http = self::createMock(Http::class);
 		$http->method("awaitFetch")->willReturn($response);
 
-		$this->expectException(\RuntimeException::class);
+		$this->expectException(FetchException::class);
 		$this->expectExceptionMessage("Response headers exceed the maximum size");
 
 		(new FetchHandler())->fetchResponse($requestEntity, $http);
+	}
+
+	public function testFetchResponseRejectsPrivateNetworkDestination():void {
+		$requestEntity = new RequestEntity("request-1");
+		$requestEntity->method = "GET";
+		$requestEntity->endpoint = "http://127.0.0.1/private";
+
+		$this->expectException(NetworkTargetException::class);
+		$this->expectExceptionMessage("private or reserved");
+
+		(new FetchHandler())->fetchResponse($requestEntity);
 	}
 
 	private static function restoreEnv(string $name, string|false $value):void {

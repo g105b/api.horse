@@ -18,6 +18,11 @@ class FetchHandler {
 	public const int MAX_REQUEST_BODY_BYTES = 5 * 1_024 * 1_024;
 	public const int MAX_RESPONSE_HEADER_BYTES = 64 * 1_024;
 	public const int MAX_RESPONSE_BODY_BYTES = 10 * 1_024 * 1_024;
+	private readonly NetworkTargetValidator $networkTargetValidator;
+
+	public function __construct(?NetworkTargetValidator $networkTargetValidator = null) {
+		$this->networkTargetValidator = $networkTargetValidator ?? new NetworkTargetValidator();
+	}
 
 	public function fetchResponse(
 		RequestEntity $requestEntity,
@@ -51,7 +56,10 @@ class FetchHandler {
 				+ strlen($header->getValuesCommaSeparated())
 				+ 4;
 			if($responseHeaderBytes > self::MAX_RESPONSE_HEADER_BYTES) {
-				throw new \RuntimeException("Response headers exceed the maximum size of " . self::MAX_RESPONSE_HEADER_BYTES . " bytes.");
+				throw $this->createSizeException(
+					"Response headers",
+					self::MAX_RESPONSE_HEADER_BYTES,
+				);
 			}
 			$responseEntity->addHeader(
 				$header->getName(),
@@ -76,11 +84,16 @@ class FetchHandler {
 	private function fetchResponseWithCurl(RequestEntity $requestEntity):ResponseEntity {
 		$responseEntity = new ResponseEntity();
 		$uri = $this->getFetchUri($requestEntity->getFetchableUri());
+		$allowedTestIpAddress = $this->getAllowedTestIpAddress($uri);
+		if(!$allowedTestIpAddress) {
+			$this->networkTargetValidator->assertUriAllowed($uri);
+		}
 		$responseHeaderList = [];
 		$responseStatusText = "";
 		$responseHeaderBytes = 0;
 		$responseHeadersTooLarge = false;
 		$responseBodyTooLarge = false;
+		$networkTargetError = null;
 		$body = "";
 
 		$curlHandle = curl_init((string)$uri);
@@ -123,6 +136,25 @@ class FetchHandler {
 			CURLOPT_LOW_SPEED_TIME => self::LOW_SPEED_TIME_SECONDS,
 			CURLOPT_MAXREDIRS => self::MAX_REDIRECTS,
 			CURLOPT_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
+			CURLOPT_PREREQFUNCTION => function(
+				$curlHandle,
+				string $connectedIpAddress,
+				string $localIpAddress,
+				int $connectedPort,
+				int $localPort,
+			)use(&$networkTargetError, $allowedTestIpAddress):int {
+				try {
+					if($connectedIpAddress !== $allowedTestIpAddress) {
+						$this->networkTargetValidator->assertIpAddressAllowed($connectedIpAddress);
+					}
+				}
+				catch(NetworkTargetException $exception) {
+					$networkTargetError = $exception->getMessage();
+					return CURL_PREREQFUNC_ABORT;
+				}
+
+				return CURL_PREREQFUNC_OK;
+			},
 			CURLOPT_REDIR_PROTOCOLS => CURLPROTO_HTTP | CURLPROTO_HTTPS,
 			CURLOPT_TIMEOUT => self::REQUEST_TIMEOUT_SECONDS,
 			CURLOPT_USERAGENT => Http::USER_AGENT,
@@ -160,12 +192,21 @@ class FetchHandler {
 			$error = curl_error($curlHandle);
 			curl_close($curlHandle);
 			if($responseHeadersTooLarge) {
-				throw new \RuntimeException("Response headers exceed the maximum size of " . self::MAX_RESPONSE_HEADER_BYTES . " bytes.");
+				throw $this->createSizeException(
+					"Response headers",
+					self::MAX_RESPONSE_HEADER_BYTES,
+				);
 			}
 			if($responseBodyTooLarge) {
-				throw new \RuntimeException("Response body exceeds the maximum size of " . self::MAX_RESPONSE_BODY_BYTES . " bytes.");
+				throw $this->createSizeException(
+					"Response body",
+					self::MAX_RESPONSE_BODY_BYTES,
+				);
 			}
-			throw new \RuntimeException("Unable to fetch response: $error");
+			if($networkTargetError) {
+				throw new NetworkTargetException($networkTargetError);
+			}
+			throw new FetchException("Unable to fetch response: $error");
 		}
 
 		$status = curl_getinfo($curlHandle, CURLINFO_RESPONSE_CODE);
@@ -187,14 +228,30 @@ class FetchHandler {
 	private function assertRequestBodySize(RequestEntity $requestEntity):void {
 		$body = $requestEntity->getFetchableBody();
 		if(!is_null($body) && strlen($body) > self::MAX_REQUEST_BODY_BYTES) {
-			throw new \RuntimeException("Request body exceeds the maximum size of " . self::MAX_REQUEST_BODY_BYTES . " bytes.");
+			throw $this->createSizeException(
+				"Request body",
+				self::MAX_REQUEST_BODY_BYTES,
+			);
 		}
 	}
 
 	private function assertResponseBodySize(string $body):void {
 		if(strlen($body) > self::MAX_RESPONSE_BODY_BYTES) {
-			throw new \RuntimeException("Response body exceeds the maximum size of " . self::MAX_RESPONSE_BODY_BYTES . " bytes.");
+			throw $this->createSizeException(
+				"Response body",
+				self::MAX_RESPONSE_BODY_BYTES,
+			);
 		}
+	}
+
+	private function createSizeException(
+		string $type,
+		int $maximumBytes,
+	):FetchException {
+		$verb = str_ends_with($type, "s") ? "exceed" : "exceeds";
+		return new FetchException(
+			"$type $verb the maximum size of $maximumBytes bytes.",
+		);
 	}
 
 	private function getFetchUri(UriInterface $requestUri):UriInterface {
@@ -216,6 +273,16 @@ class FetchHandler {
 		return $fakeServerUri
 			->withPath($requestUri->getPath())
 			->withQuery($requestUri->getQuery());
+	}
+
+	private function getAllowedTestIpAddress(UriInterface $uri):?string {
+		$fakeServerUrl = getenv("BEHAT_FAKE_SERVER_URL") ?: null;
+		if(!$fakeServerUrl || !str_starts_with((string)$uri, $fakeServerUrl)) {
+			return null;
+		}
+
+		$host = parse_url($fakeServerUrl, PHP_URL_HOST);
+		return filter_var($host, FILTER_VALIDATE_IP) ? $host : null;
 	}
 
 	private function arrayBufferToString(ArrayBuffer $arrayBuffer):string {

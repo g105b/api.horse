@@ -2,16 +2,20 @@
 namespace App;
 
 use App\Http\FetchHandler;
+use App\Http\NetworkTargetValidator;
 use App\Http\RateLimiter;
+use App\Maintenance\DataGarbageCollector;
 use App\Request\Collection\CollectionEntity;
 use App\Request\Collection\CollectionMode;
 use App\Request\Collection\CollectionRepository;
+use App\Request\Collection\NoCollectionsAvailableException;
 use App\Request\Collection\PrivateCollectionRepository;
 use App\Request\PrivateRequestRepository;
 use App\Request\RequestEntity;
 use App\Request\RequestRepository;
 use App\Request\SecretRepository;
 use App\Response\ResponseRepository;
+use Gt\Http\ServerInfo;
 use Gt\Http\Uri;
 use Gt\Routing\Path\DynamicPath;
 use Gt\Session\Session;
@@ -74,13 +78,10 @@ class ServiceLoader extends DefaultServiceLoader {
 		$allCollectionList = $collectionRepository->retrieveAll();
 		if(!$allCollectionList) {
 			if($collectionRepository instanceof PrivateCollectionRepository) {
-				$collection = $collectionRepository->create();
-				$collectionRepository->save($collection);
-				$collectionRepository->setCurrent($collection);
-				return $collection;
+				return $collectionRepository->create();
 			}
 
-			throw new \RuntimeException("No collections available.");
+			throw new NoCollectionsAvailableException("No collections available.");
 		}
 
 		return $allCollectionList[0];
@@ -133,10 +134,17 @@ class ServiceLoader extends DefaultServiceLoader {
 	}
 
 	public function loadFetchHandler():FetchHandler {
-		return new FetchHandler();
+		$serverInfo = $this->container->get(ServerInfo::class);
+		$serverAddress = $serverInfo->getServerAddress();
+		$blockedIpAddressList = $serverAddress ? [$serverAddress] : [];
+		return new FetchHandler(new NetworkTargetValidator($blockedIpAddressList));
 	}
 
 	public function loadRateLimiter():RateLimiter {
 		return new RateLimiter("data/rate-limit");
+	}
+
+	public function loadDataGarbageCollector():DataGarbageCollector {
+		return new DataGarbageCollector("data");
 	}
 }
