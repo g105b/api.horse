@@ -14,6 +14,9 @@ document.addEventListener("flux:before-render", event => {
 	let errorMessage = responseDocument
 		.querySelector("main > details > summary h2")
 		?.textContent.trim();
+	if(errorMessage?.includes("Failed to connect to localhost")) {
+		errorMessage += "\n\nTo test localhost addresses, you must clone api.horse locally, see github.com/g105b/api.horse";
+	}
 
 	// Emptying the batch stops Flux from replacing the current page with the
 	// error document once this event handler returns.
