@@ -16,6 +16,7 @@ use App\Request\RequestRepository;
 use App\Request\SecretRepository;
 use App\Response\ResponseRepository;
 use Gt\Http\ServerInfo;
+use Gt\Http\Response;
 use Gt\Http\Uri;
 use Gt\Routing\Path\DynamicPath;
 use Gt\Session\Session;
@@ -81,6 +82,10 @@ class ServiceLoader extends DefaultServiceLoader {
 				return $collectionRepository->create();
 			}
 
+			// A client that drops the session cookie cannot own the share ID
+			// from the previous redirect. Keep it read-only and explain how
+			// to start a session instead of treating an empty link as a fault.
+			$this->container->get(Response::class)->redirect("/session-required/");
 			throw new NoCollectionsAvailableException("No collections available.");
 		}
 
