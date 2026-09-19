@@ -47,6 +47,7 @@ request-topbar {
 
 			&::before {
 				content: "api.horse";
+				margin-top: -0.5rem;
 				padding: var(--theme-space-2) 0 var(--theme-space-2) 3rem;
 				background: url("/asset/horse-face.png") 0 center / 2rem no-repeat;
 				font-weight: 700;
@@ -148,16 +149,16 @@ request-topbar {
 	}
 
 	@media (min-width: flair.$break-shell) {
-		&::before {
-			content: "";
-			position: absolute;
-			inset-block-start: 0;
-			inset-inline-end: 0;
-			inline-size: var(--theme-drawer-width, 22rem);
-			block-size: 8rem;
-			background: var(--theme-color-surface-disabled);
-			pointer-events: none;
-		}
+		//&::before {
+		//	content: "";
+		//	position: absolute;
+		//	inset-block-start: 0;
+		//	inset-inline-end: 0;
+		//	inline-size: var(--theme-drawer-width, 22rem);
+		//	block-size: 8rem;
+		//	background: var(--theme-color-surface-disabled);
+		//	pointer-events: none;
+		//}
 
 		> #mobileMenuToggle { display: none; }
 
