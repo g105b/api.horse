@@ -10,10 +10,10 @@ function go(
 ):void {
 	$uriPath = $uri->getPath();
 
-	foreach($element->querySelectorAll("menu a") as $link) {
+	foreach($element->querySelectorAll("nav a") as $link) {
 		$uriPathFirstSlash = substr($uriPath, 0, strpos($uriPath, "/", 1));
 		if(str_starts_with($link->href, $uriPathFirstSlash)) {
-			$link->parentElement->classList->add("selected");
+			$link->setAttribute("aria-current", "page");
 		}
 	}
 

@@ -1,5 +1,0 @@
-@use "../decoration/panel" as *;
-
-webhook-create {
-	@extend %d-panel;
-}

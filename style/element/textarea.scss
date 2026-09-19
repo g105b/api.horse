@@ -1,6 +1,0 @@
-@use "../decoration/user-interface" as *;
-
-textarea {
-	@extend %d-user-interface;
-	height: 6rem;
-}

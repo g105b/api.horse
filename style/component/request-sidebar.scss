@@ -1,5 +1,0 @@
-@use "../decoration/sidebar" as *;
-
-request-sidebar {
-	@extend %d-sidebar;
-}
