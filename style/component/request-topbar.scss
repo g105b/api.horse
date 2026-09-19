@@ -6,7 +6,7 @@
 // familiar always-visible tool column.
 request-topbar {
 	--request-menu-toggle-width: 7.5rem;
-	--request-header-height: 8rem;
+	--request-header-height: 8.8125rem;
 
 	@include flair.icon($prefix: "> #mobileMenu .share");
 
@@ -107,7 +107,7 @@ request-topbar {
 		&:modal {
 			background: var(--theme-color-surface-disabled);
 			padding-block-start: max(
-				calc(var(--theme-space-4) + 44px + var(--theme-space-1)),
+				calc(var(--theme-space-4) + 44px + var(--theme-space-4)),
 				env(safe-area-inset-top)
 			);
 
@@ -148,6 +148,17 @@ request-topbar {
 	}
 
 	@media (min-width: flair.$break-shell) {
+		&::before {
+			content: "";
+			position: absolute;
+			inset-block-start: 0;
+			inset-inline-end: 0;
+			inline-size: var(--theme-drawer-width, 22rem);
+			block-size: 8rem;
+			background: var(--theme-color-surface-disabled);
+			pointer-events: none;
+		}
+
 		> #mobileMenuToggle { display: none; }
 
 		> #mobileMenu {
@@ -158,18 +169,14 @@ request-topbar {
 			inset-block: 0 auto;
 			inset-inline: auto 0;
 			inline-size: var(--theme-drawer-width, 22rem);
-			min-block-size: 100%;
+			min-block-size: 0;
+			block-size: auto;
+			max-block-size: none;
+			overflow: visible;
 			padding: var(--theme-space-4);
 			border: 0;
 			border-radius: 0;
-			// The controls overlap the global header only at the page top. Continue
-			// its surface behind them without turning the full-height tool column
-			// into a separate panel.
-			background: linear-gradient(
-				to bottom,
-				var(--theme-color-surface-disabled) 0 8rem,
-				transparent 8rem
-			);
+			background: transparent;
 
 			> form[method="dialog"] { display: none; }
 
