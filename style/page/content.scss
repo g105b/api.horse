@@ -3,14 +3,16 @@
 body > main > section:has(> article.panel),
 body > section:has(> article.panel) {
 	@extend %l-page-frame;
+	--theme-page-margin: 0;
 	display: grid;
 	gap: var(--theme-space-6);
 	padding-block-end: 8rem;
 
 	> article.panel {
-		@extend %l-article;
+		@extend %p-prose;
 		--theme-text-leading: 1.55;
 		inline-size: 100%;
+		max-inline-size: var(--theme-prose-measure, 65ch);
 
 		pre {
 			@extend %o-code-block;
@@ -68,6 +70,5 @@ body.uri--sponsor p.sponsor {
 		--theme-button-font-size: 1.5rem;
 		inline-size: min(100%, 22rem);
 		box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--theme-color-text) 15%, transparent);
-		text-decoration: none;
 	}
 }

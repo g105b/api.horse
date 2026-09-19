@@ -5,6 +5,7 @@ main:has(> request-sidebar) {
 	--theme-sidebar-width: 24rem;
 	--theme-workspace-gap: 2rem;
 	--theme-workspace-panel: 24rem;
+	--theme-workspace-panel-max: 48rem;
 	--theme-workspace-padding: 0 var(--theme-space-4) var(--theme-space-4);
 
 	> request-topbar {
