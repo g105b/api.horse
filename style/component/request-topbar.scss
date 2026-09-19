@@ -47,9 +47,10 @@ request-topbar {
 			--theme-actions-compact-direction: row;
 			--theme-actions-wrap: nowrap;
 			--theme-action-white-space: nowrap;
-			--theme-button-padding-inline: var(--theme-space-3);
+			--theme-button-padding-inline: var(--theme-space-2);
 			margin: 0;
 
+			> button { flex: 1 1 0; }
 			> button.positive { @extend %o-button-primary; }
 
 			> a {
@@ -63,6 +64,14 @@ request-topbar {
 
 			> label {
 				@extend %o-form-field;
+				> span {
+					position: absolute;
+					inline-size: 1px;
+					block-size: 1px;
+					overflow: hidden;
+					clip-path: inset(50%);
+					white-space: nowrap;
+				}
 			}
 
 			> .actions {
@@ -143,18 +152,12 @@ request-topbar {
 
 			.top-actions {
 				inline-size: 100%;
+				--theme-button-padding-inline: var(--theme-space-3);
+				> button { flex: 0 1 auto; }
 			}
 
 			.collections {
 				inline-size: 100%;
-				> label > span {
-					position: absolute;
-					inline-size: 1px;
-					block-size: 1px;
-					overflow: hidden;
-					clip-path: inset(50%);
-					white-space: nowrap;
-				}
 
 				select.single {
 					padding: 0;
