@@ -5,11 +5,16 @@
 // a proper modal drawer; space at the shell breakpoint turns it into the
 // familiar always-visible tool column.
 request-topbar {
+	--request-menu-toggle-width: 7.5rem;
+
+	@include flair.icon($prefix: "> #mobileMenu .share");
+
 	> #mobileMenuToggle {
 		position: absolute;
 		inset-block-start: 0;
 		inset-inline-end: 0;
 		z-index: 1;
+		inline-size: var(--request-menu-toggle-width);
 		margin: var(--theme-space-4);
 	}
 
@@ -25,12 +30,25 @@ request-topbar {
 
 		> form[method="dialog"] {
 			@extend %p-form-actions;
+			position: absolute;
+			inset-block-start: var(--theme-space-4);
+			inset-inline-end: var(--theme-space-4);
+			z-index: 1;
 			margin: 0;
+			--theme-action-white-space: nowrap;
+			> button { inline-size: var(--request-menu-toggle-width); }
 		}
 
 		.top-actions {
 			@extend %p-form-actions;
+			--theme-actions-direction: row;
+			--theme-actions-compact-direction: row;
+			--theme-actions-wrap: nowrap;
+			--theme-action-white-space: nowrap;
+			--theme-button-padding-inline: var(--theme-space-3);
 			margin: 0;
+
+			> button.positive { @extend %o-button-primary; }
 
 			> a {
 				align-self: center;
@@ -57,6 +75,13 @@ request-topbar {
 
 		&:not(.shared) .shared-show-only { display: none; }
 		&.shared button:not(.shared-show) { display: none; }
+
+		&:modal {
+			padding-block-start: max(
+				calc(var(--theme-space-4) + 44px + var(--theme-space-4)),
+				env(safe-area-inset-top)
+			);
+		}
 	}
 
 	> dialog:not(#mobileMenu) {
@@ -103,23 +128,31 @@ request-topbar {
 			padding: var(--theme-space-4);
 			border: 0;
 			border-radius: 0;
-			background: var(--theme-color-surface);
+			// The controls overlap the global header only at the page top. Continue
+			// its surface behind them without turning the full-height tool column
+			// into a separate panel.
+			background: linear-gradient(
+				to bottom,
+				var(--theme-color-surface-disabled) 0 8rem,
+				transparent 8rem
+			);
 
 			> form[method="dialog"] { display: none; }
 
 			.top-actions {
-				justify-content: flex-end;
+				inline-size: 100%;
 			}
 
 			.collections {
-			> label > span {
-				position: absolute;
-				inline-size: 1px;
-				block-size: 1px;
-				overflow: hidden;
-				clip-path: inset(50%);
-				white-space: nowrap;
-			}
+				inline-size: 100%;
+				> label > span {
+					position: absolute;
+					inline-size: 1px;
+					block-size: 1px;
+					overflow: hidden;
+					clip-path: inset(50%);
+					white-space: nowrap;
+				}
 
 				select.single {
 					padding: 0;
