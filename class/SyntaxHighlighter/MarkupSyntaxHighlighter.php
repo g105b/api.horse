@@ -13,19 +13,23 @@ use Gt\Dom\Element as HtmlElement;
 
 abstract class MarkupSyntaxHighlighter extends SyntaxHighlighter {
 	public function format(HtmlElement $element, string $rawBody):void {
+		if($element->classList->contains("syntax-highlight")) {
+			$syntaxHighlightElement = $element;
+		}
+		else {
+			$syntaxHighlightElement = $element->querySelector(".syntax-highlight");
+		}
+
+		$className = $this->getSyntaxHighlighterClassName();
+		$language = strtoupper(str_replace("syntax-highlighter-", "", $className));
+		$syntaxHighlightElement->dataset->set("language", $language);
+
 		$id = $element->dataset->get("id");
 		$cacheFile = $id ? "data/html-cache/response-formatted/$id.html" : null;
 		if($cacheFile && file_exists($cacheFile)) {
 			$html = file_get_contents($cacheFile);
 			$element->innerHTML = $html;
 			return;
-		}
-
-		if($element->classList->contains("syntax-highlight")) {
-			$syntaxHighlightElement = $element;
-		}
-		else {
-			$syntaxHighlightElement = $element->querySelector(".syntax-highlight");
 		}
 
 		$parsedNodeList = $this->parse($rawBody);
@@ -36,12 +40,8 @@ abstract class MarkupSyntaxHighlighter extends SyntaxHighlighter {
 		$document = $element->ownerDocument;
 		$fragment = $document->createDocumentFragment();
 		$wrapper = $document->createElement("div");
-		$className = $this->getSyntaxHighlighterClassName();
 		$wrapper->classList->add("syntax-highlighter", $className);
-		$wrapper->dataset->set(
-			"language",
-			strtoupper(str_replace("syntax-highlighter-", "", $className)),
-		);
+		$wrapper->dataset->set("syntaxViewport", "");
 		$fragment->appendChild($wrapper);
 		$this->renderNodeList($parsedNodeList, $wrapper);
 

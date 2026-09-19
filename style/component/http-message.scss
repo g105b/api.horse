@@ -51,29 +51,16 @@ http-message {
 	.response-body {
 		--theme-empty-message: "There is no response body";
 		white-space: pre;
+
+		&:has(> .syntax-highlighter) {
+			@extend %p-syntax-frame;
+			--theme-syntax-label-inset-block: var(--theme-region-padding, var(--theme-space-2));
+			--theme-syntax-label-inset-inline: var(--theme-region-padding, var(--theme-space-2));
+		}
 	}
 
 	.syntax-highlighter {
 		@extend %p-syntax-tree;
-
-		&.syntax-highlighter-json::after { content: "JSON"; }
-		&.syntax-highlighter-xml::after { content: "XML"; }
-		&.syntax-highlighter-html::after { content: "HTML"; }
-		&.syntax-highlighter-json::after,
-		&.syntax-highlighter-xml::after,
-		&.syntax-highlighter-html::after {
-			position: absolute;
-			inset-block-start: 0;
-			inset-inline-end: 0;
-			padding: var(--theme-space-1) var(--theme-space-2);
-			border-radius: var(--theme-badge-radius, var(--theme-radius));
-			background: var(--theme-color-muted);
-			color: var(--theme-color-surface);
-			font-family: var(--theme-font-body);
-			font-size: var(--theme-small-size, 0.875rem);
-			font-weight: 700;
-			pointer-events: none;
-		}
 
 		&[open] > summary > *,
 		details[open] > summary > * {

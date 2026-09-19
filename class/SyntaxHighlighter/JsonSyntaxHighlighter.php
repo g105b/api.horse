@@ -7,6 +7,14 @@ use Gt\Logger\Log;
 
 class JsonSyntaxHighlighter extends SyntaxHighlighter{
 	public function format(Element $element, string $rawBody):void {
+		if($element->classList->contains("syntax-highlight")) {
+			$syntaxHighlightElement = $element;
+		}
+		else {
+			$syntaxHighlightElement = $element->querySelector(".syntax-highlight");
+		}
+		$syntaxHighlightElement->dataset->set("language", "JSON");
+
 		$id = $element->dataset->get("id");
 		$cacheFile = $id ? "data/html-cache/response-formatted/$id.html" : null;
 		if($cacheFile && file_exists($cacheFile)) {
@@ -16,13 +24,6 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 		}
 
 		$document = $element->ownerDocument;
-
-		if($element->classList->contains("syntax-highlight")) {
-			$syntaxHighlightElement = $element;
-		}
-		else {
-			$syntaxHighlightElement = $element->querySelector(".syntax-highlight");
-		}
 
 		$json = json_decode($rawBody, true);
 		if($jsonError = json_last_error()) {
@@ -36,7 +37,7 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 		if($fragment->childNodes->length > 0) {
 			$appended = $syntaxHighlightElement->appendChild($fragment);
 			$appended->classList->add("syntax-highlighter", "syntax-highlighter-json");
-			$appended->dataset->set("language", "JSON");
+			$appended->dataset->set("syntaxViewport", "");
 		}
 
 		$html = $element->innerHTML;
