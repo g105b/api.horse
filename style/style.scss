@@ -1,7 +1,7 @@
 @use "font/mona-sans";
 @use "../../../BrightFlair/flair/style/flair" with (
 	$break-shell: 46rem,
-	$icon-names: (upload, webhook, server, heart, book, mail, mark-github, link-external, device-desktop, sun, moon, share, copy, key-asterisk, diff-added, grip-horizontal)
+	$icon-names: (upload, webhook, server, heart, book, mail, mark-github, link-external, device-desktop, sun, moon, share, copy, key-asterisk, diff-added, grip-horizontal, lock, trash)
 );
 @use "../../../BrightFlair/flair/style/theme/github";
 @use "component/global-header";
@@ -10,7 +10,9 @@
 @use "component/request-editor";
 @use "component/response-viewer";
 @use "component/http-message";
+@use "component/secrets-editor";
 @use "page/_common";
+@use "page/content";
 
 html {
 	@include flair.base;

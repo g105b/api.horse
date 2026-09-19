@@ -1,0 +1,73 @@
+@use "../../../../BrightFlair/flair/style/flair";
+
+body > main > section:has(> article.panel),
+body > section:has(> article.panel) {
+	@extend %l-page-frame;
+	display: grid;
+	gap: var(--theme-space-6);
+	padding-block-end: 8rem;
+
+	> article.panel {
+		@extend %l-article;
+		--theme-text-leading: 1.55;
+		inline-size: 100%;
+
+		pre {
+			@extend %o-code-block;
+		}
+
+		table {
+			@extend %o-table;
+		}
+
+		form {
+			display: grid;
+			gap: var(--theme-space-4);
+			margin-block-start: var(--theme-space-8);
+
+			> label:not(:has(input[type="checkbox"])) {
+				@extend %o-form-field;
+			}
+
+			> label:has(input[type="checkbox"]) {
+				@extend %o-choice-field;
+			}
+
+			> .actions {
+				@extend %p-form-actions;
+
+				> button {
+					@extend %o-button-primary;
+				}
+			}
+		}
+	}
+}
+
+body.uri--mailing-list {
+	article.thanks {
+		@extend %o-notice-success;
+	}
+
+	p.feature {
+		@extend %o-notice-warning;
+	}
+}
+
+body.uri--sponsor p.sponsor {
+	display: flex;
+	justify-content: center;
+	margin-block: var(--theme-space-10, 4rem);
+
+	@include flair.icon;
+
+	> a {
+		@extend %o-button-primary;
+		--theme-button-padding-block: var(--theme-space-6);
+		--theme-button-padding-inline: var(--theme-space-8);
+		--theme-button-font-size: 1.5rem;
+		inline-size: min(100%, 22rem);
+		box-shadow: 0 0.5rem 1.5rem color-mix(in srgb, var(--theme-color-text) 15%, transparent);
+		text-decoration: none;
+	}
+}
