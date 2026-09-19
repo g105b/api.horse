@@ -1,0 +1,135 @@
+@use "../../../../BrightFlair/flair/style/flair";
+
+http-message {
+	display: block;
+	min-inline-size: 0;
+
+	details.headers {
+		margin-block-start: var(--theme-space-4);
+
+		> summary {
+			max-inline-size: 100%;
+			overflow: hidden;
+			font-family: var(--theme-font-mono, monospace);
+			font-weight: var(--theme-label-weight);
+			text-overflow: ellipsis;
+			white-space: nowrap;
+			cursor: pointer;
+
+			&::before { content: "Headers "; }
+		}
+
+		&[open] > summary span { display: none; }
+
+		> ul {
+			@extend %p-key-value-list;
+			--theme-key-value-font: var(--theme-font-mono, monospace);
+			--theme-key-value-wrap: nowrap;
+			--theme-key-value-white-space: nowrap;
+			--theme-key-value-padding: var(--theme-space-2);
+			margin-block-start: var(--theme-space-4);
+		}
+	}
+
+	.response-image,
+	.response-body {
+		@extend %p-labelled-region;
+		--theme-region-font: var(--theme-font-mono, monospace);
+	}
+
+	.response-image {
+		padding: var(--theme-space-4);
+
+		img {
+			display: block;
+			max-inline-size: 100%;
+			block-size: auto;
+			margin-inline: auto;
+		}
+	}
+
+	.response-body {
+		--theme-empty-message: "There is no response body";
+		white-space: pre;
+	}
+
+	.syntax-highlighter {
+		@extend %p-syntax-tree;
+
+		&.syntax-highlighter-json::after { content: "JSON"; }
+		&.syntax-highlighter-xml::after { content: "XML"; }
+		&.syntax-highlighter-html::after { content: "HTML"; }
+		&.syntax-highlighter-json::after,
+		&.syntax-highlighter-xml::after,
+		&.syntax-highlighter-html::after {
+			position: absolute;
+			inset-block-start: 0;
+			inset-inline-end: 0;
+			padding: var(--theme-space-1) var(--theme-space-2);
+			border-radius: var(--theme-badge-radius, var(--theme-radius));
+			background: var(--theme-color-muted);
+			color: var(--theme-color-surface);
+			font-family: var(--theme-font-body);
+			font-size: var(--theme-small-size, 0.875rem);
+			font-weight: 700;
+			pointer-events: none;
+		}
+
+		&[open] > summary > *,
+		details[open] > summary > * {
+			display: none;
+		}
+
+		details {
+			padding-inline-start: var(--theme-space-4);
+
+			&[open] {
+				display: block;
+				padding-inline-start: 0;
+			}
+
+			&:not([open]) {
+				display: inline-block;
+				> summary { display: inline list-item; }
+			}
+		}
+
+		.scalar { display: inline-block; }
+
+		.data-structure {
+			margin-inline-start: var(--theme-syntax-tree-indent, var(--theme-space-4));
+			> .syntax-array-bracket:last-child {
+				margin-inline-start: calc(-1 * var(--theme-syntax-tree-indent, var(--theme-space-4)));
+			}
+		}
+
+		.data-element-list::before {
+			content: attr(data-index) ":";
+			margin-inline-end: var(--theme-space-2);
+			color: var(--theme-color-muted);
+		}
+
+		.syntax-array-bracket,
+		.syntax-array-separator,
+		.syntax-tag-angle,
+		.syntax-attribute-equals,
+		.syntax-attribute-quote {
+			color: var(--theme-syntax-punctuation, var(--theme-color-muted));
+		}
+		.syntax-tag-name {
+			color: var(--theme-syntax-tag, var(--theme-color-accent));
+			font-weight: 700;
+		}
+		.syntax-attribute-name { color: var(--theme-syntax-attribute, var(--theme-color-accent)); }
+		.syntax-attribute-value,
+		.syntax-text,
+		.type-string { color: var(--theme-syntax-string, var(--theme-color-text)); }
+		.type-integer,
+		.type-double,
+		.type-null,
+		.type-boolean {
+			color: var(--theme-syntax-number, var(--theme-color-accent));
+			font-weight: 700;
+		}
+	}
+}

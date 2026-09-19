@@ -36,7 +36,12 @@ abstract class MarkupSyntaxHighlighter extends SyntaxHighlighter {
 		$document = $element->ownerDocument;
 		$fragment = $document->createDocumentFragment();
 		$wrapper = $document->createElement("div");
-		$wrapper->classList->add("syntax-highlighter", $this->getSyntaxHighlighterClassName());
+		$className = $this->getSyntaxHighlighterClassName();
+		$wrapper->classList->add("syntax-highlighter", $className);
+		$wrapper->dataset->set(
+			"language",
+			strtoupper(str_replace("syntax-highlighter-", "", $className)),
+		);
 		$fragment->appendChild($wrapper);
 		$this->renderNodeList($parsedNodeList, $wrapper);
 

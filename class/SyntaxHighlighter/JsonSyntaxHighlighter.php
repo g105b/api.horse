@@ -36,6 +36,7 @@ class JsonSyntaxHighlighter extends SyntaxHighlighter{
 		if($fragment->childNodes->length > 0) {
 			$appended = $syntaxHighlightElement->appendChild($fragment);
 			$appended->classList->add("syntax-highlighter", "syntax-highlighter-json");
+			$appended->dataset->set("language", "JSON");
 		}
 
 		$html = $element->innerHTML;

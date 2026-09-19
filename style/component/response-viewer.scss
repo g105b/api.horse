@@ -1,0 +1,43 @@
+@use "../../../../BrightFlair/flair/style/flair";
+
+response-viewer {
+	@extend %p-panel;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	box-shadow: none;
+
+	> form {
+		@extend %p-form-actions;
+		position: absolute;
+		inset-block-start: 0;
+		inset-inline-end: 0;
+		margin: 0;
+	}
+
+	> ul {
+		@extend %d-empty-message;
+		--theme-empty-message: "Send a request to get a response";
+		list-style: none;
+		margin: 0;
+		padding: 0;
+
+		> li > details {
+			margin-block-end: var(--theme-space-8);
+
+			> summary {
+				@extend %p-http-metadata;
+				margin-block-end: var(--theme-space-4);
+			}
+
+			> .timing { color: var(--theme-color-muted); }
+			> .size {
+				color: var(--theme-color-muted);
+				&::before { content: "("; }
+				&::after { content: ")"; }
+			}
+
+			> http-message { margin-block-start: var(--theme-space-4); }
+		}
+	}
+}

@@ -28,11 +28,18 @@ function go(
 	Element $element,
 	Binder $binder,
 	?RequestEntity $requestEntity,
+	RequestRepository $requestRepository,
 ):void {
 	$binder->bindData($requestEntity);
 
 	if(!$requestEntity) {
 		$element->querySelector("form.delete")->remove();
+	}
+	elseif(!$requestRepository instanceof PrivateRequestRepository) {
+		$element->querySelector("form.delete")?->remove();
+		foreach($element->querySelectorAll("input, select, textarea, button") as $control) {
+			$control->setAttribute("disabled", "");
+		}
 	}
 
 	$document->querySelectorAll("[autofocus]")->forEach(function(Element $el) {

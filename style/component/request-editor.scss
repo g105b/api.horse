@@ -1,0 +1,128 @@
+@use "../../../../BrightFlair/flair/style/flair";
+
+request-editor {
+	@extend %p-panel;
+	--theme-disclosure-padding: var(--theme-space-6);
+	padding: 0;
+	border: 0;
+	background: transparent;
+	box-shadow: none;
+	--theme-control-font: var(--theme-font-mono, monospace);
+
+	> h1 { min-block-size: 5rem; }
+	&:has(form.delete) > h1 { min-block-size: 7rem; }
+
+	> form.fields {
+		@extend %p-form-fields;
+	}
+
+	.endpoint {
+		@extend %p-compound-field;
+		--theme-compound-direction: row;
+		--theme-compound-align-items: flex-end;
+		--theme-compound-narrow: 7.5rem;
+	}
+
+	> div[data-flux="update-inner"] > form.delete {
+		@extend %p-form-actions;
+		position: absolute;
+		inset-block-start: 0;
+		inset-inline-end: 0;
+		margin: 0;
+
+		> .negative { @extend %o-button-danger; }
+	}
+
+	> .fields {
+		display: grid;
+		gap: var(--theme-space-4);
+		margin-block-start: var(--theme-space-4);
+	}
+
+	details {
+		@extend %o-disclosure;
+
+		> summary h2 {
+			display: inline-flex;
+			gap: var(--theme-space-2);
+			margin: 0;
+			font: inherit;
+			font-weight: inherit;
+
+			> span {
+				font-weight: var(--theme-font-weight);
+				&::before { content: "("; }
+				&::after { content: ")"; }
+			}
+		}
+
+		> :where(ul, form, div):not(summary) {
+			margin-inline: var(--theme-disclosure-padding, var(--theme-space-4));
+		}
+
+		> :last-child {
+			margin-block-end: var(--theme-disclosure-padding, var(--theme-space-4));
+		}
+	}
+
+	ul.multiple {
+		@extend %p-repeatable-fields;
+	}
+
+	form.add,
+	details form.type > .actions,
+	details form.text > .actions,
+	.option .actions {
+		@extend %p-form-actions;
+	}
+
+	details form.type,
+	details form.text {
+		@extend %p-form-fields;
+		margin-block-start: var(--theme-space-4);
+	}
+
+	details form.add {
+		margin-block-start: var(--theme-space-4);
+		> button { flex-grow: 1; }
+	}
+
+	textarea[name="message"] {
+		block-size: auto;
+		overflow-x: auto;
+		resize: vertical;
+		white-space: pre;
+	}
+
+	form.actions.primary {
+		@extend %p-form-actions;
+		margin: 0;
+		transition: opacity 0.5s;
+
+		> button {
+			@extend %o-button-primary;
+			inline-size: 100%;
+		}
+
+		&.flux-form-waiting,
+		&.submitting {
+			@extend %d-state-busy;
+			cursor: wait;
+			> button { pointer-events: none; }
+		}
+	}
+
+	.actions:has(> button[data-flux="autosave"]:only-child) { display: none; }
+	form.submitting {
+		@extend %d-state-busy;
+		cursor: progress;
+	}
+
+	@media (min-width: flair.$break-compact) {
+		> h1,
+		&:has(form.delete) > h1 { min-block-size: 0; }
+		> div[data-flux="update-inner"] > form.delete {
+			flex-direction: row;
+		}
+	}
+}
