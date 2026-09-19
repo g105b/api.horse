@@ -61,6 +61,9 @@ request-topbar {
 		.collections {
 			display: grid;
 			gap: var(--theme-space-3);
+			// DomTemplate removes the list template when there are no persisted
+			// collections. There is then nothing meaningful to switch to.
+			&:not(:has(option)) { display: none; }
 
 			> label {
 				@extend %o-form-field;
