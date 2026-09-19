@@ -1,14 +1,18 @@
 @use "font/mona-sans";
-@use "../../../BrightFlair/flair/style/flair";
+@use "../../../BrightFlair/flair/style/flair" with (
+	$icon-names: (upload, webhook, server, heart, book, mail, mark-github, link-external, device-desktop, sun, moon)
+);
 @use "../../../BrightFlair/flair/style/theme/github";
 @use "component/global-header";
 
 html {
 	@include flair.base;
+	@include flair.defaults;
 	@include flair.controls;
 	@include flair.typography;
 	@include github.github;
 
+	font-size: 14px;
 	background: var(--theme-color-surface);
 	color: var(--theme-color-text);
 }

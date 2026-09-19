@@ -1,6 +1,7 @@
 @use "../../../../BrightFlair/flair/style/flair";
 
 global-header {
+	@include flair.icon($prefix: "> header ");
 	display: block;
 	border-block-end: var(--theme-border-width) solid var(--theme-color-border);
 	background: var(--theme-color-surface-disabled);
@@ -12,11 +13,12 @@ global-header {
 			font: inherit;
 			font-weight: 700;
 			> a {
-				display: inline-flex;
+				display: flex;
 				align-items: center;
 				gap: var(--theme-space-2);
-				min-block-size: 44px;
-				padding-inline: var(--theme-space-4);
+				inline-size: 50%;
+				block-size: 4.5rem;
+				padding-inline-start: 1.5rem;
 				color: var(--theme-color-text);
 				text-decoration: none;
 				&::before {
@@ -29,53 +31,26 @@ global-header {
 		}
 
 		.theme-toggle {
-			@extend %o-button;
+			@extend %o-icon-button;
+			--theme-icon-size: 1rem;
+			--theme-button-padding-block: var(--theme-space-2);
 			position: absolute;
-			inset-block-start: var(--theme-space-2);
-			inset-inline-end: var(--theme-space-4);
+			inset-block-start: 1.25rem;
+			inset-inline-start: 10rem;
 			min-block-size: 2rem;
 			inline-size: 2rem;
 			padding: 0;
-			&::before {
-				content: "";
-				inline-size: 1rem;
-				aspect-ratio: 1;
-				background: center / contain no-repeat;
-				opacity: .75;
-			}
-			&[data-theme-mode="system"]::before { background-image: url("/asset/icon/device-desktop.svg"); }
-			&[data-theme-mode="light"]::before { background-image: url("/asset/icon/sun.svg"); }
-			&[data-theme-mode="dark"]::before { background-image: url("/asset/icon/moon.svg"); }
-			.theme-toggle-label {
-				position: absolute;
-				inline-size: 1px;
-				block-size: 1px;
-				overflow: hidden;
-				clip-path: inset(50%);
-				white-space: nowrap;
-			}
 		}
 
 		> nav {
 			@extend %p-page-tabs;
-			padding-inline: var(--theme-space-2);
-			> ul > li > a::before {
-				content: "";
-				display: inline-block;
-				inline-size: 1rem;
-				aspect-ratio: 1;
-				margin-inline-end: var(--theme-space-2);
-				vertical-align: -.15em;
-				opacity: .75;
-				background: center / contain no-repeat;
+			> ul {
+				margin-inline: var(--theme-space-4);
 			}
-			> ul > li > a[href^="/request"]::before { background-image: url("/asset/icon/upload.svg"); }
-			> ul > li > a[href^="/webhook"]::before { background-image: url("/asset/icon/webhook.svg"); }
-			> ul > li > a[href^="/gateway"]::before { background-image: url("/asset/icon/server.svg"); }
-			> ul > li > a[href^="/sponsor"]::before { background-image: url("/asset/icon/heart.svg"); }
-			> ul > li > a[href^="/readme"]::before { background-image: url("/asset/icon/book.svg"); }
-			> ul > li > a[href^="/mailing-list"]::before { background-image: url("/asset/icon/mail.svg"); }
-			> ul > li > a[href*="github.com"]::before { background-image: url("/asset/icon/mark-github.svg"); }
+			> ul > li > a {
+				display: flex;
+				align-items: center;
+			}
 		}
 	}
 }
