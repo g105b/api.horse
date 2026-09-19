@@ -1,0 +1,135 @@
+@use "../../../../BrightFlair/flair/style/flair";
+
+// This component lives in the request page, rather than the global header,
+// but keeps its tools at the page's top edge.  On a narrow screen it becomes
+// a proper modal drawer; space at the shell breakpoint turns it into the
+// familiar always-visible tool column.
+request-topbar {
+	> #mobileMenuToggle {
+		position: absolute;
+		inset-block-start: 0;
+		inset-inline-end: 0;
+		z-index: 1;
+		margin: var(--theme-space-4);
+	}
+
+	> #mobileMenu {
+		@extend %o-drawer;
+		display: grid;
+		gap: var(--theme-space-4);
+		align-content: start;
+
+		&[open]:not(:modal) {
+			position: static;
+		}
+
+		> form[method="dialog"] {
+			@extend %p-form-actions;
+			margin: 0;
+		}
+
+		.top-actions {
+			@extend %p-form-actions;
+			margin: 0;
+
+			> a {
+				align-self: center;
+			}
+		}
+
+		.collections {
+			display: grid;
+			gap: var(--theme-space-3);
+
+			> label {
+				@extend %o-form-field;
+			}
+
+			> .actions {
+				@extend %p-form-actions;
+				margin: 0;
+			}
+		}
+
+		&.shared {
+			.shared-hide { display: none; }
+		}
+
+		&:not(.shared) .shared-show-only { display: none; }
+		&.shared button:not(.shared-show) { display: none; }
+	}
+
+	> dialog:not(#mobileMenu) {
+		@extend %o-dialog;
+
+		> form {
+			@extend %p-form-fields;
+		}
+
+		.actions {
+			@extend %p-form-actions;
+		}
+
+		button.positive { @extend %o-button-primary; }
+		button.negative { @extend %o-button-danger; }
+
+		.important {
+			padding-block-start: var(--theme-space-4);
+			border-block-start: var(--theme-border-width) solid var(--theme-color-border);
+		}
+	}
+
+	.share-link {
+		@extend %p-compound-field;
+
+		> button {
+			@extend %o-icon-button;
+			align-self: flex-end;
+		}
+	}
+
+	@media (min-width: flair.$break-shell) {
+		> #mobileMenuToggle { display: none; }
+
+		> #mobileMenu {
+			display: grid;
+			&[open]:not(:modal) { position: absolute; }
+			// Reset the browser's `dialog { inset: 0 }` rule before pinning this
+			// non-modal desktop presentation to the page edge.
+			inset-block: 0 auto;
+			inset-inline: auto 0;
+			inline-size: var(--theme-drawer-width, 22rem);
+			min-block-size: 100%;
+			padding: var(--theme-space-4);
+			border: 0;
+			border-radius: 0;
+			background: var(--theme-color-surface);
+
+			> form[method="dialog"] { display: none; }
+
+			.top-actions {
+				justify-content: flex-end;
+			}
+
+			.collections {
+			> label > span {
+				position: absolute;
+				inline-size: 1px;
+				block-size: 1px;
+				overflow: hidden;
+				clip-path: inset(50%);
+				white-space: nowrap;
+			}
+
+				select.single {
+					padding: 0;
+					border: 0;
+					background: transparent;
+					font-weight: var(--theme-font-weight-strong);
+				}
+
+				> .actions { display: none; }
+			}
+		}
+	}
+}

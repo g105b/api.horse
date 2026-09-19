@@ -1,9 +1,11 @@
 @use "font/mona-sans";
 @use "../../../BrightFlair/flair/style/flair" with (
-	$icon-names: (upload, webhook, server, heart, book, mail, mark-github, link-external, device-desktop, sun, moon)
+	$break-shell: 46rem,
+	$icon-names: (upload, webhook, server, heart, book, mail, mark-github, link-external, device-desktop, sun, moon, share, copy)
 );
 @use "../../../BrightFlair/flair/style/theme/github";
 @use "component/global-header";
+@use "component/request-topbar";
 
 html {
 	@include flair.base;

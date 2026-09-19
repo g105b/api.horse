@@ -1,7 +1,23 @@
 document.querySelectorAll("request-topbar").forEach(component => {
+	let mobileMenu = component.querySelector("#mobileMenu");
+	let mobileMenuToggle = component.querySelector("#mobileMenuToggle");
 	let shareModal = component.querySelector("#shareModal");
 	let shareButton = component.querySelector("button.share");
 	let copyButton = component.querySelector(".copy-share-link");
+
+	// The menu arrives open in the document so collection controls remain usable
+	// without JavaScript. Enhancement turns it into the mobile drawer.
+	if(mobileMenu && typeof mobileMenu.showModal === "function") {
+		mobileMenu.close();
+		mobileMenuToggle.hidden = false;
+		mobileMenuToggle.addEventListener("click", () => mobileMenu.showModal());
+	}
+
+	component.querySelectorAll("[data-dialog-open]").forEach(button => {
+		button.addEventListener("click", () => {
+			document.getElementById(button.dataset.dialogOpen)?.showModal();
+		});
+	});
 
 	shareButton.addEventListener("click", event => {
 		let shareLinkInput = shareModal.querySelector("[name='shareLink']");
@@ -33,8 +49,9 @@ document.querySelectorAll("request-topbar").forEach(component => {
 		e.preventDefault();
 		let shareLinkInput = shareModal.querySelector("[name='shareLink']");
 		shareLinkInput.select();
-		navigator.clipboard.writeText(shareLinkInput.value);
-		shareModal.close();
+		if(navigator.clipboard?.writeText) {
+			navigator.clipboard.writeText(shareLinkInput.value).then(() => shareModal.close());
+		}
 	});
 });
 
