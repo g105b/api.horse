@@ -8,6 +8,8 @@ request-editor {
 	background: transparent;
 	box-shadow: none;
 	--theme-panel-header-padding-block-start: var(--theme-space-6);
+	--theme-panel-header-direction: column;
+	--theme-panel-header-align-items: flex-start;
 
 	> form.fields {
 		@extend %p-form-fields;
@@ -22,6 +24,8 @@ request-editor {
 
 	> header > div[data-flux="update-inner"] > form.delete {
 		@extend %p-form-actions;
+		--theme-actions-direction: row;
+		--theme-actions-align-items: center;
 		margin: 0;
 
 		> .negative { @extend %o-button-danger; }
@@ -134,9 +138,4 @@ request-editor {
 		cursor: progress;
 	}
 
-	@media (min-width: flair.$break-compact) {
-		> header > div[data-flux="update-inner"] > form.delete {
-			flex-direction: row;
-		}
-	}
 }
