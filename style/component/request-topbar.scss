@@ -6,6 +6,7 @@
 // familiar always-visible tool column.
 request-topbar {
 	--request-menu-toggle-width: 7.5rem;
+	--request-header-height: 8rem;
 
 	@include flair.icon($prefix: "> #mobileMenu .share");
 
@@ -33,11 +34,24 @@ request-topbar {
 		> form[method="dialog"] {
 			@extend %p-form-actions;
 			position: absolute;
-			inset-block-start: var(--theme-space-4);
-			inset-inline-end: var(--theme-space-4);
+			inset-block-start: 0;
+			inset-inline: 0;
 			z-index: 1;
 			margin: 0;
 			--theme-action-white-space: nowrap;
+			--theme-actions-direction: row;
+			--theme-actions-compact-direction: row;
+			--theme-actions-align: space-between;
+			--theme-actions-align-items: center;
+			padding: var(--theme-space-4) 1.5rem;
+
+			&::before {
+				content: "api.horse";
+				padding: var(--theme-space-2) 0 var(--theme-space-2) 3rem;
+				background: url("/asset/horse-face.png") 0 center / 2rem no-repeat;
+				font-weight: 700;
+			}
+
 			> button { inline-size: var(--request-menu-toggle-width); }
 		}
 
@@ -91,10 +105,16 @@ request-topbar {
 		&.shared button:not(.shared-show) { display: none; }
 
 		&:modal {
+			background: var(--theme-color-surface-disabled);
 			padding-block-start: max(
-				calc(var(--theme-space-4) + 44px + var(--theme-space-4)),
+				calc(var(--theme-space-4) + 44px + var(--theme-space-1)),
 				env(safe-area-inset-top)
 			);
+
+			&:not(:has(option)) {
+				min-block-size: var(--request-header-height);
+				block-size: var(--request-header-height);
+			}
 		}
 	}
 
