@@ -6,12 +6,11 @@ response-viewer {
 	border: 0;
 	background: transparent;
 	box-shadow: none;
+	--theme-panel-header-padding-block-start: var(--theme-space-6);
 
-	> form {
+	> header > form {
 		@extend %p-form-actions;
-		position: absolute;
-		inset-block-start: calc(var(--theme-space-3) + var(--theme-space-4));
-		inset-inline-end: 0;
+		flex: 0 0 auto;
 		margin: 0;
 	}
 

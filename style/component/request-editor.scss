@@ -7,15 +7,7 @@ request-editor {
 	border: 0;
 	background: transparent;
 	box-shadow: none;
-
-	input,
-	select,
-	textarea {
-		--theme-control-font: var(--theme-font-mono, monospace);
-	}
-
-	> h1 { min-block-size: 5rem; }
-	&:has(form.delete) > h1 { min-block-size: 7rem; }
+	--theme-panel-header-padding-block-start: var(--theme-space-6);
 
 	> form.fields {
 		@extend %p-form-fields;
@@ -28,11 +20,8 @@ request-editor {
 		--theme-compound-narrow: 7.5rem;
 	}
 
-	> div[data-flux="update-inner"] > form.delete {
+	> header > div[data-flux="update-inner"] > form.delete {
 		@extend %p-form-actions;
-		position: absolute;
-		inset-block-start: calc(var(--theme-space-3) + var(--theme-space-4));
-		inset-inline-end: 0;
 		margin: 0;
 
 		> .negative { @extend %o-button-danger; }
@@ -46,6 +35,9 @@ request-editor {
 
 	details {
 		@extend %o-disclosure;
+		&[open] {
+			padding-block-end: var(--theme-disclosure-padding, var(--theme-space-4));
+		}
 
 		> summary h2 {
 			display: inline-flex;
@@ -65,9 +57,7 @@ request-editor {
 			margin-inline: var(--theme-disclosure-padding, var(--theme-space-4));
 		}
 
-		> :last-child {
-			margin-block-end: var(--theme-disclosure-padding, var(--theme-space-4));
-		}
+		> :last-child { margin-block-end: 0; }
 	}
 
 	ul.multiple {
@@ -98,6 +88,14 @@ request-editor {
 	details > .option:not([hidden]),
 	details > .text {
 		margin-block-start: var(--theme-space-4);
+	}
+
+	details > .option.parameters > ul.multiple {
+		margin-inline: 0;
+	}
+
+	details > .text > label {
+		@extend %o-form-field;
 	}
 
 	details form.add {
@@ -137,9 +135,7 @@ request-editor {
 	}
 
 	@media (min-width: flair.$break-compact) {
-		> h1,
-		&:has(form.delete) > h1 { min-block-size: 0; }
-		> div[data-flux="update-inner"] > form.delete {
+		> header > div[data-flux="update-inner"] > form.delete {
 			flex-direction: row;
 		}
 	}
