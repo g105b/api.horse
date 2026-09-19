@@ -20,9 +20,11 @@ request-topbar {
 
 	> #mobileMenu {
 		@extend %o-drawer;
-		display: grid;
 		gap: var(--theme-space-4);
 		align-content: start;
+		// A closed native dialog must remain absent on mobile. The `open`
+		// attribute keeps the no-JavaScript version in normal document flow.
+		&[open] { display: grid; }
 
 		&[open]:not(:modal) {
 			position: static;
