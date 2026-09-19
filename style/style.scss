@@ -10,6 +10,7 @@
 @use "component/request-editor";
 @use "component/response-viewer";
 @use "component/http-message";
+@use "page/_common";
 
 html {
 	@include flair.base;

@@ -1,0 +1,49 @@
+@use "../../../../BrightFlair/flair/style/flair";
+
+body {
+	>footer {
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		background-color: var(--pal-3);
+		border-top: 1px solid var(--pal-4);
+
+		@media (min-width: flair.$break-compact) {
+			display: flex;
+			gap: 2rem;
+			justify-content: center;
+		}
+
+		>p {
+			margin: 0;
+			text-align: center;
+
+			a {
+				display: block;
+				padding: 0.5rem;
+				font-size: 0.8rem;
+				text-transform: uppercase;
+				text-decoration: none;
+				font-weight: bold;
+				color: var(--pal-1);
+				opacity: 0.5;
+
+				strong {
+					@extend %o-badge;
+					--theme-badge-background: var(--theme-http-id-background, var(--theme-color-muted));
+					--theme-badge-text: var(--theme-http-id-text, var(--theme-color-surface));
+					margin-inline-end: var(--theme-space-2);
+				}
+
+				&:hover {
+					opacity: 1;
+				}
+
+				@media (min-width: flair.$break-compact) {
+					padding: 1rem;
+				}
+			}
+		}
+	}
+}
