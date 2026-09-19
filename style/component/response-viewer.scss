@@ -10,7 +10,7 @@ response-viewer {
 	> form {
 		@extend %p-form-actions;
 		position: absolute;
-		inset-block-start: 0;
+		inset-block-start: calc(var(--theme-space-3) + var(--theme-space-4));
 		inset-inline-end: 0;
 		margin: 0;
 	}

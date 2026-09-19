@@ -7,7 +7,12 @@ request-editor {
 	border: 0;
 	background: transparent;
 	box-shadow: none;
-	--theme-control-font: var(--theme-font-mono, monospace);
+
+	input,
+	select,
+	textarea {
+		--theme-control-font: var(--theme-font-mono, monospace);
+	}
 
 	> h1 { min-block-size: 5rem; }
 	&:has(form.delete) > h1 { min-block-size: 7rem; }
@@ -26,7 +31,7 @@ request-editor {
 	> div[data-flux="update-inner"] > form.delete {
 		@extend %p-form-actions;
 		position: absolute;
-		inset-block-start: 0;
+		inset-block-start: calc(var(--theme-space-3) + var(--theme-space-4));
 		inset-inline-end: 0;
 		margin: 0;
 
@@ -67,6 +72,8 @@ request-editor {
 
 	ul.multiple {
 		@extend %p-repeatable-fields;
+		margin-block: var(--theme-space-4);
+		margin-inline: var(--theme-disclosure-padding, var(--theme-space-4));
 	}
 
 	form.add,
@@ -79,6 +86,17 @@ request-editor {
 	details form.type,
 	details form.text {
 		@extend %p-form-fields;
+		margin-block-start: var(--theme-space-4);
+	}
+
+	details > form.type,
+	details > .option,
+	details > .text {
+		margin-inline: var(--theme-disclosure-padding, var(--theme-space-4));
+	}
+
+	details > .option:not([hidden]),
+	details > .text {
 		margin-block-start: var(--theme-space-4);
 	}
 
