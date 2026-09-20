@@ -1,101 +1,35 @@
 @use "font/mona-sans";
-@use "font/monspace-neon";
-
-@use "variable/palette";
-
-@use "decoration/panel" as *;
-@use "decoration/syntax-highlighter" as *;
-
+@use "../../../BrightFlair/flair/style/flair" with (
+	$break-shell: 46rem,
+	$icon-names: (upload, webhook, server, heart, book, mail, mark-github, link-external, device-desktop, sun, moon, share, copy, key-asterisk, diff-added, grip-horizontal, lock, trash)
+);
+@use "../../../BrightFlair/flair/style/theme/github";
 @use "component/global-header";
-@use "component/request-editor";
-@use "component/request-sidebar";
 @use "component/request-topbar";
+@use "component/request-sidebar";
+@use "component/request-editor";
 @use "component/response-viewer";
-@use "component/secrets-editor";
-@use "component/webhook-sidebar";
-@use "component/webhook-create";
-@use "component/webhook-editor";
-@use "component/webhook-viewer";
 @use "component/http-message";
+@use "component/secrets-editor";
+@use "page/_common";
+@use "page/content";
 
-@use "element/article";
-@use "element/body";
-@use "element/button";
-@use "element/dialog";
-@use "element/html";
-@use "element/input";
-@use "element/main";
-@use "element/select";
-@use "element/textarea";
+html {
+	@include flair.base;
+	@include flair.defaults;
+	@include flair.controls;
+	@include flair.typography;
+	@include github.github;
 
-@use "page/_error";
-@use "page/sponsor";
-@use "page/mailing-list";
-@use "variable/break";
-
-:focus {
-	--theme-outline: var(--pal-7);
-	outline: 2px solid var(--theme-outline);
-	outline-offset: 2px;
-
-	&:active {
-		outline-offset: 0;
-	}
-}
-
-.panel {
-	@extend %d-panel;
-}
-
-.syntax-highlighter {
-	@extend %d-syntax-highlighter;
-}
-
-form.submitting {
-	cursor: progress;
-	opacity: 0.5;
-	transition: opacity 0.25s ease-in-out;
-
-	* {
-		cursor: progress;
-	}
+	font-size: 14px;
+	background: var(--theme-color-surface);
+	color: var(--theme-color-text);
 }
 
 body {
-	min-height: 100svh;
-}
-
-body>footer {
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	right: 0;
-	background-color: var(--pal-3);
-	border-top: 1px solid var(--pal-4);
-
-	@media(min-width: break.$small) {
-		display: flex;
-		gap: 2rem;
-		justify-content: center;
-	}
-
-	p {
-		margin: 0;
-		text-align: center;
-
-		a {
-			display: block;
-			padding: 0.5rem;
-			font-size: 0.8rem;
-			text-transform: uppercase;
-			text-decoration: none;
-			font-weight: bold;
-			color: var(--pal-1);
-			opacity: 0.5;
-
-			&:hover {
-				opacity: 1;
-			}
-		}
-	}
+	margin: 0;
+	min-block-size: 100svh;
+	background: var(--theme-color-surface);
+	color: var(--theme-color-text);
+	font-family: var(--theme-font-body);
 }

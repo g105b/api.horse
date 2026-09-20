@@ -1,7 +1,0 @@
-@use "../object/page-layout" as *;
-
-main {
-	@extend %o-page-layout;
-
-	margin-bottom: 4rem;
-}

@@ -1,16 +1,16 @@
-<button id="mobileMenuToggle" onclick="mobileMenu.showModal()">Collections</button>
+<button id="mobileMenuToggle" type="button" hidden>Collections</button>
 
-<dialog id="mobileMenu" class="no-scroll special" data-bind:class=":shared">
+<dialog id="mobileMenu" class="no-scroll special" data-bind:class=":shared" open>
 	<form method="dialog">
 		<button class="shared-show">Close menu</button>
 	</form>
 
 	<div class="top-actions">
 		<a href="/" class="shared-show shared-show-only">← Back to your collections</a>
-		<button class="shared-show shared-show-only" onclick="forkModal.showModal()"><span>Fork</span></button>
-		<button class="share shared-hide" onclick="shareModal.showModal()"><span>Share</span></button>
-		<button onclick="editModal.showModal();"><span>Edit</span></button>
-		<button class="positive" onclick="newModal.showModal();"><span>New collection</span></button>
+		<button class="shared-show shared-show-only" type="button" data-dialog-open="forkModal"><span>Fork</span></button>
+		<button class="share shared-hide" type="button" data-dialog-open="shareModal" data-icon="share"><span>Share</span></button>
+		<button type="button" data-dialog-open="editModal"><span>Edit</span></button>
+		<button class="positive" type="button" data-dialog-open="newModal"><span>New collection</span></button>
 	</div>
 
 	<form method="post" class="collections" data-flux="update-inner">
@@ -23,7 +23,7 @@
 		</label>
 
 		<div class="actions">
-			<button name="do" value="change-collection">Change collection</button>
+			<button name="do" value="change-collection" hidden>Change collection</button>
 		</div>
 	</form>
 </dialog>
@@ -32,11 +32,13 @@
 	<form method="post" data-flux="update-inner">
 		<h1>Share this collection</h1>
 
-		<label>
-			<span>Share link</span>
-			<input name="shareLink" data-bind:value="shareLink" readonly />
-			<button class="copy-share-link" formnovalidate><span>Copy</span></button>
-		</label>
+		<div class="share-link">
+			<label>
+				<span>Share link</span>
+				<input name="shareLink" data-bind:value="shareLink" readonly />
+			</label>
+			<button class="copy-share-link" type="button" data-icon="copy"><span>Copy share link</span></button>
+		</div>
 		<div class="actions">
 			<button name="do" value="close" formnovalidate formmethod="dialog">Close</button>
 		</div>

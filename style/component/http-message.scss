@@ -1,111 +1,122 @@
+@use "../../../../BrightFlair/flair/style/flair";
+
 http-message {
 	display: block;
-
-	--theme-bg: var(--pal-3);
-	--theme-border: var(--pal-4);
+	min-inline-size: 0;
 
 	details.headers {
-		margin-top: 1rem;
+		margin-block-start: var(--theme-space-4);
 
-		>summary {
-			white-space: nowrap;
+		> summary {
+			max-inline-size: 100%;
 			overflow: hidden;
+			font-family: var(--theme-font-mono, monospace);
+			font-weight: var(--theme-label-weight);
 			text-overflow: ellipsis;
-			font-family: "Monaspace Neon", monospace;
+			white-space: nowrap;
+			cursor: pointer;
 
-			&::marker {
-				content: "";
-			}
-
-			&::before {
-				content: "Headers ";
-				font-weight: bold;
-			}
-
-			&:hover, &:focus {
-				text-decoration: underline;
-				cursor: pointer;
-			}
+			&::before { content: "Headers "; }
 		}
 
-		&[open] {
-			>summary {
-				span {
-					display: none;
-				}
-			}
-		}
+		&[open] > summary span { display: none; }
 
-		ul {
-			list-style-type: none;
-			background-color: var(--theme-bg);
-			border: 1px solid var(--theme-border);
-			padding: 0.5rem;
-			border-radius: 0.25rem;
-			font-family: "Monaspace Neon", monospace;
-			margin-top: 1rem;
-			overflow-x: scroll;
-
-			>li {
-				white-space: nowrap;
-
-				>.key {
-					font-weight: bold;
-				}
-				>.value {
-
-				}
-			}
+		> ul {
+			@extend %p-key-value-list;
+			--theme-key-value-font: var(--theme-font-mono, monospace);
+			--theme-key-value-wrap: nowrap;
+			--theme-key-value-white-space: nowrap;
+			--theme-key-value-padding: var(--theme-space-2);
+			margin-block-start: var(--theme-space-4);
 		}
 	}
 
 	.response-image,
 	.response-body {
-		position: relative;
-		margin-top: 3rem;
-		background-color: var(--theme-bg);
-		border: 1px solid var(--theme-border);
-		border-radius: 0.25rem;
-
-		&::before {
-			position: absolute;
-			display: block;
-			content: "Body";
-			font-weight: bold;
-			margin-bottom: 1rem;
-			top: -2rem;
-			left: 0;
-			font-family: sans-serif;
-		}
+		@extend %p-labelled-region;
+		--theme-region-font: var(--theme-font-mono, monospace);
 	}
 
 	.response-image {
-		padding: 1rem;
-		overflow: auto;
+		padding: var(--theme-space-4);
 
 		img {
 			display: block;
-			max-width: 100%;
-			height: auto;
-			margin: 0 auto;
+			max-inline-size: 100%;
+			block-size: auto;
+			margin-inline: auto;
 		}
 	}
 
 	.response-body {
-		padding: 0.5rem;
-		font-family: "Monaspace Neon", monospace;
+		--theme-empty-message: "There is no response body";
 		white-space: pre;
-		overflow-x: scroll;
 
-		&:empty {
-			background-color: transparent;
-			border: none;
-			padding-left: 0;
+		&:has(> .syntax-highlighter) {
+			@extend %p-syntax-frame;
+			--theme-syntax-label-inset-block: var(--theme-region-padding, var(--theme-space-2));
+			--theme-syntax-label-inset-inline: var(--theme-region-padding, var(--theme-space-2));
+		}
+	}
 
-			&::after {
-				content: "There is no response body";
-				font-style: italic;
+	.syntax-highlighter {
+		@extend %p-syntax-tree;
+
+		&[open] > summary > *,
+		details[open] > summary > * {
+			display: none;
+		}
+
+		details {
+			padding-inline-start: var(--theme-space-4);
+
+			&[open] {
+				display: block;
+				padding-inline-start: 0;
 			}
+
+			&:not([open]) {
+				display: inline-block;
+				> summary { display: inline list-item; }
+			}
+		}
+
+		.scalar { display: inline-block; }
+
+		.data-structure {
+			margin-inline-start: var(--theme-syntax-tree-indent, var(--theme-space-4));
+			> .syntax-array-bracket:last-child {
+				margin-inline-start: calc(-1 * var(--theme-syntax-tree-indent, var(--theme-space-4)));
+			}
+		}
+
+		.data-element-list::before {
+			content: attr(data-index) ":";
+			margin-inline-end: var(--theme-space-2);
+			color: var(--theme-color-muted);
+		}
+
+		.syntax-array-bracket,
+		.syntax-array-separator,
+		.syntax-tag-angle,
+		.syntax-attribute-equals,
+		.syntax-attribute-quote {
+			color: var(--theme-syntax-punctuation, var(--theme-color-muted));
+		}
+		.syntax-tag-name {
+			color: var(--theme-syntax-tag, var(--theme-color-accent));
+			font-weight: 700;
+		}
+		.syntax-attribute-name { color: var(--theme-syntax-attribute, var(--theme-color-accent)); }
+		.syntax-attribute-value,
+		.syntax-text,
+		.type-string { color: var(--theme-syntax-string, var(--theme-color-text)); }
+		.type-integer,
+		.type-double,
+		.type-null,
+		.type-boolean {
+			color: var(--theme-syntax-number, var(--theme-color-accent));
+			font-weight: 700;
 		}
 	}
 }

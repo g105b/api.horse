@@ -39,6 +39,9 @@ function go(
 	if(empty($responseEntityList)) {
 		$element->querySelector("button[name=do][value=clear]")->hidden = true;
 	}
+	elseif(!$collectionRepository instanceof PrivateCollectionRepository) {
+		$element->querySelector("button[name=do][value=clear]")?->remove();
+	}
 
 	foreach($element->querySelectorAll("http-message") as $i => $httpMessageElement) {
 		$responseEntity = $responseEntityList[$i] ?? null;

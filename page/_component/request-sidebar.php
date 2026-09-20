@@ -36,7 +36,7 @@ function go(
 			continue;
 		}
 
-		$menuLink->parentElement->classList->add("selected");
+		$menuLink->setAttribute("aria-current", "page");
 	}
 }
 

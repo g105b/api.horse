@@ -1,214 +1,196 @@
-@use "../variable/break";
-@use "../mixin/icon";
+@use "../../../../BrightFlair/flair/style/flair";
 
+// This component lives in the request page, rather than the global header,
+// but keeps its tools at the page's top edge.  On a narrow screen it becomes
+// a proper modal drawer; space at the shell breakpoint turns it into the
+// familiar always-visible tool column.
 request-topbar {
-	>button {
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin: 1rem;
+	--request-menu-toggle-width: 7.5rem;
+	--request-header-height: 8.8125rem;
 
-		@media(min-width: break.$small) {
-			display: none;
-		}
+	@include flair.icon($prefix: "> #mobileMenu .share");
+
+	> #mobileMenuToggle {
+		position: absolute;
+		inset-block-start: 0;
+		inset-inline-end: 0;
+		z-index: 1;
+		inline-size: var(--request-menu-toggle-width);
+		margin: var(--theme-space-4);
 	}
 
-	dialog#mobileMenu {
-		max-width: 100%;
-		width: 100%;
-		min-height: 12rem;
-		margin-top: 0;
-		border: none;
-		padding: 0;
-		background-color: transparent;
+	> #mobileMenu {
+		@extend %o-drawer;
+		gap: var(--theme-space-4);
+		align-content: start;
+		// A closed native dialog must remain absent on mobile. The `open`
+		// attribute keeps the no-JavaScript version in normal document flow.
+		&[open] { display: grid; }
 
-		&::backdrop {
-			background-color: transparent;
-			backdrop-filter: blur(0.5rem);
+		&[open]:not(:modal) {
+			position: static;
 		}
 
-		@media(min-width: break.$small) {
-			display: flex;
-			flex-direction: column;
-			gap: 1rem;
-			padding: 1rem;
+		> form[method="dialog"] {
+			@extend %p-form-actions;
 			position: absolute;
-			top: 0;
-			right: 0;
-			min-height: 100%;
-			width: 22rem;
-			margin-right: 0;
+			inset-block-start: 0;
+			inset-inline: 0;
+			z-index: 1;
+			margin: 0;
+			--theme-action-white-space: nowrap;
+			--theme-actions-direction: row;
+			--theme-actions-compact-direction: row;
+			--theme-actions-align: space-between;
+			--theme-actions-align-items: center;
+			padding: var(--theme-space-4) 1.5rem;
 
-			&:focus {
-				outline: none;
+			&::before {
+				content: "api.horse";
+				margin-top: -0.5rem;
+				padding: var(--theme-space-2) 0 var(--theme-space-2) 3rem;
+				background: url("/asset/horse-face.png") 0 center / 2rem no-repeat;
+				font-weight: 700;
 			}
-		}
-		@media(min-width: break.$medium) {
-			min-height: 0;
-			padding-bottom: 0;
+
+			> button { inline-size: var(--request-menu-toggle-width); }
 		}
 
 		.top-actions {
-			display: flex;
-			align-items: center;
-			justify-content: center;
-			gap: 0.5rem;
-			top: 0;
-			right: 0;
-			padding: 1rem;
-			background-color: var(--pal-3);
-			width: auto;
+			@extend %p-form-actions;
+			--theme-actions-direction: row;
+			--theme-actions-compact-direction: row;
+			--theme-actions-wrap: nowrap;
+			--theme-action-white-space: nowrap;
+			--theme-button-padding-inline: var(--theme-space-2);
+			margin: 0;
 
-			@media(min-width: break.$small) {
-				justify-content: flex-end;
-				padding: 0;
-			}
+			> button { flex: 1 1 0; }
+			> button.positive { @extend %o-button-primary; }
 
-			button {
-				&.positive {
-					@media(min-width: break.$small) {
-						flex-grow: 1;
-					}
-				}
-
-				&.share {
-					display: flex;
-					align-items: center;
-					gap: 0.5rem;
-
-					&::after {
-						@include icon.icon("share");
-					}
-				}
-			}
-
-			a {
-				color: var(--pal-1);
-				text-decoration: none;
-				margin: 0 1rem;
-
-				&:hover, &:focus {
-					text-decoration: underline;
-				}
+			> a {
+				align-self: center;
 			}
 		}
 
-		form {
-			display: flex;
-			justify-content: center;
-			gap: 0.5rem;
-			right: 0;
-			padding: 1rem;
-			background-color: var(--pal-3);
-			width: auto;
+		.collections {
+			display: grid;
+			gap: var(--theme-space-3);
+			// DomTemplate removes the list template when there are no persisted
+			// collections. There is then nothing meaningful to switch to.
+			&:not(:has(option)) { display: none; }
 
-			&:last-of-type {
-				padding-bottom: 2rem;
-				border-bottom: 1px solid var(--pal-4);
-
-				@media(min-width: break.$small) {
-					padding-bottom: 1rem;
-					border-bottom: none;
+			> label {
+				@extend %o-form-field;
+				> span {
+					position: absolute;
+					inline-size: 1px;
+					block-size: 1px;
+					overflow: hidden;
+					clip-path: inset(50%);
+					white-space: nowrap;
 				}
 			}
 
-			@media(min-width: break.$small) {
-				justify-content: stretch;
-				padding: 0;
-				background-color: transparent;
-			}
-
-			&[method=dialog] {
-				justify-content: space-between;
-				align-items: end;
-
-				@media(min-width: break.$small) {
-					display: none;
-				}
-
-				&::before {
-					content: "api.horse";
-					display: block;
-					font-weight: bold;
-					padding: 0.5rem 3rem;
-					background-image: url("/asset/horse-face.png");
-					background-size: 2rem;
-					background-repeat: no-repeat;
-					background-position-x: 0.5rem;
-					background-position-y: 0.15rem;
-
-					@media(min-width: break.$small) {
-						content: "";
-						display: none;
-					}
-				}
-			}
-
-			&.collections {
-				bottom: 0;
-
-				span {
-					display: none;
-				}
-
-				label {
-					@media(min-width: break.$small) {
-						flex-grow: 1;
-					}
-
-					select {
-						text-align: left;
-
-						&.single {
-							appearance: none;
-							pointer-events: none;
-							border: none;
-							outline: none;
-							background: transparent;
-							text-align: right;
-							font-weight: bold;
-						}
-					}
-				}
-
-				.actions {
-					display: none;
-				}
+			> .actions {
+				@extend %p-form-actions;
+				margin: 0;
 			}
 		}
 
 		&.shared {
-			button:not(.shared-show) {
-				display: none;
-			}
+			.shared-hide { display: none; }
 		}
 
-		&:not(.shared) {
-			*.shared-show-only {
-				display: none;
+		&:not(.shared) .shared-show-only { display: none; }
+		&.shared button:not(.shared-show) { display: none; }
+
+		&:modal {
+			background: var(--theme-color-surface-disabled);
+			padding-block-start: max(
+				calc(var(--theme-space-4) + 44px + var(--theme-space-4)),
+				env(safe-area-inset-top)
+			);
+
+			&:not(:has(option)) {
+				min-block-size: var(--request-header-height);
+				block-size: var(--request-header-height);
 			}
 		}
 	}
 
-	dialog#shareModal {
-		label {
-			position: relative;
+	> dialog:not(#mobileMenu) {
+		@extend %o-dialog;
 
-			input {
-				width: calc(100% - 4rem);
+		> form {
+			@extend %p-form-fields;
+		}
+
+		.actions {
+			@extend %p-form-actions;
+		}
+
+		button.positive { @extend %o-button-primary; }
+		button.negative { @extend %o-button-danger; }
+
+		.important {
+			padding-block-start: var(--theme-space-4);
+			border-block-start: var(--theme-border-width) solid var(--theme-color-border);
+		}
+	}
+
+	.share-link {
+		@extend %p-compound-field;
+
+		> button {
+			@extend %o-icon-button;
+			align-self: flex-end;
+		}
+	}
+
+	@media (min-width: flair.$break-shell) {
+		//&::before {
+		//	content: "";
+		//	position: absolute;
+		//	inset-block-start: 0;
+		//	inset-inline-end: 0;
+		//	inline-size: var(--theme-drawer-width, 22rem);
+		//	block-size: 8rem;
+		//	background: var(--theme-color-surface-disabled);
+		//	pointer-events: none;
+		//}
+
+		> #mobileMenuToggle { display: none; }
+
+		> #mobileMenu {
+			display: grid;
+			&[open]:not(:modal) { position: absolute; }
+			// Reset the browser's `dialog { inset: 0 }` rule before pinning this
+			// non-modal desktop presentation to the page edge.
+			inset-block: 0 auto;
+			inset-inline: auto 0;
+			inline-size: var(--theme-drawer-width, 22rem);
+			min-block-size: 0;
+			block-size: auto;
+			max-block-size: none;
+			overflow: visible;
+			padding: var(--theme-space-4);
+			border: 0;
+			border-radius: 0;
+			background: transparent;
+
+			> form[method="dialog"] { display: none; }
+
+			.top-actions {
+				inline-size: 100%;
+				--theme-button-padding-inline: var(--theme-space-3);
+				> button { flex: 0 1 auto; }
 			}
 
-			button.copy-share-link {
-				position: absolute;
-				bottom: 0;
-				right: 0;
+			.collections {
+				inline-size: 100%;
 
-				span {
-					display: none;
-				}
-				&::after {
-					@include icon.icon("copy");
-				}
+				> .actions { display: none; }
 			}
 		}
 	}

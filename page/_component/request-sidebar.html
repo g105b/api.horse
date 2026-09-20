@@ -1,15 +1,15 @@
 <menu data-flux="update" data-flux-drag-handle="">
-	<li class="end-of-section">
-		<a href="/request/{{shareId}}/{{collectionId}}/secrets/">Secrets</a>
+	<li class="end-of-section" data-end-of-section>
+		<a href="/request/{{shareId}}/{{collectionId}}/secrets/" data-icon="key-asterisk">Secrets</a>
 	</li>
 	<li>
-		<a href="/request/{{shareId}}/{{collectionId}}/_new/">New request</a>
+		<a href="/request/{{shareId}}/{{collectionId}}/_new/" data-icon="diff-added">New request</a>
 	</li>
 
 	<li data-list data-flux="drag-order">
 		<a href="/request/{{shareId}}/{{collectionId}}/{{id}}/" data-bind:text="nameOrId" draggable="false">word1-word2-word3</a>
 
-		<form method="post" class="drag-drop">
+		<form method="post" class="drag-drop" data-row-actions>
 			<input type="hidden" name="id" data-bind:value="id" />
 			<label>
 				<input type="number" name="order" />

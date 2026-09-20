@@ -47,6 +47,11 @@ function updateToggleButton(mode) {
 	}
 
 	button.dataset.themeMode = mode;
+	button.dataset.icon = {
+		system: "device-desktop",
+		light: "sun",
+		dark: "moon",
+	}[mode];
 
 	const label = button.querySelector(".theme-toggle-label");
 	if (label) {

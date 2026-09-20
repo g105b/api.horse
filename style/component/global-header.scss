@@ -1,204 +1,55 @@
-@use "../variable/break";
-@use "../variable/palette";
-@use "../mixin/icon";
+@use "../../../../BrightFlair/flair/style/flair";
 
 global-header {
+	@include flair.icon($prefix: "> header ");
 	display: block;
-	position: relative;
-	background-color: var(--pal-3);
-	color: var(--pal-1);
-	border-bottom: 1px solid var(--pal-4);
+	border-block-end: var(--theme-border-width) solid var(--theme-color-border);
+	background: var(--theme-color-surface-disabled);
 
-	h1 {
-		display: flex;
-		align-items: center;
-		margin: 0;
-		font-size: 1rem;
-
-		a {
-			display: flex;
-			align-items: center;
-			padding: 1rem 0 1rem 1.5rem;
-			height: 2.5rem;
-			width: 50%;
-			color: var(--pal-1);
-			text-decoration: none;
-
-			&::before {
-				content: "";
-				display: block;
-				width: 2rem;
-				margin-right: 0.5rem;
-				aspect-ratio: 1;
-				background-image: url("/asset/horse-face.png");
-				background-size: 100%;
-			}
-		}
-	}
-
-	.theme-toggle {
-		position: absolute;
-		left: 10rem;
-		top: 1.25rem;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		flex-shrink: 0;
-		width: 2rem;
-		height: 2rem;
-		margin-left: 0.25rem;
-		padding: 0;
-		border: 1px solid var(--pal-4);
-		border-radius: 0.375rem;
-		background-color: var(--pal-3);
-		color: var(--pal-1);
-		cursor: pointer;
-
-		&:hover, &:focus, &:active {
-			background-color: var(--pal-4);
-
-			.theme-toggle-label {
-				display: block;
-			}
-		}
-
-		&::before {
-			content: "";
-			display: block;
-			width: 1rem;
-			height: 1rem;
-			opacity: 0.75;
-			background-size: 100%;
-			background-position: center;
-			background-repeat: no-repeat;
-		}
-
-		&[data-theme-mode="system"]::before {
-			background-image: url("/asset/icon/device-desktop.svg");
-		}
-
-		&[data-theme-mode="light"]::before {
-			background-image: url("/asset/icon/sun.svg");
-		}
-
-		&[data-theme-mode="dark"]::before {
-			background-image: url("/asset/icon/moon.svg");
-		}
-
-		.theme-toggle-label {
-			position: absolute;
-			top: calc(100% + 0.5rem);
-			left: 50%;
-			z-index: 2;
-			display: none;
-			padding: 0.25rem 0.5rem;
-			border: 1px solid var(--pal-1);
-			border-radius: 0.375rem;
-			background-color: var(--pal-1);
-			color: var(--pal-3);
-			font-size: 0.8125rem;
-			font-weight: 500;
-			line-height: 1.2;
-			white-space: nowrap;
-			transform: translateX(-50%);
-			pointer-events: none;
-		}
-
-		@include palette.when-dark {
-			&::before {
-				filter: invert(1);
-			}
-		}
-	}
-
-	menu {
-		display: flex;
-		list-style-type: none;
-		margin: 0 1rem;
-		padding: 0;
-		overflow-x: scroll;
-
-		@media(min-width: break.$small) {
-			&::-webkit-scrollbar {
-				display: none;
-			}
-		}
-
-		>li {
-			border-bottom: 2px solid transparent;
-
-			&.selected {
-				border-bottom-color: var(--pal-12);
-
-				a {
-					opacity: 1;
-				}
-			}
-
-			>a {
+	> header {
+		position: relative;
+		> h1 {
+			margin: 0;
+			font: inherit;
+			font-weight: 700;
+			> a {
 				display: flex;
 				align-items: center;
-				gap: 0.5rem;
-				margin: 0.5rem;
-				padding: 0.5rem;
+				gap: var(--theme-space-2);
+				inline-size: 50%;
+				block-size: 4.5rem;
+				padding-inline-start: 1.5rem;
+				color: var(--theme-color-text);
 				text-decoration: none;
-				border-radius: 0.5rem;
-				color: var(--pal-1);
-				transition: background-color 0.1s ease-in-out;
-				opacity: 0.75;
-				font-weight: 500;
-
 				&::before {
-					opacity: 0.75;
-				}
-
-				&[href^="/request"]::before {
-					@include icon.icon("upload");
-				}
-				&[href^="/webhook"]::before {
-					@include icon.icon("webhook");
-				}
-				&[href^="/gateway"]::before {
-					@include icon.icon("server");
-				}
-				&[href^="/sponsor"]::before {
-					@include icon.icon("heart");
-				}
-				&[href^="/readme"]::before {
-					@include icon.icon("book");
-				}
-				&[href^="/mailing-list"] {
-					white-space: nowrap;
-				}
-				&[href^="/mailing-list"]::before {
-					@include icon.icon("mail");
-				}
-				&[href^="https://github.com"]::before {
-					@include icon.icon("mark-github");
-				}
-
-				&[href*="://"]::after {
 					content: "";
-					display: inline-block;
-					width: 0.9rem;
+					inline-size: 2rem;
 					aspect-ratio: 1;
-					opacity: 0.75;
-					background-size: 100%;
-					background-position: center;
-					background-repeat: no-repeat;
-					background-image: url("/asset/icon/link-external.svg");
+					background: url("/asset/horse-face.png") center / contain no-repeat;
 				}
+			}
+		}
 
-				&:hover, &:focus {
-					background-color: var(--pal-4);
-				}
+		.theme-toggle {
+			@extend %o-icon-button;
+			--theme-icon-size: 1rem;
+			--theme-button-padding-block: var(--theme-space-2);
+			position: absolute;
+			inset-block-start: 1.25rem;
+			inset-inline-start: 10rem;
+			min-block-size: 2rem;
+			inline-size: 2rem;
+			padding: 0;
+		}
 
-				@include palette.when-dark {
-					&::before,
-					&[href*="://"]::after {
-						filter: invert(1);
-					}
-				}
+		> nav {
+			@extend %p-page-tabs;
+			> ul {
+				margin-inline: var(--theme-space-4);
+			}
+			> ul > li > a {
+				display: flex;
+				align-items: center;
 			}
 		}
 	}

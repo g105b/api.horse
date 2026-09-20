@@ -1,55 +1,145 @@
-@use "../decoration/panel" as *;
-@use "../variable/break";
+@use "../../../../BrightFlair/flair/style/flair";
 
 request-editor {
-	@extend %d-panel;
+	@extend %p-panel;
+	--theme-disclosure-padding: var(--theme-space-6);
+	padding: 0;
+	border: 0;
+	background: transparent;
+	box-shadow: none;
+	--theme-panel-header-padding-block-start: var(--theme-space-6);
+	--theme-panel-header-direction: column;
+	--theme-panel-header-align-items: flex-start;
 
-	>h1 {
-		height: 5rem;
-
-		@media(min-width: break.$small) {
-			height: auto;
-		}
+	> form.fields {
+		@extend %p-form-fields;
 	}
 
-	form.delete {
-		position: absolute;
-		top: 0;
-		right: 0;
-		margin-top: 0.75rem;
-		display: flex;
-		flex-direction: column;
-		gap: 0.5rem;
-
-		@media(min-width: break.$small) {
-			flex-direction: row;
-		}
+	.endpoint {
+		@extend %p-compound-field;
+		--theme-compound-direction: row;
+		--theme-compound-align-items: flex-end;
+		--theme-compound-field-flex: 1 1 var(--theme-field-min-width);
+		--theme-compound-narrow-flex: 0 0 7.5rem;
+		--theme-compound-narrow: 7.5rem;
 	}
 
-	textarea[name=message] {
+	> header > div[data-flux="update-inner"] > form.delete {
+		@extend %p-form-actions;
+		--theme-actions-direction: row;
+		--theme-actions-align-items: center;
+		margin: 0;
+
+		> .negative { @extend %o-button-danger; }
+	}
+
+	> .fields {
+		display: grid;
+		gap: var(--theme-space-4);
+		margin-block-start: var(--theme-space-4);
+	}
+
+	details {
+		@extend %o-disclosure;
+		&[open] {
+			padding-block-end: var(--theme-disclosure-padding, var(--theme-space-4));
+		}
+
+		> summary h2 {
+			display: inline-flex;
+			gap: var(--theme-space-2);
+			margin: 0;
+			font: inherit;
+			font-weight: inherit;
+
+			> span {
+				font-weight: var(--theme-font-weight);
+				&::before { content: "("; }
+				&::after { content: ")"; }
+			}
+		}
+
+		> :where(ul, form, div):not(summary) {
+			margin-inline: var(--theme-disclosure-padding, var(--theme-space-4));
+		}
+
+		> :last-child { margin-block-end: 0; }
+	}
+
+	ul.multiple {
+		@extend %p-repeatable-fields;
+		--theme-repeat-field-wrap: nowrap;
+		margin-block: var(--theme-space-4);
+		margin-inline: var(--theme-disclosure-padding, var(--theme-space-4));
+	}
+
+	form.add,
+	details form.type > .actions,
+	details form.text > .actions,
+	.option .actions {
+		@extend %p-form-actions;
+	}
+
+	details form.type,
+	details form.text {
+		@extend %p-form-fields;
+		margin-block-start: var(--theme-space-4);
+	}
+
+	details > form.type,
+	details > .option,
+	details > .text {
+		margin-inline: var(--theme-disclosure-padding, var(--theme-space-4));
+	}
+
+	details > .option:not([hidden]),
+	details > .text {
+		margin-block-start: var(--theme-space-4);
+	}
+
+	details > .option.parameters > ul.multiple {
+		margin-inline: 0;
+	}
+
+	details > .text > label {
+		@extend %o-form-field;
+	}
+
+	details form.add {
+		margin-block-start: var(--theme-space-4);
+		> button { flex-grow: 1; }
+	}
+
+	textarea[name="message"] {
+		block-size: auto;
+		overflow-x: auto;
 		resize: vertical;
-		overflow-x: scroll;
 		white-space: pre;
-		height: auto;
 	}
 
-	form.primary {
+	form.actions.primary {
+		@extend %p-form-actions;
+		margin: 0;
 		transition: opacity 0.5s;
 
-		&.flux-form-waiting {
-			@keyframes loading {
-				from {
-					opacity: 1;
-				}
-			}
+		> button {
+			@extend %o-button-primary;
+			inline-size: 100%;
+		}
 
+		&.flux-form-waiting,
+		&.submitting {
+			@extend %d-state-busy;
 			cursor: wait;
-			opacity: 0.5;
-			animation: loading 1s 1s both;
-
-			button {
-				pointer-events: none;
-			}
+			> button { pointer-events: none; }
 		}
 	}
+
+	.actions:has(> button[data-flux="autosave"]:only-child) { display: none; }
+	[data-flux~="autosave"] { display: none !important; }
+	form.submitting {
+		@extend %d-state-busy;
+		cursor: progress;
+	}
+
 }

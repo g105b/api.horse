@@ -7,33 +7,35 @@
 		</a>
 	</h1>
 
-	<button type="button" class="theme-toggle" data-theme-toggle data-theme-mode="system">
+	<button type="button" class="theme-toggle" data-theme-toggle data-theme-mode="system" data-icon="device-desktop">
 		<span class="theme-toggle-label">System</span>
 	</button>
 
-	<menu>
+	<nav aria-label="Primary">
+		<ul>
 		<li>
-			<a href="/request/{{shareId}}/">Request</a>
+			<a href="/request/{{shareId}}/" data-icon="upload">Request</a>
 		</li>
 		<li>
-			<a href="/webhook/{{shareId}}/">Webhook</a>
+			<a href="/webhook/{{shareId}}/" data-icon="webhook">Webhook</a>
 		</li>
 		<li>
-			<a href="/gateway/{{shareId}}/">Gateway</a>
+			<a href="/gateway/{{shareId}}/" data-icon="server">Gateway</a>
 		</li>
 		<li>
-			<a href="/sponsor/">Sponsor</a>
+			<a href="/sponsor/" data-icon="heart">Sponsor</a>
 		</li>
 		<li>
-			<a href="/readme/">Readme</a>
+			<a href="/readme/" data-icon="book">Readme</a>
 		</li>
 		<li>
-			<a href="/mailing-list/">Mailing list</a>
+			<a href="/mailing-list/" data-icon="mail">Mailing list</a>
 		</li>
 		<li>
-			<a href="https://github.com/g105b/api.horse" target="_blank">GitHub</a>
+			<a href="https://github.com/g105b/api.horse" target="_blank" data-icon="mark-github" data-icon-end="link-external">GitHub</a>
 		</li>
-	</menu>
+		</ul>
+	</nav>
 </header>
 
 <dialog id="sharedReadOnlyDialog" data-flux="update-outer" data-dialog="auto-modal">

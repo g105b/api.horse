@@ -1,5 +1,67 @@
-@use "../decoration/sidebar" as *;
+@use "../../../../BrightFlair/flair/style/flair";
+
+main:has(> request-sidebar) {
+	@extend %l-workspace;
+	--theme-sidebar-width: 24rem;
+	--theme-workspace-gap: 2rem;
+	--theme-workspace-panel: 24rem;
+	--theme-workspace-panel-max: 48rem;
+	--theme-workspace-padding: 0 var(--theme-space-4) var(--theme-space-4);
+
+	> request-topbar {
+		display: block;
+		block-size: 0;
+	}
+
+	@media (min-width: flair.$break-shell) {
+		> request-sidebar {
+			flex: 0 0 var(--theme-sidebar-width);
+		}
+	}
+}
 
 request-sidebar {
-	@extend %d-sidebar;
+	@extend %p-side-navigation;
+	@extend %p-side-navigation-icons;
+	@include flair.icon;
+	display: block;
+
+	> menu > li {
+		@extend %p-row-actions;
+
+		> a {
+			min-inline-size: 0;
+			white-space: nowrap;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+		> form[data-row-actions] {
+			position: absolute;
+			inset-block: var(--theme-space-2);
+			inset-inline-end: var(--theme-space-6);
+
+			label { margin: 0; }
+			.drag-handle {
+				display: block;
+				inline-size: 2rem;
+				block-size: 100%;
+				background: currentColor;
+				mask: url("/asset/icon/grip-horizontal.svg") center / 1.25rem no-repeat;
+				cursor: grab;
+				opacity: 0.65;
+				&:hover, &:focus-visible { opacity: 1; }
+				&:active { cursor: grabbing; }
+			}
+			input, button {
+				inline-size: 3rem;
+				block-size: 100%;
+				padding: 0;
+			}
+		}
+	}
+
+	.flux-drag-order-dragging {
+		@extend %d-state-dragging;
+	}
 }
