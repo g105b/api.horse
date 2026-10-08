@@ -2,7 +2,7 @@
   "dependencies": {
     "@phpgt/flux": "github:PhpGt/Flux",
     "esbuild": "^0.25.5",
-    "flair": "github:BrightFlair/flair#5f0766ce50ca4d951dc65ded04cf8f5b4a750794",
+    "flair": "file:../../BrightFlair/flair",
     "sass": "^1.98.0"
   }
 }

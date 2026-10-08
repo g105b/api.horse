@@ -1,7 +1,7 @@
-@use "../../../../BrightFlair/flair/style/flair";
+@use "../../node_modules/flair/style/flair";
 
 request-editor {
-	@extend %p-panel;
+	@extend %o-panel;
 	--theme-disclosure-padding: var(--theme-space-6);
 	padding: 0;
 	border: 0;

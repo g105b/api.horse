@@ -1,4 +1,4 @@
-@use "../../../../BrightFlair/flair/style/flair";
+@use "../../node_modules/flair/style/flair";
 
 main:has(> request-sidebar) {
 	@extend %l-workspace;

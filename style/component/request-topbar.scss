@@ -1,4 +1,4 @@
-@use "../../../../BrightFlair/flair/style/flair";
+@use "../../node_modules/flair/style/flair";
 
 // This component lives in the request page, rather than the global header,
 // but keeps its tools at the page's top edge.  On a narrow screen it becomes
